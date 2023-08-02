@@ -2,6 +2,7 @@ from PIL import ImageTk, Image
 import tkinter as tk
 
 from cards import DevelopmentDeck
+from tiles import TileDeck
 
 
 class GUI:
@@ -11,6 +12,10 @@ class GUI:
 
     def __init__(self):
         self.dev_deck = DevelopmentDeck('assets/dev_cards.jpg')
+        self.outdoor_deck = TileDeck(
+            'assets/tiles.jpg', rows=4, cols=4, start_row=0)
+        self.indoor_deck = TileDeck(
+            'assets/tiles.jpg', rows=4, cols=4, start_row=2)
 
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
@@ -34,8 +39,31 @@ class GUI:
             self.root, text="Draw Development Card", command=self.draw_dev_card)
         self.button_draw_card.pack()
 
+        # Add buttons for drawing outdoor and indoor tiles
+        self.button_draw_outdoor_tile = tk.Button(
+            self.root, text="Draw Outdoor Tile", command=self.draw_outdoor_tile)
+        self.button_draw_outdoor_tile.pack()
+
+        self.button_draw_indoor_tile = tk.Button(
+            self.root, text="Draw Indoor Tile", command=self.draw_indoor_tile)
+        self.button_draw_indoor_tile.pack()
+
         # Start the GUI main loop
         self.root.mainloop()
+
+    def draw_outdoor_tile(self):
+        tile = self.outdoor_deck.draw()
+        tile_image = tile.image
+        tile_tk_image = ImageTk.PhotoImage(tile_image)
+        self.label_image.config(image=tile_tk_image)
+        self.label_image.image = tile_tk_image
+
+    def draw_indoor_tile(self):
+        tile = self.indoor_deck.draw()
+        tile_image = tile.image
+        tile_tk_image = ImageTk.PhotoImage(tile_image)
+        self.label_image.config(image=tile_tk_image)
+        self.label_image.image = tile_tk_image
 
     def draw_dev_card(self):
         card = self.dev_deck.draw()
@@ -49,7 +77,3 @@ class GUI:
         # Update the label showing the number of cards remaining
         self.label_number_of_cards.config(
             text=f"Development Cards: {self.dev_deck.get_number_of_cards()}")
-
-
-# Create and run the GUI
-app = GUI()
