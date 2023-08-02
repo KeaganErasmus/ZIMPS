@@ -43,7 +43,7 @@ class Card:
         print("---------------")
 
 
-class Deck:
+class DevelopmentDeck:
     """
     A deck of development cards.
     """
@@ -61,6 +61,7 @@ class Deck:
                 top = j * card_height
                 right = (i + 1) * card_width
                 bottom = (j + 1) * card_height
+                print(left, top, right, bottom)
                 card_image = image.crop((left, top, right, bottom))
                 # Get the contents for this card
                 content = cards_content[str(card_index)]
