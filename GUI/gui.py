@@ -1,8 +1,8 @@
 from PIL import ImageTk, Image
 import tkinter as tk
 
-from cards import DevelopmentDeck
-from tiles import TileDeck
+from GUI.cards import DevelopmentDeck
+from GUI.tiles import TileDeck
 
 
 class GUI:
