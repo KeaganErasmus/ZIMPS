@@ -43,7 +43,7 @@ class Card:
         print("---------------")
 
 
-class Deck:
+class DevelopmentDeck:
     """
     A deck of development cards.
     """
