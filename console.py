@@ -3,7 +3,7 @@ class console:
     Console that displays text and allows for user input
     """
 
-    def __init__(self, args: list[str]) -> None:
+    def __init__(self, *args) -> None:
         self.args = args
 
     def print_commands(self):
