@@ -1,17 +1,16 @@
 from PIL import Image
 import random
 
-SECTIONS = ["9 PM", "10 PM", "11 PM", "Item"]
 CARDS = {
-    '1': [{'You try hard not to wet yourself': 0}, {'ITEM': None}, {'zombies': 6}, {'Oil': 0}],
-    '2': [{'zombies': 4}, {'A bat poops in your eye': -1}, {'zombies': 6}, {'Machete': 2}],
-    '3': [{'zombies': 3}, {'You hear terrible screams': 0}, {'zombies': 5}, {'Chainsaw': 3}],
-    '4': [{'zombies': 4}, {'You sense your impending doom': -1}, {'ITEM': None}, {'Gasoline': 0}],
-    '5': [{'ITEM': None}, {'zombies': 5}, {'Your soul is not wanted here': -1}, {'Grisly Femur': 1}],
-    '6': [{'Candybar in your pocket': 1}, {'ITEM': None}, {'zombies': 4}, {'Soda Can': 2}],
-    '7': [{'ITEM': None}, {'zombies': 4}, {'Something icky in your mouth': -1}, {'Board with Nails': 1}],
-    '8': [{'Slipped on nasty goo': -1}, {'zombies': 4}, {'The smell of blood is in the air': 0}, {'Golf Club': 1}],
-    '9': [{'Your body shivers involuntarily': 0}, {'You feel a spark of hope': 1}, {'zombies': 4}, {'Candle': 0}],
+    '1': {'9 PM': {'text': 'You try hard not to wet yourself', 'value': 0}, '10 PM': {'text': 'ITEM', 'value': None}, '11 PM': {'text': 'zombies', 'value': 6}, 'Item': {'text': 'Oil', 'value': 0}},
+    '2': {'9 PM': {'text': 'zombies', 'value': 4}, '10 PM': {'text': 'A bat poops in your eye', 'value': -1}, '11 PM': {'text': 'zombies', 'value': 6}, 'Item': {'text': 'Machete', 'value': 2}},
+    '3': {'9 PM': {'text': 'zombies', 'value': 3}, '10 PM': {'text': 'You hear terrible screams', 'value': 0}, '11 PM': {'text': 'zombies', 'value': 5}, 'Item': {'text': 'Chainsaw', 'value': 3}},
+    '4': {'9 PM': {'text': 'zombies', 'value': 4}, '10 PM': {'text': 'You sense your impending doom', 'value': -1}, '11 PM': {'text': 'ITEM', 'value': None}, 'Item': {'text': 'Gasoline', 'value': 0}},
+    '5': {'9 PM': {'text': 'ITEM', 'value': None}, '10 PM': {'text': 'zombies', 'value': 5}, '11 PM': {'text': 'Your soul is not wanted here', 'value': -1}, 'Item': {'text': 'Grisly Femur', 'value': 1}},
+    '6': {'9 PM': {'text': 'Candybar in your pocket', 'value': 1}, '10 PM': {'text': 'ITEM', 'value': None}, '11 PM': {'text': 'zombies', 'value': 4}, 'Item': {'text': 'Soda Can', 'value': 2}},
+    '7': {'9 PM': {'text': 'ITEM', 'value': None}, '10 PM': {'text': 'zombies', 'value': 4}, '11 PM': {'text': 'Something icky in your mouth', 'value': -1}, 'Item': {'text': 'Board with Nails', 'value': 1}},
+    '8': {'9 PM': {'text': 'Slipped on nasty goo', 'value': -1}, '10 PM': {'text': 'zombies', 'value': 4}, '11 PM': {'text': 'The smell of blood is in the air', 'value': 0}, 'Item': {'text': 'Golf Club', 'value': 1}},
+    '9': {'9 PM': {'text': 'Your body shivers involuntarily', 'value': 0}, '10 PM': {'text': 'You feel a spark of hope', 'value': 1}, '11 PM': {'text': 'zombies', 'value': 4}, 'Item': {'text': 'Candle', 'value': 0}},
 }
 
 
@@ -27,19 +26,23 @@ class Card:
     def show(self):
         self.image.show()
 
-    def print_content(self):
-        # Iterate through the cards sections and print based on the key
-        print("Card Content:")
+    def print_content(self, section_key='9 PM'):
+       # Print the content for the specified section of the card
+        print("Development Card:")
         print("---------------")
-        for i, section in enumerate(self.content):
-            print(SECTIONS[i])
-            for key, value in section.items():
-                if key == 'zombies':
-                    print(f"{value} Zombies")
-                elif key == 'ITEM':
-                    print("ITEM")
-                else:
-                    print(f"{key}: {value}")
+        print(section_key)
+        section = self.content[section_key]
+        text = section['text']
+        value = section['value']
+        if section_key == 'Item':
+            print(f"{text}: {value}")
+            return
+        if text == 'zombies':
+            print(f"{value} Zombies")
+        elif text == 'ITEM':
+            print("ITEM: Draw another card and keep the item on it.")
+        else:
+            print(f"{text}: {value}")
         print("---------------")
 
 
