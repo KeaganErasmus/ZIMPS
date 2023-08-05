@@ -12,10 +12,8 @@ class GUI:
 
     def __init__(self):
         self.dev_deck = DevelopmentDeck('assets/dev_cards.jpg')
-        self.outdoor_deck = TileDeck(
-            'assets/tiles.jpg', rows=4, cols=4, start_row=0)
-        self.indoor_deck = TileDeck(
-            'assets/tiles.jpg', rows=4, cols=4, start_row=2)
+        self.outdoor_deck = TileDeck(deck_type='outdoor')
+        self.indoor_deck = TileDeck(deck_type='indoor')
 
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
@@ -53,6 +51,7 @@ class GUI:
 
     def draw_outdoor_tile(self):
         tile = self.outdoor_deck.draw()
+        tile.display()
         tile_image = tile.image
         tile_tk_image = ImageTk.PhotoImage(tile_image)
         self.label_image.config(image=tile_tk_image)
@@ -60,6 +59,7 @@ class GUI:
 
     def draw_indoor_tile(self):
         tile = self.indoor_deck.draw()
+        tile.display()
         tile_image = tile.image
         tile_tk_image = ImageTk.PhotoImage(tile_image)
         self.label_image.config(image=tile_tk_image)
