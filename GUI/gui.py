@@ -1,7 +1,7 @@
 from PIL import ImageTk
 import tkinter as tk
 
-from GUI.cards import DevelopmentDeck
+from GUI.cards import CardDeck
 from GUI.tiles import TileDeck
 
 
@@ -11,9 +11,9 @@ class GUI:
     """
 
     def __init__(self):
-        self.dev_deck = DevelopmentDeck('assets/dev_cards.jpg')
-        self.outdoor_deck = TileDeck(deck_type='outdoor')
-        self.indoor_deck = TileDeck(deck_type='indoor')
+        self.dev_cards = CardDeck()
+        self.outdoor_tiles = TileDeck(deck_type='outdoor')
+        self.indoor_tiles = TileDeck(deck_type='indoor')
 
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
@@ -24,7 +24,7 @@ class GUI:
 
         # Create a label to show the number of cards
         self.label_number_of_cards = tk.Label(
-            self.root, text=f"Development Cards: {self.dev_deck.get_number_of_cards()}")
+            self.root, text=f"Development Cards: {self.dev_cards.get_number_of_cards()}")
         self.label_number_of_cards.pack()
 
         # Create a button to draw a new card
@@ -45,7 +45,7 @@ class GUI:
         self.root.mainloop()
 
     def draw_outdoor_tile(self):
-        tile = self.outdoor_deck.draw()
+        tile = self.outdoor_tiles.draw()
         tile.display()
         tile_image = tile.image
         tile_tk_image = ImageTk.PhotoImage(tile_image)
@@ -53,7 +53,7 @@ class GUI:
         self.label_image.image = tile_tk_image
 
     def draw_indoor_tile(self):
-        tile = self.indoor_deck.draw()
+        tile = self.indoor_tiles.draw()
         tile.display()
         tile_image = tile.image
         tile_tk_image = ImageTk.PhotoImage(tile_image)
@@ -61,7 +61,7 @@ class GUI:
         self.label_image.image = tile_tk_image
 
     def draw_dev_card(self):
-        card = self.dev_deck.draw()
+        card = self.dev_cards.draw()
         card.print_content()
 
         card_image = card.image
@@ -71,4 +71,4 @@ class GUI:
 
         # Update the label showing the number of cards remaining
         self.label_number_of_cards.config(
-            text=f"Development Cards: {self.dev_deck.get_number_of_cards()}")
+            text=f"Development Cards: {self.dev_cards.get_number_of_cards()}")

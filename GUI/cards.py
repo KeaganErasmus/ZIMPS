@@ -1,6 +1,7 @@
 from PIL import Image
 import random
 
+IMAGE_PATH = 'assets/dev_cards.jpg'
 CARDS = {
     '1': {'9 PM': {'text': 'You try hard not to wet yourself', 'value': 0}, '10 PM': {'text': 'ITEM', 'value': None}, '11 PM': {'text': 'zombies', 'value': 6}, 'Item': {'text': 'Oil', 'value': 0}},
     '2': {'9 PM': {'text': 'zombies', 'value': 4}, '10 PM': {'text': 'A bat poops in your eye', 'value': -1}, '11 PM': {'text': 'zombies', 'value': 6}, 'Item': {'text': 'Machete', 'value': 2}},
@@ -46,12 +47,12 @@ class Card:
         print("---------------")
 
 
-class DevelopmentDeck:
+class CardDeck:
     """
     A deck of development cards.
     """
 
-    def __init__(self, image_path, cards_content=CARDS):
+    def __init__(self, image_path=IMAGE_PATH, cards_content=CARDS):
         self.cards = []
         image = Image.open(image_path)
         card_width, card_height = image.width // 3, image.height // 3
