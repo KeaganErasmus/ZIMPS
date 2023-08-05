@@ -1,4 +1,4 @@
-from PIL import ImageTk, Image
+from PIL import ImageTk
 import tkinter as tk
 
 from GUI.cards import DevelopmentDeck
@@ -18,13 +18,8 @@ class GUI:
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
 
-        # Create a blank placeholder image
-        self.placeholder_image = Image.new('RGB', (345, 517), color='white')
-        self.placeholder_tk_image = ImageTk.PhotoImage(self.placeholder_image)
-
         # Create a label to hold the card image and set the placeholder as the initial image
-        self.label_image = tk.Label(self.root, image=self.placeholder_tk_image)
-        self.label_image.image = self.placeholder_tk_image  # keep a reference
+        self.label_image = tk.Label(self.root)
         self.label_image.pack()
 
         # Create a label to show the number of cards
