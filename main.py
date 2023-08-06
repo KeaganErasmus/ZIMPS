@@ -1,10 +1,9 @@
-from GUI.gui import GUI
+from GUI.game import Game
 
 
 def main():
-    print("yeetus pateetus")
-    print("coding so discreteus!")
-    app = GUI()
+    app = Game()
+    app.gui.root.mainloop()
 
 
 if __name__ == "__main__":

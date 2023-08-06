@@ -1,4 +1,5 @@
 from PIL import Image
+import random
 
 IMAGE_PATH = 'assets/tiles.jpg'
 INDOOR_TILES = {
@@ -25,29 +26,58 @@ OUTDOOR_TILES = {
 
 
 class Tile:
+    """
+    A tile is a single square on the game board.
+    """
+
     def __init__(self, image, name, exits):
         self.image = image
         self.name = name
         self.exits = exits
 
     def display(self):
-        name_length = 15  # Set this to the length of the longest name
-        # Center the name within the given length
-        padded_name = self.name.center(name_length)
+        # self.image.show()
+        max_name_len = 15  # Set this to the length of the longest name
+        padded_name = self.name.center(max_name_len)  # Center the name
 
         top_exit = ' ' if self.exits['N'] else '_'
         right_exit = ' ' if self.exits['E'] else '|'
         bottom_exit = ' ' if self.exits['S'] else '_'
         left_exit = ' ' if self.exits['W'] else '|'
 
-        print(f" {top_exit * (name_length + 2)} ")
-        print(f"+{' ' * (name_length + 2)}+")
+        print(f" {top_exit * (max_name_len + 2)} ")
+        print(f"+{' ' * (max_name_len + 2)}+")
         print(f"{left_exit} {padded_name} {right_exit}")
-        print(f"+{bottom_exit * (name_length + 2)}+")
+        print(f"+{bottom_exit * (max_name_len + 2)}+")
         print('')
+
+    def get_possible_exits(self):
+        return [direction for direction, is_exit in self.exits.items() if is_exit]
+    
+    def rotate_tile_exits(self, chosen_entry, chosen_exit):
+        """
+        Rotate new tile to align the chosen entry with the chosen exit from the previous tile. Also rotate the tile's image.
+        """
+        print(f"chosen_exit: {chosen_exit}, chosen_entry: {chosen_entry}")
+        rotations_needed = {'N': {'N': 2, 'E': 1, 'S': 0, 'W': 3},
+                            'E': {'N': 3, 'E': 2, 'S': 3, 'W': 0},
+                            'S': {'N': 0, 'E': 3, 'S': 2, 'W': 1},
+                            'W': {'N': 1, 'E': 0, 'S': 1, 'W': 2}}[chosen_exit][chosen_entry]
+
+        print(f"rotations_needed: {rotations_needed}")
+        for _ in range(rotations_needed):
+            self.exits = {'N': self.exits['W'], 'E': self.exits['N'], 
+                            'S': self.exits['E'], 'W': self.exits['S']}
+            self.image = self.image.rotate(-90)  # Rotate image 90 degrees counterclockwise
+        
+        return self
 
 
 class TileDeck:
+    """
+    A tile deck is a collection of either indoor or outdoor tiles that can be drawn from.
+    """
+
     def __init__(self, deck_type, image_path=IMAGE_PATH):
         self.tiles = []
 
@@ -72,6 +102,20 @@ class TileDeck:
                 tile = Tile(tile_image, metadata['name'], metadata['exits'])
                 self.tiles.append(tile)
                 index += 1
+                
+        random.shuffle(self.tiles)
+        self.number_of_tiles = len(self.tiles)
+
+    def draw_tile_by_name(self, name):
+        for i, tile in enumerate(self.tiles):
+            if tile.name == name:
+                return self.tiles.pop(i)
 
     def draw(self):
-        return self.tiles.pop(0)
+        if self.tiles:
+            tile = self.tiles.pop(0)
+            self.number_of_tiles -= 1
+            return tile
+
+    def get_number_of_tiles(self):
+        return self.number_of_tiles

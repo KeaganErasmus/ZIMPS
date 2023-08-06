@@ -24,13 +24,11 @@ class Card:
         self.image = image
         self.content = content
 
-    def show(self):
-        self.image.show()
-
-    def print_content(self, section_key='9 PM'):
+    def display(self, section_key='9 PM'):
+        # self.image.show()
        # Print the content for the specified section of the card
         print("Development Card:")
-        print("---------------")
+        print("------------------------------")
         print(section_key)
         section = self.content[section_key]
         text = section['text']
@@ -44,7 +42,7 @@ class Card:
             print("ITEM: Draw another card and keep the item on it.")
         else:
             print(f"{text}: {value}")
-        print("---------------")
+        print("------------------------------")
 
 
 class CardDeck:
@@ -52,8 +50,9 @@ class CardDeck:
     A deck of development cards.
     """
 
-    def __init__(self, image_path=IMAGE_PATH, cards_content=CARDS):
+    def __init__(self, image_path=IMAGE_PATH, cards_content=CARDS, gui=None):
         self.cards = []
+        self.gui = gui
         image = Image.open(image_path)
         card_width, card_height = image.width // 3, image.height // 3
 
@@ -79,11 +78,6 @@ class CardDeck:
         if self.cards:
             card = self.cards.pop(0)  # Removes the top card from the deck
             self.number_of_cards -= 1
+            if self.gui:  # If a GUI instance is set
+                self.gui.update_dev_cards_count(self.number_of_cards)  # Update the card count in the GUI
             return card
-
-    def get_number_of_cards(self):
-        return self.number_of_cards
-
-    def show_top(self):
-        if self.cards:
-            self.cards[0].show()
