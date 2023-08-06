@@ -10,7 +10,7 @@ class Game:
 
     def __init__(self):
         self.gui = GUI()
-        self.dev_cards = CardDeck(gui=self.gui)
+        self.dev_cards = CardDeck()
         self.outdoor_tiles = TileDeck(deck_type='outdoor')
         self.indoor_tiles = TileDeck(deck_type='indoor')
         self.attack_score = 1
@@ -66,6 +66,19 @@ class Game:
         """
         new_tile = self.indoor_tiles.draw()
         possible_entries = new_tile.get_possible_exits()
+        if len(possible_entries) > 1:
+             new_tile = self.choose_entry(chosen_exit, new_tile, possible_entries)
+        else:
+            new_tile = new_tile.rotate_tile_exits(possible_entries[0], chosen_exit)
+        
+        print(f"You entered the {new_tile.name}.")    
+        new_tile.display()
+        self.gui.place_tile(new_tile, *self.player_location)
+        self.board[self.player_location] = new_tile
+        self.resolve_dev_card()
+        
+        
+    def choose_entry(self, chosen_exit, new_tile, possible_entries):
         print(f"You found the {new_tile.name}, you can enter from the following sides: {possible_entries}")
         new_tile.display()
         chosen_entry = ""
@@ -74,14 +87,10 @@ class Game:
             if chosen_entry not in possible_entries:
                 print(f"Invalid entry. Please choose from: {possible_entries}")
 
-        print(f"You chose to enter from {chosen_entry}.")
-
         # Rotate new tile to align the chosen entry with the chosen exit from the previous tile
         new_tile = new_tile.rotate_tile_exits(chosen_entry, chosen_exit)
-        new_tile.display()
-        self.gui.place_tile(new_tile, *self.player_location)
-        self.board[self.player_location] = new_tile
-        self.resolve_dev_card()
+        print(f"You chose to enter from {chosen_entry}.")
+        return new_tile
         
         
     def resolve_dev_card(self):
@@ -92,12 +101,15 @@ class Game:
             self.update_dev_deck_and_time()
             
         card = self.dev_cards.draw()
+        self.gui.update_dev_cards_count(self.dev_cards.number_of_cards)
         card.display(self.time)
-        card.image.show()
+        # card.image.show() # uncomment to show the card image
         self.player_turn()
+    
     
     def is_explored(self, location):
         return location in self.board
+    
     
     def update_dev_deck_and_time(self):
         """
@@ -111,6 +123,9 @@ class Game:
 
     
     def update_location(self, direction):
+        """
+        Update the player location based on the chosen exit direction.
+        """
         x, y = self.player_location
         if direction == 'E':
             return x, y + 1

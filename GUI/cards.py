@@ -24,6 +24,7 @@ class Card:
         self.image = image
         self.content = content
 
+
     def display(self, section_key='9 PM'):
         # self.image.show()
        # Print the content for the specified section of the card
@@ -50,9 +51,8 @@ class CardDeck:
     A deck of development cards.
     """
 
-    def __init__(self, image_path=IMAGE_PATH, cards_content=CARDS, gui=None):
+    def __init__(self, image_path=IMAGE_PATH, cards_content=CARDS):
         self.cards = []
-        self.gui = gui
         image = Image.open(image_path)
         card_width, card_height = image.width // 3, image.height // 3
 
@@ -74,10 +74,9 @@ class CardDeck:
         random.shuffle(self.cards)
         self.number_of_cards = len(self.cards)
 
+
     def draw(self):
         if self.cards:
             card = self.cards.pop(0)  # Removes the top card from the deck
-            self.number_of_cards -= 1
-            if self.gui:  # If a GUI instance is set
-                self.gui.update_dev_cards_count(self.number_of_cards)  # Update the card count in the GUI
+            self.number_of_cards -= 1                
             return card

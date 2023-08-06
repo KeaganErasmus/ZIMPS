@@ -116,6 +116,3 @@ class TileDeck:
             tile = self.tiles.pop(0)
             self.number_of_tiles -= 1
             return tile
-
-    def get_number_of_tiles(self):
-        return self.number_of_tiles
