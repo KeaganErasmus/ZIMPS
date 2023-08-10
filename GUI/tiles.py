@@ -53,7 +53,7 @@ class Tile:
 
     def get_possible_exits(self):
         return [direction for direction, is_exit in self.exits.items() if is_exit]
-    
+
     def rotate_tile_exits(self, chosen_entry, chosen_exit):
         """
         Rotate new tile to align the chosen entry with the chosen exit from the previous tile. Also rotate the tile's image.
@@ -66,16 +66,17 @@ class Tile:
 
         print(f"rotations_needed: {rotations_needed}")
         for _ in range(rotations_needed):
-            self.exits = {'N': self.exits['W'], 'E': self.exits['N'], 
-                            'S': self.exits['E'], 'W': self.exits['S']}
-            self.image = self.image.rotate(-90)  # Rotate image 90 degrees counterclockwise
-        
+            self.exits = {'N': self.exits['W'], 'E': self.exits['N'],
+                          'S': self.exits['E'], 'W': self.exits['S']}
+            # Rotate image 90 degrees counterclockwise
+            self.image = self.image.rotate(-90)
+
         return self
 
 
 class TileDeck:
     """
-    A tile deck is a collection of either indoor or outdoor tiles that can be drawn from.
+    A tile deck is a collection of tiles that can be drawn from.
     """
 
     def __init__(self, deck_type, image_path=IMAGE_PATH):
@@ -102,7 +103,7 @@ class TileDeck:
                 tile = Tile(tile_image, metadata['name'], metadata['exits'])
                 self.tiles.append(tile)
                 index += 1
-                
+
         random.shuffle(self.tiles)
         self.number_of_tiles = len(self.tiles)
 
@@ -116,3 +117,13 @@ class TileDeck:
             tile = self.tiles.pop(0)
             self.number_of_tiles -= 1
             return tile
+
+
+class IndoorTileDeck(TileDeck):
+    def __init__(self, image_path=IMAGE_PATH):
+        super().__init__('indoor', image_path)
+
+
+class OutdoorTileDeck(TileDeck):
+    def __init__(self, image_path=IMAGE_PATH):
+        super().__init__('outdoor', image_path)
