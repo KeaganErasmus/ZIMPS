@@ -1,14 +1,16 @@
 from GUI.gui import GUI
-from console import console
+from console import Console
 
 
 def main():
     # app = GUI()
     print("Welcome to Zombies in my pocket")
-    view = console("help", "start", "stop", "quit")
+    # view = Console("help", "start", "stop", "quit")
+    view = Console()
 
-    while view.user_input() != "quit":
-        view.run_commands()
+    # while view.userinput != "quit":
+    #     view.user_input()
+    #     view.run_commands()
 
 
 if __name__ == "__main__":
