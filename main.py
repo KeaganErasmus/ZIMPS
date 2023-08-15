@@ -1,5 +1,6 @@
 from GUI.gui import GUI
 from console import Console
+from pickling import Pickling
 
 
 def main():
