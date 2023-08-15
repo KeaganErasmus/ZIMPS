@@ -51,26 +51,23 @@ class Tile:
         print(f"+{bottom_exit * (max_name_len + 2)}+")
         print('')
 
-    def get_possible_exits(self):
+    def possible_exits(self):
         return [direction for direction, is_exit in self.exits.items() if is_exit]
 
-    def rotate_tile_exits(self, chosen_entry, chosen_exit):
+    def rotate_tile(self, chosen_entry, chosen_exit):
         """
-        Rotate new tile to align the chosen entry with the chosen exit from the previous tile. Also rotate the tile's image.
+        Rotate new tile to align the chosen entry with the chosen exit from the previous tile.
         """
-        print(f"chosen_exit: {chosen_exit}, chosen_entry: {chosen_entry}")
         rotations_needed = {'N': {'N': 2, 'E': 1, 'S': 0, 'W': 3},
                             'E': {'N': 3, 'E': 2, 'S': 3, 'W': 0},
                             'S': {'N': 0, 'E': 3, 'S': 2, 'W': 1},
                             'W': {'N': 1, 'E': 0, 'S': 1, 'W': 2}}[chosen_exit][chosen_entry]
 
-        print(f"rotations_needed: {rotations_needed}")
         for _ in range(rotations_needed):
             self.exits = {'N': self.exits['W'], 'E': self.exits['N'],
                           'S': self.exits['E'], 'W': self.exits['S']}
             # Rotate image 90 degrees counterclockwise
             self.image = self.image.rotate(-90)
-
         return self
 
 

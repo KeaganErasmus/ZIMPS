@@ -37,7 +37,7 @@ class Game:
 
     def player_turn(self):
         current_tile = self.board[self.player_location]
-        possible_exits = current_tile.get_possible_exits()
+        possible_exits = current_tile.possible_exits()
         print(
             f"You are in the {current_tile.name}. Possible exit directions: {possible_exits}")
         current_tile.display()
@@ -49,8 +49,7 @@ class Game:
                     f"Invalid exit direction. Please choose a direction from: {possible_exits}")
 
         self.player_location = self.update_location(chosen_exit)
-        print(
-            f"You chose to exit {chosen_exit}. Your new location is {self.player_location}.")
+
         # If the new location hasn't been explored, place a new tile
         if not self.is_explored(self.player_location):
             self.place_new_tile(chosen_exit)
@@ -64,7 +63,7 @@ class Game:
         """
         new_tile = self.indoor_tiles.draw()
         self.gui.place_tile(new_tile, *self.player_location)
-        possible_entries = new_tile.get_possible_exits()
+        possible_entries = new_tile.possible_exits()
         if new_tile.name == 'Dining Room':
             # remove 'N' from possible entries as it reserved for exit to the patio
             possible_entries.remove('N')
@@ -72,7 +71,7 @@ class Game:
             new_tile = self.choose_entry(
                 chosen_exit, new_tile, possible_entries)
         else:
-            new_tile = new_tile.rotate_tile_exits(
+            new_tile = new_tile.rotate_tile(
                 possible_entries[0], chosen_exit)
 
         print(f"You entered the {new_tile.name}.")
@@ -91,9 +90,7 @@ class Game:
             if chosen_entry not in possible_entries:
                 print(f"Invalid entry. Please choose from: {possible_entries}")
 
-        # Rotate new tile to align the chosen entry with the chosen exit from the previous tile
-        new_tile = new_tile.rotate_tile_exits(chosen_entry, chosen_exit)
-        print(f"You chose to enter from {chosen_entry}.")
+        new_tile = new_tile.rotate_tile(chosen_entry, chosen_exit)
         return new_tile
 
     def resolve_dev_card(self):
