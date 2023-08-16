@@ -1,79 +1,46 @@
 from PIL import ImageTk, Image
 import tkinter as tk
 
-from GUI.cards import DevelopmentDeck
-from GUI.tiles import TileDeck
-
 
 class GUI:
     """
-    A GUI for drawing cards from a deck.
+    A graphical interface, mainly for testing the game logic.
     """
 
     def __init__(self):
-        self.dev_deck = DevelopmentDeck('assets/dev_cards.jpg')
-        self.outdoor_deck = TileDeck(
-            'assets/tiles.jpg', rows=4, cols=4, start_row=0)
-        self.indoor_deck = TileDeck(
-            'assets/tiles.jpg', rows=4, cols=4, start_row=2)
-
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
+        self.images = []
+        cols, rows = 7, 7  # Size of the grid
+        self.tile_size = 120  # Size of each tile, in pixels
 
-        # Create a blank placeholder image
-        self.placeholder_image = Image.new('RGB', (345, 517), color='white')
-        self.placeholder_tk_image = ImageTk.PhotoImage(self.placeholder_image)
+        # Create a canvas to hold the tiles
+        self.canvas = tk.Canvas(
+            self.root, width=self.tile_size*cols, height=self.tile_size*rows)
+        self.canvas.pack()
 
-        # Create a label to hold the card image and set the placeholder as the initial image
-        self.label_image = tk.Label(self.root, image=self.placeholder_tk_image)
-        self.label_image.image = self.placeholder_tk_image  # keep a reference
-        self.label_image.pack()
+        # Create a grid of squares on the canvas
+        self.grid_rects = [[None for _ in range(cols)] for _ in range(rows)]
+        for i in range(rows):
+            for j in range(cols):
+                self.grid_rects[i][j] = self.canvas.create_rectangle(
+                    j*self.tile_size, i*self.tile_size, (j+1)*self.tile_size, (i+1)*self.tile_size)
 
-        # Create a label to show the number of cards
+        # Create labels to show the number of cards and tiles remaining
         self.label_number_of_cards = tk.Label(
-            self.root, text=f"Development Cards: {self.dev_deck.get_number_of_cards()}")
+            self.root, text=f"Development Cards: ")
         self.label_number_of_cards.pack()
 
-        # Create a button to draw a new card
-        self.button_draw_card = tk.Button(
-            self.root, text="Draw Development Card", command=self.draw_dev_card)
-        self.button_draw_card.pack()
-
-        # Add buttons for drawing outdoor and indoor tiles
-        self.button_draw_outdoor_tile = tk.Button(
-            self.root, text="Draw Outdoor Tile", command=self.draw_outdoor_tile)
-        self.button_draw_outdoor_tile.pack()
-
-        self.button_draw_indoor_tile = tk.Button(
-            self.root, text="Draw Indoor Tile", command=self.draw_indoor_tile)
-        self.button_draw_indoor_tile.pack()
-
-        # Start the GUI main loop
-        self.root.mainloop()
-
-    def draw_outdoor_tile(self):
-        tile = self.outdoor_deck.draw()
+    def place_tile(self, tile, row, col):
         tile_image = tile.image
+        # Resize the image to fit the tile size
+        tile_image = tile_image.resize((self.tile_size, self.tile_size))
         tile_tk_image = ImageTk.PhotoImage(tile_image)
-        self.label_image.config(image=tile_tk_image)
-        self.label_image.image = tile_tk_image
+        # Use the create_image method to draw the image on the canvas
+        self.canvas.create_image(
+            col*self.tile_size, row*self.tile_size, image=tile_tk_image, anchor=tk.NW)
+        # Add this line to store a reference to the image
+        self.images.append(tile_tk_image)
 
-    def draw_indoor_tile(self):
-        tile = self.indoor_deck.draw()
-        tile_image = tile.image
-        tile_tk_image = ImageTk.PhotoImage(tile_image)
-        self.label_image.config(image=tile_tk_image)
-        self.label_image.image = tile_tk_image
-
-    def draw_dev_card(self):
-        card = self.dev_deck.draw()
-        card.print_content()
-
-        card_image = card.image
-        card_tk_image = ImageTk.PhotoImage(card_image)
-        self.label_image.config(image=card_tk_image)
-        self.label_image.image = card_tk_image
-
-        # Update the label showing the number of cards remaining
-        self.label_number_of_cards.config(
-            text=f"Development Cards: {self.dev_deck.get_number_of_cards()}")
+    def update_dev_cards_count(self, count):
+        self.label_number_of_cards.config(text=f"Development Cards: {count}")
