@@ -24,7 +24,6 @@ class Card:
         self.image = image
         self.content = content
 
-
     def display(self, section_key='9 PM'):
         # self.image.show()
        # Print the content for the specified section of the card
@@ -72,11 +71,12 @@ class CardDeck:
                 card_index += 1
 
         random.shuffle(self.cards)
+        self.cards.pop(0)  # discard the first 2 cards
+        self.cards.pop(0)
         self.number_of_cards = len(self.cards)
-
 
     def draw(self):
         if self.cards:
             card = self.cards.pop(0)  # Removes the top card from the deck
-            self.number_of_cards -= 1                
+            self.number_of_cards -= 1
             return card

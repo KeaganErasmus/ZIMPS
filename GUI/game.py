@@ -5,7 +5,7 @@ from GUI.gui import GUI
 
 class Game:
     """
-    A single player game of Zombie in my pocket.
+    A single player game of Zombie in my pocket with basic logic for testing GUI.
     """
 
     def __init__(self):
@@ -14,15 +14,12 @@ class Game:
         self.outdoor_tiles = OutdoorTileDeck()
         self.indoor_tiles = IndoorTileDeck()
         self.time = '9 PM'
-        self.player_location = (5, 3)
+        self.player_location = (5, 3)  # foyer tile start location
         self.board = {}
         self.patio_tile = None
         self.initialize_game()
 
     def initialize_game(self):
-        # discard the first 2 development cards
-        self.dev_cards.draw()
-        self.dev_cards.draw()
         self.gui.update_dev_cards_count(self.dev_cards.number_of_cards)
 
         # Place the 'Foyer' tile on the board
@@ -65,7 +62,7 @@ class Game:
         self.gui.place_tile(new_tile, *self.player_location)
         possible_entries = new_tile.possible_exits()
         if new_tile.name == 'Dining Room':
-            # remove 'N' from possible entries as it reserved for exit to the patio
+            # 'N' is reserved for exit to the patio and can therefore not be an entry when placing as new tile
             possible_entries.remove('N')
         if len(possible_entries) > 1:
             new_tile = self.choose_entry(
@@ -115,8 +112,6 @@ class Game:
         """
         self.dev_cards = CardDeck()
         self.time = '10 PM' if self.time == '9 PM' else '11 PM'
-        self.dev_cards.draw()
-        self.dev_cards.draw()
         self.resolve_dev_card()
 
     def update_location(self, direction):

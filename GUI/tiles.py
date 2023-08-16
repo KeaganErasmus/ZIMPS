@@ -59,15 +59,15 @@ class Tile:
         Rotate new tile to align the chosen entry with the chosen exit from the previous tile.
         """
         rotations_needed = {'N': {'N': 2, 'E': 1, 'S': 0, 'W': 3},
-                            'E': {'N': 3, 'E': 2, 'S': 3, 'W': 0},
+                            'E': {'N': 3, 'E': 2, 'S': 1, 'W': 0},
                             'S': {'N': 0, 'E': 3, 'S': 2, 'W': 1},
-                            'W': {'N': 1, 'E': 0, 'S': 1, 'W': 2}}[chosen_exit][chosen_entry]
+                            'W': {'N': 1, 'E': 0, 'S': 3, 'W': 2}}[chosen_exit][chosen_entry]
 
         for _ in range(rotations_needed):
-            self.exits = {'N': self.exits['W'], 'E': self.exits['N'],
-                          'S': self.exits['E'], 'W': self.exits['S']}
-            # Rotate image 90 degrees counterclockwise
+            self.exits = {direction: self.exits[prev_dir]
+                          for direction, prev_dir in zip('NESW', 'WNES')}
             self.image = self.image.rotate(-90)
+
         return self
 
 
