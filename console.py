@@ -1,17 +1,26 @@
 import cmd
 
+
 class Console(cmd.Cmd):
-    def __init__(self):
+    """
+    Console that displays text and allows for user input
+    """
+
+    def __init__(self) -> None:
         cmd.Cmd.__init__(self)
-        self.prompt = ">>> "
+        self.prompt = ">>"
+        self.args = ["help, start, go, quit"]
+
+        print(self.args)
 
     def do_go(self, direction):
         """
-        Choose a direction to go from the current room.
-        Syntax: go [direction] where direction is either \'n\' (for north), \'e\' (for east), \'s\' (for south), \'w\' (for west).
+        Choose a direction to go from the current room. Syntax: go [direction] where direction is either \'n\' (for
+        north), \'e\' (for east), \'s\' (for south), \'w\' (for west).
         """
         try:
-            pass # this is where we will keep asking the player to play their turn
+            # this is where we will put the turn logic
+            pass
         except TypeError as err:
             print("Please enter a direction")
 
