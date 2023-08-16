@@ -7,14 +7,9 @@ from cmdconsole import CMDConsole
 def main():
     # app = GUI()
     print("Welcome to Zombies in my pocket")
-    vcon = Console("help", "start", "stop", "quit")
-    vcmd = CMDConsole()
+    console = Console()
 
-    vcmd.cmdloop()
-
-    while vcon.userinput != "quit":
-        vcon.user_input()
-        vcon.run_commands()
+    console.cmdloop()
 
 
 if __name__ == "__main__":

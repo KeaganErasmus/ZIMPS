@@ -1,26 +1,26 @@
-class Console:
-    """
-    Console that displays text and allows for user input
-    """
+import cmd
 
-    def __init__(self, *args) -> None:
-        self.args = args
-        self.userinput = ""
 
-    def print_commands(self):
-        """
-        Print the commands that can be used 
-        """
-        print(f'These are the commands that you can use: \n{self.args}')
+class Console(cmd.Cmd):
+    def __init__(self):
+        cmd.Cmd.__init__(self)
+        print("Commands: help, go, quit")
+        self.prompt = ">>> "
 
-    def user_input(self):
+    def do_go(self, direction):
         """
-        Takes the raw input from a user and displays the message
+        Choose a direction to go from the current room.
+        Syntax: go [direction] where direction is either \'n\' (for north), \'e\' (for east), \'s\' (for south), \'w\' (for west).
         """
-        self.userinput = input("To see all commands type help: ").strip().lower()
+        try:
+            # play_turn(direction)
+            pass
+        except TypeError as err:
+            print("Please enter a direction")
 
-    def run_commands(self):
-        if self.userinput == "help":
-            self.print_commands()
-        else:
-            print("That is not a recognized command: Type help to see all commands")
+    def do_quit(self, arg):
+        """
+        Quits the current game.
+        """
+        print("Goodbye")
+        return True
