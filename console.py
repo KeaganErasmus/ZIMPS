@@ -1,6 +1,7 @@
-from GUI.game import Game
+from game import Game
 
 import cmd
+
 
 class Console(cmd.Cmd):
     def __init__(self):
