@@ -23,7 +23,7 @@ class Card:
         """
         # self.image.show()
         print("Development Card:")
-        print("------------------------------")
+        print("---------------------------------------")
         print(section_key)
         section = self.content[section_key]
         text = section['text']
@@ -32,12 +32,12 @@ class Card:
             print(f"{text}: {value}")
             return
         if text == 'zombies':
-            print(f"{value} Zombies")
+            print(f"{value} Zombies attack.. AHHH!!!")
         elif text == 'ITEM':
-            print("ITEM: Draw another card and keep the item on it.")
+            print("You found an item: Draw another card to see what it is.")
         else:
             print(f"{text}: {value}")
-        print("------------------------------")
+        print("---------------------------------------")
 
 
 class CardDeck:
