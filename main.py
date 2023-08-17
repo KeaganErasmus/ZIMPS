@@ -1,4 +1,4 @@
-from GUI.game import Game
+from game import Game
 from console import Console
 from pickling import Pickling
 from cmdconsole import CMDConsole
