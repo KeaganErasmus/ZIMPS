@@ -10,7 +10,7 @@ class Console(cmd.Cmd):
 
         # self.game = Game()
 
-    def do_go(self):
+    def do_go(self, direction):
         """
         Choose a direction to go from the current room.
         Syntax: go [direction] where direction is either \'n\' (for north), \'e\' (for east), \'s\' (for south), \'w\' (for west).
