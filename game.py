@@ -18,6 +18,8 @@ class Game:
         self.board = {}
         self.patio_tile = None
         self.initialize_game()
+        # Start the GUI main loop
+        self.gui.root.mainloop()
 
     def initialize_game(self):
         self.gui.update_dev_cards_count(self.dev_cards.number_of_cards)
