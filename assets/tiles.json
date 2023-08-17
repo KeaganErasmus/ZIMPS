@@ -6,15 +6,18 @@
     },
     "2": {
       "name": "Kitchen",
-      "exits": { "N": true, "S": false, "E": true, "W": true }
+      "exits": { "N": true, "S": false, "E": true, "W": true },
+      "effect": "Add health"
     },
     "3": {
       "name": "Storage",
-      "exits": { "N": true, "S": false, "E": false, "W": false }
+      "exits": { "N": true, "S": false, "E": false, "W": false },
+      "effect": "Find item"
     },
     "4": {
       "name": "Evil Temple",
-      "exits": { "N": false, "S": false, "E": true, "W": true }
+      "exits": { "N": false, "S": false, "E": true, "W": true },
+      "effect":"Find totem"
     },
     "5": {
       "name": "Family Room",
@@ -48,7 +51,8 @@
     },
     "4": {
       "name": "Graveyard",
-      "exits": { "N": false, "S": true, "E": true, "W": false }
+      "exits": { "N": false, "S": true, "E": true, "W": false },
+      "effect": "Bury totem"
     },
     "5": {
       "name": "Garage",
