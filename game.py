@@ -1,5 +1,5 @@
-from GUI.cards import CardDeck
-from GUI.tiles import OutdoorTileDeck, IndoorTileDeck
+from cards import CardDeck
+from tiles import OutdoorTileDeck, IndoorTileDeck
 from GUI.gui import GUI
 
 

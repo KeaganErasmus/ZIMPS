@@ -1,28 +1,9 @@
 from PIL import Image
 import random
+import json
 
 IMAGE_PATH = 'assets/tiles.jpg'
-INDOOR_TILES = {
-    1: {'name': 'Bathroom', 'exits': {'N': True, 'S': False, 'E': False, 'W': False}},
-    5: {'name': 'Family Room', 'exits': {'N': True, 'S': False, 'E': True, 'W': True}},
-    2: {'name': 'Kitchen', 'exits': {'N': True, 'S': False, 'E': True, 'W': True}},
-    6: {'name': 'Dining Room', 'exits': {'N': True, 'S': True, 'E': True, 'W': True}},
-    3: {'name': 'Storage', 'exits': {'N': True, 'S': False, 'E': False, 'W': False}},
-    7: {'name': 'Bedroom', 'exits': {'N': True, 'S': False, 'E': False, 'W': True}},
-    4: {'name': 'Evil Temple', 'exits': {'N': False, 'S': False, 'E': True, 'W': True}},
-    8: {'name': 'Foyer', 'exits': {'N': True, 'S': False, 'E': False, 'W': False}},
-}
-
-OUTDOOR_TILES = {
-    1: {'name': 'Garden', 'exits': {'N': False, 'S': True, 'E': True, 'W': True}},
-    5: {'name': 'Garage', 'exits': {'N': False, 'S': True, 'E': False, 'W': True}},
-    2: {'name': 'Sitting Area', 'exits': {'N': False, 'S': True, 'E': True, 'W': True}},
-    6: {'name': 'Patio', 'exits': {'N': True, 'S': True, 'E': True, 'W': False}},
-    3: {'name': 'Yard', 'exits': {'N': False, 'S': True, 'E': True, 'W': True}},
-    7: {'name': 'Yard', 'exits': {'N': False, 'S': True, 'E': True, 'W': True}},
-    4: {'name': 'Graveyard', 'exits': {'N': False, 'S': True, 'E': True, 'W': False}},
-    8: {'name': 'Yard', 'exits': {'N': False, 'S': True, 'E': True, 'W': True}},
-}
+JSON_PATH = 'assets/tiles.json'
 
 
 class Tile:
@@ -76,18 +57,39 @@ class TileDeck:
     A tile deck is a collection of tiles that can be drawn from.
     """
 
-    def __init__(self, deck_type, image_path=IMAGE_PATH):
+    def __init__(self, deck_type, image_path=IMAGE_PATH, json_path=JSON_PATH):
         self.tiles = []
+        self.image_path = image_path
 
-        # Determine start row and metadata based on deck type
-        start_row = 0 if deck_type == 'outdoor' else 2
-        tile_metadata = OUTDOOR_TILES if deck_type == 'outdoor' else INDOOR_TILES
+        tile_metadata = self.load_metadata(deck_type, json_path)
+        self.initialize_tiles(tile_metadata)
 
-        image = Image.open(image_path)
+    def load_metadata(self, deck_type, json_path):
+        try:
+            with open(json_path, 'r') as file:
+                metadata_dict = json.load(file)
+            tile_metadata = metadata_dict['OUTDOOR_TILES'] if deck_type == 'outdoor' else metadata_dict['INDOOR_TILES']
+            return tile_metadata
+        except FileNotFoundError:
+            print(
+                f"File {json_path} not found. Please ensure the path is correct.")
+            return None
+        except json.JSONDecodeError:
+            print(
+                f"Error decoding JSON from {json_path}. Please ensure the file is formatted correctly.")
+            return None
+
+    def initialize_tiles(self, tile_metadata):
+        if tile_metadata is None:
+            return
+
+        image = Image.open(self.image_path)
         rows, cols = 4, 4
         tile_width = image.width // cols
         tile_height = image.height // rows
         index = 1
+        start_row = 0 if 'Garden' in [tile['name']
+                                      for tile in tile_metadata.values()] else 2
 
         for i in range(start_row, start_row + rows // 2):
             for j in range(cols):
@@ -96,7 +98,7 @@ class TileDeck:
                 right = (j + 1) * tile_width
                 bottom = (i + 1) * tile_height
                 tile_image = image.crop((left, top, right, bottom))
-                metadata = tile_metadata[index]
+                metadata = tile_metadata[str(index)]
                 tile = Tile(tile_image, metadata['name'], metadata['exits'])
                 self.tiles.append(tile)
                 index += 1
@@ -117,10 +119,10 @@ class TileDeck:
 
 
 class IndoorTileDeck(TileDeck):
-    def __init__(self, image_path=IMAGE_PATH):
-        super().__init__('indoor', image_path)
+    def __init__(self):
+        super().__init__('indoor')
 
 
 class OutdoorTileDeck(TileDeck):
-    def __init__(self, image_path=IMAGE_PATH):
-        super().__init__('outdoor', image_path)
+    def __init__(self):
+        super().__init__('outdoor')
