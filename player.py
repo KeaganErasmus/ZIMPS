@@ -23,3 +23,12 @@ class Player:
 
     def get_health(self):
         return self.health
+
+    def take_damage(self, amount):
+        self.health -= amount
+
+    def take_totem(self):
+        self.has_totem = True
+
+    def get_details(self):
+        return f'Current location: x->{self.x}, y->{self.y} \nhealth->{self.health}'
