@@ -1,5 +1,5 @@
-from PIL import ImageTk, Image
 import tkinter as tk
+from PIL import ImageTk
 
 
 class GUI:
