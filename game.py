@@ -1,38 +1,19 @@
-from cards import CardDeck
-from tiles import OutdoorTileDeck, IndoorTileDeck
-from GUI.gui import GUI
+from board import Board
+
 
 
 class Game:
     """
-    A single player game of Zombie in my pocket with basic logic for testing GUI.
+    The Game class controls the game logic eg (movement, attack)
     """
 
     def __init__(self):
-        self.gui = GUI()
-        self.dev_cards = CardDeck()
-        self.outdoor_tiles = OutdoorTileDeck()
-        self.indoor_tiles = IndoorTileDeck()
         self.time = '9 PM'
         self.player_location = (5, 3)  # foyer tile start location
         self.board = {}
         self.patio_tile = None
-        self.initialize_game()
         # Start the GUI main loop
-        self.gui.root.mainloop()
-
-    def initialize_game(self):
-        self.gui.update_dev_cards_count(self.dev_cards.number_of_cards)
-
-        # Place the 'Foyer' tile on the board
-        foyer_tile = self.indoor_tiles.draw_tile_by_name('Foyer')
-        self.gui.place_tile(foyer_tile, 5, 3)
-        self.board[(5, 3)] = foyer_tile
-
-        # Set aside the 'Patio' tile
-        self.patio_tile = self.outdoor_tiles.draw_tile_by_name('Patio')
-
-        self.player_turn()
+        Board()
 
     def player_turn(self):
         current_tile = self.board[self.player_location]
@@ -112,7 +93,6 @@ class Game:
         """
         Create new development deck and update the time and discard the first 2 cards.
         """
-        self.dev_cards = CardDeck()
         self.time = '10 PM' if self.time == '9 PM' else '11 PM'
         self.resolve_dev_card()
 
