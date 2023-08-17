@@ -1,3 +1,5 @@
+from GUI.game import Game
+
 import cmd
 
 class Console(cmd.Cmd):
@@ -6,6 +8,8 @@ class Console(cmd.Cmd):
         print("Commands: help, go, quit")
         self.prompt = ">>> "
 
+        # self.game = Game()
+
     def do_go(self):
         """
         Choose a direction to go from the current room.
@@ -13,7 +17,7 @@ class Console(cmd.Cmd):
         """
         try:
             # this is where we will do our movement logic
-            pass
+            Game()
         except TypeError as err:
             print("Please enter a direction")
 
