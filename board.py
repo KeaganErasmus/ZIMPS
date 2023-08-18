@@ -1,6 +1,7 @@
 from cards import CardDeck
 from tiles import OutdoorTileDeck, IndoorTileDeck
 from GUI.gui import GUI
+from player import Player
 
 
 class Board:
@@ -14,7 +15,6 @@ class Board:
         self.outdoor_tiles = OutdoorTileDeck()
         self.indoor_tiles = IndoorTileDeck()
         self.time = '9 PM'
-        self.player_location = (5, 3)  # foyer tile start location
         self.board = {}
         self.patio_tile = None
         self.initialize_game()
@@ -29,6 +29,3 @@ class Board:
 
         # Set aside the 'Patio' tile
         self.patio_tile = self.outdoor_tiles.draw_tile_by_name('Patio')
-
-
-

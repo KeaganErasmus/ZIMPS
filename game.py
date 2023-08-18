@@ -1,7 +1,6 @@
 from board import Board
 
 
-
 class Game:
     """
     The Game class controls the game logic eg (movement, attack)
@@ -10,13 +9,12 @@ class Game:
     def __init__(self):
         self.time = '9 PM'
         self.player_location = (5, 3)  # foyer tile start location
-        self.board = {}
         self.patio_tile = None
         # Start the GUI main loop
-        Board()
+        self.the_board = Board()
 
     def player_turn(self):
-        current_tile = self.board[self.player_location]
+        current_tile = self.the_board.board[self.player_location]
         possible_exits = current_tile.possible_exits()
         print(
             f"You are in the {current_tile.name}. Possible exit directions: {possible_exits}")
@@ -41,8 +39,8 @@ class Game:
         Check if new tile has multiple exits(entries) and if so, ask the player to choose one side to enter from.
         Rotate the new tile accordingly.
         """
-        new_tile = self.indoor_tiles.draw()
-        self.gui.place_tile(new_tile, *self.player_location)
+        new_tile = self.the_board.indoor_tiles.draw()
+        self.the_board.gui.place_tile(new_tile, *self.player_location)
         possible_entries = new_tile.possible_exits()
         if new_tile.name == 'Dining Room':
             # 'N' is reserved for exit to the patio and can therefore not be an entry when placing as new tile
@@ -56,8 +54,8 @@ class Game:
 
         print(f"You entered the {new_tile.name}.")
         new_tile.display()
-        self.gui.place_tile(new_tile, *self.player_location)
-        self.board[self.player_location] = new_tile  # add new tile to board
+        self.the_board.gui.place_tile(new_tile, *self.player_location)
+        self.the_board.board[self.player_location] = new_tile  # add new tile to board
         self.resolve_dev_card()
 
     def choose_entry(self, chosen_exit, new_tile, possible_entries):
@@ -77,17 +75,17 @@ class Game:
         """
         Handle logic for resolving a development card.
         """
-        if self.dev_cards.number_of_cards == 0:
+        if self.the_board.dev_cards.number_of_cards == 0:
             self.update_dev_deck_and_time()
 
-        card = self.dev_cards.draw()
-        self.gui.update_dev_cards_count(self.dev_cards.number_of_cards)
+        card = self.the_board.dev_cards.draw()
+        self.the_board.gui.update_dev_cards_count(self.the_board.dev_cards.number_of_cards)
         card.display(self.time)
         # card.image.show() # uncomment to show the card image
         self.player_turn()
 
     def is_explored(self, location):
-        return location in self.board
+        return location in self.the_board.board
 
     def update_dev_deck_and_time(self):
         """

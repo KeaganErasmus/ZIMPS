@@ -1,6 +1,3 @@
-from game import Game
-
-
 class Player:
     def __init__(self, x, y, health, attack, items, has_totem, score, game):
         self.x = x
