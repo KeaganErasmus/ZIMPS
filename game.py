@@ -1,4 +1,5 @@
 from board import Board
+from player import Player
 
 
 class Game:
@@ -7,98 +8,97 @@ class Game:
     """
 
     def __init__(self):
-        self.time = '9 PM'
-        self.player_location = (5, 3)  # foyer tile start location
-        self.patio_tile = None
-        # Start the GUI main loop
-        self.the_board = Board()
+        self.player = Player()
+        self.board = Board()
+        self._print_current_room()
 
-    def player_turn(self):
-        current_tile = self.the_board.board[self.player_location]
-        possible_exits = current_tile.possible_exits()
-        print(
-            f"You are in the {current_tile.name}. Possible exit directions: {possible_exits}")
-        current_tile.display()
-        chosen_exit = ""
-        while chosen_exit not in possible_exits:
-            chosen_exit = input("Choose a direction to exit: ").upper()
-            if chosen_exit not in possible_exits:
-                print(
-                    f"Invalid exit direction. Please choose a direction from: {possible_exits}")
+    def _print_current_room(self):
+        print(f"You are in the {self._current_room().name}.")
+        print(f"Possible exits: {self._current_room().possible_exits()}")
+        self._current_room().display()
 
-        self.player_location = self.update_location(chosen_exit)
+    def _current_room(self):
+        return self.board.tile_map[self.player.location]
 
-        # If the new location hasn't been explored, place a new tile
-        if not self.is_explored(self.player_location):
-            self.place_new_tile(chosen_exit)
+    def player_turn(self, direction):
+        possible_exits = self._current_room().possible_exits()
+        if direction not in possible_exits:
+            print(
+                f"Invalid exit direction. Choose from: {possible_exits}")
+            return
+
+        new_location = self.update_location(direction)
+        if self.board.is_explored(new_location):
+            room = self.board.tile_map[new_location]
+            if self.opposite_direction(direction) not in room.possible_exits():
+                print("This exit is blocked by a wall from another room.")
+                return
+
+            self.player.location = new_location
+            self.resolve_dev_card(room)
         else:
-            self.resolve_dev_card()
+            self.player.location = new_location
+            self.place_new_tile(direction)
 
     def place_new_tile(self, chosen_exit):
         """
-        Check if new tile has multiple exits(entries) and if so, ask the player to choose one side to enter from.
+        Choose side to enter new room from.
         Rotate the new tile accordingly.
         """
-        new_tile = self.the_board.indoor_tiles.draw()
-        self.the_board.gui.place_tile(new_tile, *self.player_location)
+        # TODO:
+        # logic to draw from correct tile deck (outdoor/indoor)
+        # logic to place patio tile when moving outside
+        new_tile = self.board.indoor_tiles.draw()
+        self.board.gui.place_tile(new_tile, *self.player.location)
+
         possible_entries = new_tile.possible_exits()
         if new_tile.name == 'Dining Room':
-            # 'N' is reserved for exit to the patio and can therefore not be an entry when placing as new tile
+            # 'N' is reserved for exit to the Patio
             possible_entries.remove('N')
         if len(possible_entries) > 1:
-            new_tile = self.choose_entry(
+            new_tile = self._choose_entry(
                 chosen_exit, new_tile, possible_entries)
         else:
             new_tile = new_tile.rotate_tile(
                 possible_entries[0], chosen_exit)
 
-        print(f"You entered the {new_tile.name}.")
-        new_tile.display()
-        self.the_board.gui.place_tile(new_tile, *self.player_location)
-        self.the_board.board[self.player_location] = new_tile  # add new tile to board
-        self.resolve_dev_card()
+        self.board.gui.place_tile(new_tile, *self.player.location)
+        self.board.tile_map[self.player.location] = new_tile
+        self.resolve_dev_card(new_tile)
 
-    def choose_entry(self, chosen_exit, new_tile, possible_entries):
+    def _choose_entry(self, chosen_exit, new_tile, possible_entries):
         print(
-            f"You found the {new_tile.name}, you can enter from the following sides: {possible_entries}")
-        new_tile.display()
+            f"You found the {new_tile.name}, you can enter from: {possible_entries}")
         chosen_entry = ""
         while chosen_entry not in possible_entries:
             chosen_entry = input("Choose a side to enter from: ").upper()
             if chosen_entry not in possible_entries:
                 print(f"Invalid entry. Please choose from: {possible_entries}")
 
-        new_tile = new_tile.rotate_tile(chosen_entry, chosen_exit)
-        return new_tile
+        return new_tile.rotate_tile(chosen_entry, chosen_exit)
 
-    def resolve_dev_card(self):
+    def resolve_dev_card(self, room):
         """
         Handle logic for resolving a development card.
         """
-        if self.the_board.dev_cards.number_of_cards == 0:
-            self.update_dev_deck_and_time()
+        room.display()
+        if self.board.dev_cards.number_of_cards == 0:
+            self.board.update_time()
 
-        card = self.the_board.dev_cards.draw()
-        self.the_board.gui.update_dev_cards_count(self.the_board.dev_cards.number_of_cards)
-        card.display(self.time)
-        # card.image.show() # uncomment to show the card image
-        self.player_turn()
+        card = self.board.dev_cards.draw()
+        card.display(self.board.time)
+        # TODO: implement card logic
+        return
 
-    def is_explored(self, location):
-        return location in self.the_board.board
-
-    def update_dev_deck_and_time(self):
-        """
-        Create new development deck and update the time and discard the first 2 cards.
-        """
-        self.time = '10 PM' if self.time == '9 PM' else '11 PM'
-        self.resolve_dev_card()
+    def opposite_direction(direction):
+        opposites = {'N': 'S', 'E': 'W', 'S': 'N', 'W': 'E'}
+        return opposites.get(direction, "Invalid direction")
 
     def update_location(self, direction):
         """
         Update the player location based on the chosen exit direction.
         """
-        x, y = self.player_location
+        x, y = self.player.location
         if direction == 'E':
             return x, y + 1
         elif direction == 'W':

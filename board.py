@@ -1,31 +1,41 @@
+from GUI.gui import GUI
 from cards import CardDeck
 from tiles import OutdoorTileDeck, IndoorTileDeck
-from GUI.gui import GUI
-from player import Player
 
 
 class Board:
     """
-    Class for setting up the board, and tiles
+    Class for setting up the game commponents and GUI.
     """
 
-    def __init__(self):
+    def __init__(self, start_time='9 PM', start_coordinates=(5, 3)):
+        self.time = start_time
+        self.tile_map = {}
+        self.patio_tile = None
         self.gui = GUI()
         self.dev_cards = CardDeck()
         self.outdoor_tiles = OutdoorTileDeck()
         self.indoor_tiles = IndoorTileDeck()
-        self.time = '9 PM'
-        self.board = {}
-        self.patio_tile = None
-        self.initialize_game()
-        # Start the GUI main loop
-        self.gui.root.mainloop()
+        self._setup(start_coordinates)
 
-    def initialize_game(self):
-        # Place the 'Foyer' tile on the board
+    def _setup(self, start_coordinates):
+        # Start the GUI
+        # self.gui.root.mainloop()
+
+        # Place the 'Foyer' tile at the start coordinates
         foyer_tile = self.indoor_tiles.draw_tile_by_name('Foyer')
-        self.gui.place_tile(foyer_tile, 5, 3)
-        self.board[(5, 3)] = foyer_tile
+        self.tile_map[start_coordinates] = foyer_tile
+        self.gui.place_tile(foyer_tile, *start_coordinates)
 
         # Set aside the 'Patio' tile
         self.patio_tile = self.outdoor_tiles.draw_tile_by_name('Patio')
+
+    def update_time(self):
+        """
+        Update the time and create a new dev card deck.
+        """
+        self.time = '10 PM' if self.time == '9 PM' else '11 PM'
+        self.dev_cards = CardDeck()
+
+    def is_explored(self, location):
+        return location in self.tile_map

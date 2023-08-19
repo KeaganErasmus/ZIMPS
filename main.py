@@ -3,8 +3,10 @@ from console import Console
 
 def main():
     print("Welcome to Zombies in my pocket")
-    view = Console()
-    view.cmdloop()
+    run = Console()
+    while True:
+        run.cmdloop()
+        run.game.board.gui.root.mainloop()
 
 
 if __name__ == "__main__":
