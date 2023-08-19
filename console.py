@@ -12,7 +12,7 @@ class Console(cmd.Cmd):
     def do_go(self, direction):
         """
         Choose a direction to go from the current room.
-        Syntax: go [direction] where direction is either \'n\' (for north), \'e\' (for east), \'s\' (for south), \'w\' (for west).
+        Syntax: go [direction] where direction is either \'N\' (for north), \'E\' (for east), \'S\' (for south), \'W\' (for west).
         """
         try:
             self.game.player_turn(direction)
