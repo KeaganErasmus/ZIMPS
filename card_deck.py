@@ -1,43 +1,10 @@
-from PIL import Image
-import random
 import json
+import random
+from PIL import Image
+from card import Card
 
 IMAGE_PATH = 'assets/dev_cards.jpg'
-JSON_PATH = 'assets/dev_cards.json'
-
-
-class Card:
-    """
-    A development card.
-    """
-
-    def __init__(self, image, content):
-        self.image = image
-        self.content = content
-
-    def display(self, section_key='9 PM'):
-        """Prints the cards content to the console.
-
-        Args:
-            section_key (str, optional): The section(time) of the card to display. Defaults to '9 PM'.
-        """
-        # self.image.show()
-        print("Development Card:")
-        print("---------------------------------------")
-        print(section_key)
-        section = self.content[section_key]
-        text = section['text']
-        value = section['value']
-        if section_key == 'Item':
-            print(f"{text}: {value}")
-            return
-        if text == 'zombies':
-            print(f"{value} Zombies attack.. AHHH!!!")
-        elif text == 'ITEM':
-            print("You found an item: Draw another card to see what it is.")
-        else:
-            print(f"{text}: {value}")
-        print("---------------------------------------")
+CONTENT_PATH = 'assets/dev_cards.json'
 
 
 class CardDeck:
@@ -45,7 +12,7 @@ class CardDeck:
     A deck of development cards.
     """
 
-    def __init__(self, image_path=IMAGE_PATH, json_path=JSON_PATH):
+    def __init__(self, image_path=IMAGE_PATH, json_path=CONTENT_PATH):
         self.cards = []
         self.image_path = image_path
         cards_content = self.load_cards_content(json_path)

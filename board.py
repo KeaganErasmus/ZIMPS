@@ -1,6 +1,6 @@
 from GUI.gui import GUI
-from cards import CardDeck
-from tiles import OutdoorTileDeck, IndoorTileDeck
+from card_deck import CardDeck
+from tile_deck import OutdoorTileDeck, IndoorTileDeck
 
 
 class Board:
@@ -19,9 +19,11 @@ class Board:
         self._setup(start_coordinates)
 
     def _setup(self, start_coordinates):
-        # Start the GUI
-        # self.gui.root.mainloop()
+        """Intialize the game board.
 
+        Args:
+            start_coordinates (tuple): The x, y starting coordinates.
+        """
         # Place the 'Foyer' tile at the start coordinates
         foyer_tile = self.indoor_tiles.draw_tile_by_name('Foyer')
         self.tile_map[start_coordinates] = foyer_tile
