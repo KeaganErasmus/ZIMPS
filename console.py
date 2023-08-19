@@ -24,4 +24,5 @@ class Console(cmd.Cmd):
         Quits the current game.
         """
         print("Goodbye")
+        self.game.board.gui.root.destroy()
         return True
