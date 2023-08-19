@@ -17,7 +17,7 @@ class TileDeck:
         self.image_path = image_path
 
         tile_metadata = self.load_metadata(deck_type, json_path)
-        self.initialize_tiles(tile_metadata)
+        self.initialize_tiles(deck_type, tile_metadata)
 
     def load_metadata(self, deck_type, json_path):
         try:
@@ -34,7 +34,7 @@ class TileDeck:
                 f"Error decoding JSON from {json_path}. Please ensure the file is formatted correctly.")
             return None
 
-    def initialize_tiles(self, tile_metadata):
+    def initialize_tiles(self, decktype, tile_metadata):
         if tile_metadata is None:
             return
 
@@ -43,8 +43,7 @@ class TileDeck:
         tile_width = image.width // cols
         tile_height = image.height // rows
         index = 1
-        start_row = 0 if 'Garden' in [tile['name']
-                                      for tile in tile_metadata.values()] else 2
+        start_row = 0 if decktype == 'outdoor' else 2
 
         for i in range(start_row, start_row + rows // 2):
             for j in range(cols):
@@ -54,7 +53,8 @@ class TileDeck:
                 bottom = (i + 1) * tile_height
                 tile_image = image.crop((left, top, right, bottom))
                 metadata = tile_metadata[str(index)]
-                tile = Tile(tile_image, metadata['name'], metadata['exits'])
+                tile = Tile(
+                    tile_image, metadata['name'], metadata['exits'], decktype)
                 self.tiles.append(tile)
                 index += 1
 
@@ -68,17 +68,18 @@ class TileDeck:
                 return self.tiles.pop(i)
 
     def draw(self):
-        if self.tiles:
+        if self.count > 0:
             tile = self.tiles.pop(0)
             self.count -= 1
             return tile
+        return None
 
 
-class IndoorTileDeck(TileDeck):
+class IndoorTiles(TileDeck):
     def __init__(self):
         super().__init__('indoor')
 
 
-class OutdoorTileDeck(TileDeck):
+class OutdoorTiles(TileDeck):
     def __init__(self):
         super().__init__('outdoor')

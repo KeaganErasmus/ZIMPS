@@ -3,10 +3,11 @@ class Tile:
     A tile is a single square on the game board.
     """
 
-    def __init__(self, image, name, exits):
+    def __init__(self, image, name, exits, tile_type):
         self.image = image
         self.name = name
         self.exits = exits
+        self.tile_type = tile_type  # 'indoor' or 'outdoor'
 
     def display(self):
         # self.image.show()
@@ -27,7 +28,7 @@ class Tile:
     def possible_exits(self):
         return [direction for direction, is_exit in self.exits.items() if is_exit]
 
-    def rotate_tile(self, chosen_entry, chosen_exit):
+    def rotate(self, chosen_entry, chosen_exit):
         """
         Rotate new tile to align the chosen entry with the chosen exit from the previous tile.
         """

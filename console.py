@@ -17,7 +17,8 @@ class Console(cmd.Cmd):
         try:
             self.game.player_turn(direction)
         except TypeError as err:
-            print("Please enter a direction")
+            print(TypeError.__str__())
+            print(err)
 
     def do_quit(self, arg):
         """

@@ -38,43 +38,40 @@ class Game:
         possible_exits = self._current_room().possible_exits()
         if direction not in possible_exits:
             print(
-                f"Invalid exit direction. Choose from: {possible_exits}")
+                f"Invalid direction. Choose from: {possible_exits}")
             return
 
-        new_location = self.update_location(direction)
+        new_location = self._update_location(direction)
         if self.board.is_explored(new_location):
             room = self.board.tile_map[new_location]
             if self._opposite_direction(direction) not in room.possible_exits():
                 print("This exit is blocked by a wall from another room.")
                 return
-
             self.player.location = new_location
             self._resolve_dev_card(room)
         else:
+            new_tile, tile_type = self.board.draw_tile(self._current_room())
+            if new_tile is None:
+                print(f"No more {tile_type} tiles to draw.")
+                return
             self.player.location = new_location
-            self._place_new_tile(direction)
+            self.gui.place_tile(new_tile, *new_location)
+            self._place_new_tile(direction, new_tile)
 
-    def _place_new_tile(self, chosen_exit):
+    def _place_new_tile(self, chosen_exit, new_tile):
         """
         Choose side to enter new room from.
         Rotate the new tile accordingly.
         """
         # TODO:
-        # logic to draw from correct tile deck (outdoor/indoor)
         # logic to place patio tile when moving outside
         # logic to bash down wall if no other exits
-        new_tile = self.board.indoor_tiles.draw()
-        self.gui.place_tile(new_tile, *self.player.location)
-
         possible_entries = new_tile.possible_exits()
-        if new_tile.name == 'Dining Room':
-            # 'N' is reserved for exit to the Patio
-            possible_entries.remove('N')
         if len(possible_entries) > 1:
             new_tile = self._choose_entry(
                 chosen_exit, new_tile, possible_entries)
         else:
-            new_tile = new_tile.rotate_tile(
+            new_tile = new_tile.rotate(
                 possible_entries[0], chosen_exit)
 
         self.gui.place_tile(new_tile, *self.player.location)
@@ -82,6 +79,10 @@ class Game:
         self._resolve_dev_card(new_tile)
 
     def _choose_entry(self, chosen_exit, new_tile, possible_entries):
+        if new_tile.name == 'Dining Room':
+            # 'N' is reserved for exit to the Patio
+            possible_entries.remove('N')
+            # place patio tile with 'N' to (N) of Dining room
         print(
             f"You found the {new_tile.name}, you can enter from: {possible_entries}")
         chosen_entry = ""
@@ -90,7 +91,14 @@ class Game:
             if chosen_entry not in possible_entries:
                 print(f"Invalid entry. Please choose from: {possible_entries}")
 
-        return new_tile.rotate_tile(chosen_entry, chosen_exit)
+        # if new_tile.name == 'Dining Room':
+        #     patio_tile = self.board.patio_tile.rotate(
+        #         'N', self._opposite_direction(chosen_entry))  # not tested
+        #     patio_location = self._update_location('N')
+        #     self.board.tile_map[patio_location] = patio_tile
+        #     self.gui.place_tile(patio_tile, *patio_location)
+
+        return new_tile.rotate(chosen_entry, chosen_exit)
 
     def _resolve_dev_card(self, room):
         """
@@ -100,12 +108,15 @@ class Game:
         card = self.board.dev_cards.draw()
         card.display(self.board.time)
         # TODO: implement card logic
+        if not self._game_over():
+            pass
         return
 
     def _game_over(self):
         """
         Check if the game is over.
         """
+        self._update_gui_labels()
         if self.board.dev_cards.count == 0:
             if self.board.time == "11 PM":
                 print("You ran out of time. GAME OVER!")
@@ -116,10 +127,9 @@ class Game:
             print("You died. GAME OVER!")
             return True
 
-        self._update_gui_labels()
         return False
 
-    def _opposite_direction(direction):
+    def _opposite_direction(self, direction):
         opposites = {'N': 'S', 'E': 'W', 'S': 'N', 'W': 'E'}
         return opposites.get(direction, "Invalid direction")
 
