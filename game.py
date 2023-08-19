@@ -44,12 +44,12 @@ class Game:
         new_location = self.update_location(direction)
         if self.board.is_explored(new_location):
             room = self.board.tile_map[new_location]
-            if self.opposite_direction(direction) not in room.possible_exits():
+            if self._opposite_direction(direction) not in room.possible_exits():
                 print("This exit is blocked by a wall from another room.")
                 return
 
             self.player.location = new_location
-            self.resolve_dev_card(room)
+            self._resolve_dev_card(room)
         else:
             self.player.location = new_location
             self._place_new_tile(direction)
@@ -62,6 +62,7 @@ class Game:
         # TODO:
         # logic to draw from correct tile deck (outdoor/indoor)
         # logic to place patio tile when moving outside
+        # logic to bash down wall if no other exits
         new_tile = self.board.indoor_tiles.draw()
         self.gui.place_tile(new_tile, *self.player.location)
 
@@ -78,7 +79,7 @@ class Game:
 
         self.gui.place_tile(new_tile, *self.player.location)
         self.board.tile_map[self.player.location] = new_tile
-        self.resolve_dev_card(new_tile)
+        self._resolve_dev_card(new_tile)
 
     def _choose_entry(self, chosen_exit, new_tile, possible_entries):
         print(
@@ -91,7 +92,7 @@ class Game:
 
         return new_tile.rotate_tile(chosen_entry, chosen_exit)
 
-    def resolve_dev_card(self, room):
+    def _resolve_dev_card(self, room):
         """
         Handle logic for resolving a development card.
         """
@@ -105,13 +106,17 @@ class Game:
         """
         Check if the game is over.
         """
-        if self.board.dev_cards.number_of_cards == 0:
+        if self.board.dev_cards.count == 0:
             if self.board.time == "11 PM":
                 print("You ran out of time. GAME OVER!")
                 return True
             self.board.update_time()
 
+        if self.player.health == 0:
+            print("You died. GAME OVER!")
             return True
+
+        self._update_gui_labels()
         return False
 
     def _opposite_direction(direction):
@@ -120,7 +125,7 @@ class Game:
 
     def _update_location(self, direction):
         """
-        Update the player location based on the chosen exit direction.
+        Calculate the new location based on the chosen exit direction.
         """
         x, y = self.player.location
         if direction == 'E':
