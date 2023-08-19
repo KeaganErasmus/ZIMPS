@@ -59,17 +59,18 @@ class TileDeck:
                 index += 1
 
         random.shuffle(self.tiles)
-        self.number_of_tiles = len(self.tiles)
+        self.count = len(self.tiles)
 
     def draw_tile_by_name(self, name):
         for i, tile in enumerate(self.tiles):
             if tile.name == name:
+                self.count -= 1
                 return self.tiles.pop(i)
 
     def draw(self):
         if self.tiles:
             tile = self.tiles.pop(0)
-            self.number_of_tiles -= 1
+            self.count -= 1
             return tile
 
 

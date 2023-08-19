@@ -1,6 +1,6 @@
 class Player:
-    def __init__(self, x=5, y=3, health=6, attack=1, items=[], has_totem=False):
-        self.location = (x, y)
+    def __init__(self, start_coordinates, health=6, attack=1, items=[], has_totem=False):
+        self.location = start_coordinates
         self.health = health
         self.attack = attack
         self.items = items

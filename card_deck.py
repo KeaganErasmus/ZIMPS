@@ -49,10 +49,10 @@ class CardDeck:
         random.shuffle(self.cards)
         self.cards.pop(0)  # discard the first 2 cards
         self.cards.pop(0)
-        self.number_of_cards = len(self.cards)
+        self.count = len(self.cards)
 
     def draw(self):
         if self.cards:
             card = self.cards.pop(0)  # Removes the top card from the deck
-            self.number_of_cards -= 1
+            self.count -= 1
             return card

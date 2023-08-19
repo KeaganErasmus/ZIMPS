@@ -5,7 +5,7 @@ from game import Game
 class Console(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
-        print("Commands: help, go, quit")
+        print("Commands: help, go [direction], quit")
         self.prompt = ">>> "
         self.game = Game()
 
@@ -24,5 +24,5 @@ class Console(cmd.Cmd):
         Quits the current game.
         """
         print("Goodbye")
-        self.game.board.gui.root.destroy()
+        self.game.gui.root.destroy()
         return True
