@@ -151,9 +151,10 @@ class Game:
     def _fight_zombies(self, number):
         damage = number - self.player.attack
         if damage >= 0:
+            damage = min(damage, 4)  # max damage is 4
             self.player.take_damage(damage)
             self.player.attack = 0
-        else:  # no damage only decrease attack
+        else:  # only decrease attack
             self.player.attack += damage
 
     def _get_new_item(self):
