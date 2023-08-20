@@ -179,7 +179,6 @@ class Game:
             item_value = new_item['value']
             print(f"You found {item_name}")
 
-            # TODO: ask player to replace an item if inventory is full (2 items)
             while action not in possible_actions:
                 print(f"Invalid choice, choose: {possible_actions}")
                 action = input("Do you want to replace one of your items? (Y/N): ").upper()
