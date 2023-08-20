@@ -63,3 +63,9 @@ class Console(cmd.Cmd):
         Prints the players details: Location, Health, Attack and Items
         """
         self.game.get_details()
+
+    def do_coords(self, args):
+        """
+        Shows the coordinates of a compass
+        """
+        print("  N\nW\tE\n  S")
