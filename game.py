@@ -34,14 +34,16 @@ class Game:
     def _current_room(self):
         return self.board.tile_map[self.player.location]
 
-    def player_turn(self, direction):
+    def _move_direction(self, direction):
         possible_exits = self._current_room().possible_exits()
         if direction not in possible_exits:
             print(
                 f"Invalid direction. Choose from: {possible_exits}")
             return
+        return self._update_location(direction)
 
-        new_location = self._update_location(direction)
+    def player_turn(self, direction):
+        new_location = self._move_direction(direction)
         if self.board.is_explored(new_location):
             room = self.board.tile_map[new_location]
             if self._opposite_direction(direction) not in room.possible_exits():
@@ -100,23 +102,68 @@ class Game:
 
         return new_tile.rotate(chosen_entry, chosen_exit)
 
-    def _resolve_dev_card(self, room):
+    def _resolve_dev_card(self, tile):
         """
         Handle logic for resolving a development card.
         """
-        room.display()
+        tile.display()
         card = self.board.dev_cards.draw()
         card.display(self.board.time)
-        # TODO: implement card logic
+        content = card.content[self.board.time]
+        if content.text == 'zombies':
+            self._runaway_or_fight(content.value)
+        elif content.text == 'ITEM':
+            self._get_new_item()
+        else:
+            self.player.health += content.value
+
         if not self._game_over():
-            pass
+            if tile.name == 'Kitchen' or tile.name == 'Garden':
+                self.player.health += 1
+            elif tile.name == 'Storage':
+                self._get_new_item()
+
+        self._update_gui_labels()
+        return
+
+    def _runaway_or_fight(self, num_zombies):
+        # handle logic for running away or fighting
+        possible_actions = ['F', 'R']
+        print("Enter 'F' to fight or 'R' to run away.")
+        action = ""
+        while action not in possible_actions:
+            action = input("Choose your action: ").upper()
+            if action not in possible_actions:
+                print(f"Invalid, choose: {possible_actions}")
+
+        if action == 'R':
+            self._escape_zombies()
+
+        if action == 'F':
+            damage = num_zombies - self.player.attack
+            self.player.take_damage(damage)
+        return
+
+    def _escape_zombies(self):
+        # logic to only run into prevously explored rooms
+        self.player.health -= 1
+
+    def _get_new_item(self):
+        # logic for getting a new item maybe move this to player class?
+        pass
+
+    def cower(self):
+        self.player.health += 3
+        self.board.dev_cards.draw()
+        self._update_gui_labels()
+        if not self._game_over():
+            self._print_current_room()
         return
 
     def _game_over(self):
         """
         Check if the game is over.
         """
-        self._update_gui_labels()
         if self.board.dev_cards.count == 0:
             if self.board.time == "11 PM":
                 print("You ran out of time. GAME OVER!")
@@ -127,6 +174,7 @@ class Game:
             print("You died. GAME OVER!")
             return True
 
+        self._update_gui_labels()
         return False
 
     def _opposite_direction(self, direction):

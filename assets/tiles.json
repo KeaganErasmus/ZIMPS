@@ -1,23 +1,20 @@
 {
-  "INDOOR_TILES": {
+  "INDOOR": {
     "1": {
       "name": "Bathroom",
       "exits": { "N": true, "S": false, "E": false, "W": false }
     },
     "2": {
       "name": "Kitchen",
-      "exits": { "N": true, "S": false, "E": true, "W": true },
-      "effect": "Add health"
+      "exits": { "N": true, "S": false, "E": true, "W": true }
     },
     "3": {
       "name": "Storage",
-      "exits": { "N": true, "S": false, "E": false, "W": false },
-      "effect": "Find item"
+      "exits": { "N": true, "S": false, "E": false, "W": false }
     },
     "4": {
       "name": "Evil Temple",
-      "exits": { "N": false, "S": false, "E": true, "W": true },
-      "effect":"Find totem"
+      "exits": { "N": false, "S": false, "E": true, "W": true }
     },
     "5": {
       "name": "Family Room",
@@ -36,7 +33,7 @@
       "exits": { "N": true, "S": false, "E": false, "W": false }
     }
   },
-  "OUTDOOR_TILES": {
+  "OUTDOOR": {
     "1": {
       "name": "Garden",
       "exits": { "N": false, "S": true, "E": true, "W": true }
@@ -51,8 +48,7 @@
     },
     "4": {
       "name": "Graveyard",
-      "exits": { "N": false, "S": true, "E": true, "W": false },
-      "effect": "Bury totem"
+      "exits": { "N": false, "S": true, "E": true, "W": false }
     },
     "5": {
       "name": "Garage",

@@ -5,7 +5,7 @@ from game import Game
 class Console(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
-        print("Commands: help, go [direction], quit")
+        print("Commands: help, go [direction], cower, quit")
         self.prompt = ">>> "
         self.game = Game()
 
@@ -16,6 +16,16 @@ class Console(cmd.Cmd):
         """
         try:
             self.game.player_turn(direction)
+        except TypeError as err:
+            print(TypeError.__str__())
+            print(err)
+
+    def do_cower(self):
+        """
+        Choose to curl up into a corner and hide.
+        """
+        try:
+            self.game.cower()
         except TypeError as err:
             print(TypeError.__str__())
             print(err)

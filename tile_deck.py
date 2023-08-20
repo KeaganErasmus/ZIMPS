@@ -23,7 +23,7 @@ class TileDeck:
         try:
             with open(json_path, 'r') as file:
                 metadata_dict = json.load(file)
-            tile_metadata = metadata_dict['OUTDOOR_TILES'] if deck_type == 'outdoor' else metadata_dict['INDOOR_TILES']
+            tile_metadata = metadata_dict['OUTDOOR'] if deck_type == 'outdoor' else metadata_dict['INDOOR']
             return tile_metadata
         except FileNotFoundError:
             print(
