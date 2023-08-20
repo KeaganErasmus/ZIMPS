@@ -3,4 +3,4 @@
 .vscode
 __pycache__/
 .idea
-.txt
+*.pickle
