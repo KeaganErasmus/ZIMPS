@@ -43,6 +43,7 @@ class Game:
         return self._update_location(direction)
 
     def player_turn(self, direction):
+        direction = direction.upper()
         new_location = self._move_direction(direction)
         if self.board.is_explored(new_location):
             room = self.board.tile_map[new_location]
