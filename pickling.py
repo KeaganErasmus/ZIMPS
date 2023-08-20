@@ -1,3 +1,4 @@
+import pickle
 from pickle import dump, load
 
 
@@ -5,23 +6,32 @@ class Pickling:
 
     def __init__(self):
         self.value = "file text initial"
-        self.filename = "initial"
+        self.filename = "initial.pickle"
         self.file = open(str(self.filename), 'wb')
 
     def open_file(self):
         self.file = open(str(self.filename), 'rb')
-        self.load()
+        self.load_file()
 
     def close_file(self):
         self.file.close()
         self.value = "nothing"
 
-    def load(self):
-        self.value = load(self.file)
+    def load_file(self):
+        with open(self.filename, 'rb') as file:
+            data = pickle.load(file)
 
-    def dump(self):
-        self.file = open(str(self.filename), 'wb')
-        dump(self.value, self.file)
+        for lines in data:
+            print(lines)
+        # self.value = load(self.file)
+
+    def dump_file(self, data=None):
+        if data is None:
+            data = []
+        with open(self.filename, "wb") as file:
+            pickle.dump(data, file)
+        # self.file = open(str(self.filename), 'wb')
+        # pickle.dump(self.file, data)
 
     def change_value(self, new_str):
         self.value = new_str
@@ -71,4 +81,3 @@ if __name__ == "__main__":
     p.print_value()
     # close file again
     p.close_file()
-

@@ -1,6 +1,9 @@
+import pickle
+
 from board import Board
 from player import Player
 from GUI.gui import GUI
+from pickling import Pickling
 
 
 class Game:
@@ -12,7 +15,16 @@ class Game:
         self.player = Player(start_coordinates)
         self.board = Board(start_coordinates)
         self.gui = GUI()
+        self.pickle = Pickling()
         self._setup(start_coordinates)
+
+    def save_game(self, filename):
+        self.pickle.dump_file([self.player, self.board])
+        # self.pickle.write_new_file(filename)
+        print(f"Saving file {filename}")
+
+    def load_game(self, filename):
+        self.pickle.load_file()
 
     def _setup(self, start_coordinates):
         self.gui.place_tile(self.board.foyer_tile, *start_coordinates)
