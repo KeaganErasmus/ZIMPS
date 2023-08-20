@@ -165,18 +165,35 @@ class Game:
         return
 
     def _escape_zombies(self):
-        # logic to only run into prevously explored rooms
+        # logic to only run into previously explored rooms
         self.player.health -= 1
+        self.get_details()
 
     def _get_new_item(self):
         # logic for getting a new item
+        possible_actions = ["Y", "N"]
+        action = ""
         if not self._game_over():
             new_item = self.board.dev_cards.draw().content['Item']
             item_name = new_item['text']
             item_value = new_item['value']
             print(f"You found {item_name}")
+
             # TODO: ask player to replace an item if inventory is full (2 items)
-            self.player.items.append(item_name)
+            while action not in possible_actions:
+                print(f"Invalid choice, choose: {possible_actions}")
+                action = input("Do you want to replace one of your items? (Y/N): ").upper()
+                if action not in possible_actions:
+                    print(f"Your current items: {self.player.items}")
+
+            if action == "Y": 
+                item_to_replace = input("Choose an item to replace: ")
+                if item_to_replace in self.player.items:
+                    self.player.items.remove(item_to_replace)
+                    self.player.items.append(item_name)
+                    print(f"You replaced {item_to_replace} with {item_name}.")
+                else:
+                    print("Invalid item choice.")
 
     def cower(self):
         self.player.health += 3
