@@ -1,6 +1,4 @@
 import pickle
-from pickle import dump, load
-
 
 class Pickling:
 
@@ -18,16 +16,12 @@ class Pickling:
         self.value = "nothing"
 
     def load_file(self):
+        # self.value = load(self.file)
         with open(self.filename, 'rb') as file:
             data = pickle.load(file)
+        return data
 
-        for lines in data:
-            print(lines)
-        # self.value = load(self.file)
-
-    def dump_file(self, data=None):
-        if data is None:
-            data = []
+    def dump_file(self, *data):
         with open(self.filename, "wb") as file:
             pickle.dump(data, file)
         # self.file = open(str(self.filename), 'wb')
@@ -54,7 +48,7 @@ if __name__ == "__main__":
     # print value
     p.print_value()
     # save value to file
-    p.dump()
+    p.dump_file()
     # close file
     p.close_file()
 
@@ -69,7 +63,7 @@ if __name__ == "__main__":
     # change value
     p.change_value("changed text")
     # dump new value
-    p.dump()
+    p.dump_file()
     # print value
     p.print_value()
     # close file again

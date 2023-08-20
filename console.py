@@ -5,7 +5,7 @@ from game import Game
 class Console(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
-        print("Commands: help, go [direction], cower, quit, save")
+        print("Commands: help, go [direction], cower, quit, save, details")
         self.prompt = ">>> "
         self.game = Game()
 
@@ -17,7 +17,7 @@ class Console(cmd.Cmd):
         try:
             self.game.player_turn(direction)
         except TypeError as err:
-            print(TypeError.__str__())
+            print(str(TypeError))
             print(err)
 
     def do_cower(self):
@@ -27,7 +27,7 @@ class Console(cmd.Cmd):
         try:
             self.game.cower()
         except TypeError as err:
-            print(TypeError.__str__())
+            print(str(TypeError))
             print(err)
 
     def do_quit(self, arg):
@@ -47,4 +47,13 @@ class Console(cmd.Cmd):
         self.game.save_game(filename)
 
     def do_load(self, args):
+        """
+        Loads the serialized objects in the pickle files
+        """
         self.game.load_game(args)
+
+    def do_details(self, args):
+        """
+        Prints the players details: Location, Health, Attack and Items
+        """
+        self.game.get_details()

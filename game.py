@@ -19,12 +19,16 @@ class Game:
         self._setup(start_coordinates)
 
     def save_game(self, filename):
-        self.pickle.dump_file([self.player, self.board])
-        # self.pickle.write_new_file(filename)
+        self.pickle.dump_file(self.player, self.board)
         print(f"Saving file {filename}")
 
     def load_game(self, filename):
-        self.pickle.load_file()
+        file = self.pickle.load_file()
+        for line in file:
+            print(line)
+
+    def get_details(self):
+        self.player.get_details()
 
     def _setup(self, start_coordinates):
         self.gui.place_tile(self.board.foyer_tile, *start_coordinates)
