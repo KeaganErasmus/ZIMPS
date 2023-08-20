@@ -19,17 +19,16 @@ class Game:
         self._setup(start_coordinates)
 
     def save_game(self):
-        self.pickle.dump_file(self.player)
+        self.pickle.dump_file(self.player, self.board)
         print(f"Saving file")
 
     def load_game(self, filename):
         try:
             file = self.pickle.load_file()
             for line in file:
-                print(line.get_details())
+                print(line)
         except EOFError:
             return print("There is no file to load")
-
 
     def get_details(self):
         self.player.get_details()
