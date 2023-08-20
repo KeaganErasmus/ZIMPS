@@ -110,12 +110,12 @@ class Game:
         card = self.board.dev_cards.draw()
         card.display(self.board.time)
         content = card.content[self.board.time]
-        if content.text == 'zombies':
-            self._runaway_or_fight(content.value)
-        elif content.text == 'ITEM':
+        if content['text'] == 'zombies':
+            self._runaway_or_fight(content['value'])
+        elif content['text'] == 'ITEM':
             self._get_new_item()
         else:
-            self.player.health += content.value
+            self.player.health += content['value']
 
         if not self._game_over():
             if tile.name == 'Kitchen' or tile.name == 'Garden':
@@ -149,7 +149,7 @@ class Game:
         self.player.health -= 1
 
     def _get_new_item(self):
-        # logic for getting a new item maybe move this to player class?
+        # logic for getting a new item
         pass
 
     def cower(self):
