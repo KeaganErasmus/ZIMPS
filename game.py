@@ -147,7 +147,9 @@ class Game:
         return
 
     def _runaway_or_fight(self, num_zombies):
-        # handle logic for running away or fighting
+        """
+        handle logic for running away or fighting
+        """
         possible_actions = ['F', 'R']
         print("Enter 'F' to fight or 'R' to run away.")
         action = ""
@@ -171,12 +173,10 @@ class Game:
     def _escape_zombies(self):
         # logic to only run into previously explored rooms
         self.player.health -= 1
-        self.get_details()
 
     def _get_new_item(self):
         """
         Logic for getting new items
-        or replacing items
         """
         possible_actions = ["Y", "N"]
         action = ""
@@ -189,6 +189,10 @@ class Game:
             self.remove_items(action, item_name, possible_actions)
 
     def remove_items(self, action, item_name, possible_actions):
+        """
+        This function does the logic for replacing items
+        if the player wants to
+        """
         if len(self.player.items) >= 2:
             while action not in possible_actions:
                 action = input("Do you want to replace one of your items? (Y/N): ").upper()
