@@ -5,7 +5,6 @@ from player import Player
 from GUI.gui import GUI
 from pickling import Pickling
 
-
 class Game:
     """
     The Game class controls the game logic eg (movement, attack)
@@ -18,14 +17,17 @@ class Game:
         self.pickle = Pickling()
         self._setup(start_coordinates)
 
-    def save_game(self, filename):
-        self.pickle.dump_file(self.player, self.board)
-        print(f"Saving file {filename}")
+    def save_game(self):
+        self.pickle.dump_file(self.player)
+        print(f"Saving file")
 
     def load_game(self, filename):
         file = self.pickle.load_file()
-        for line in file:
-            print(line)
+        if file:
+            for line in file:
+                print(line.get_details())
+        else:
+            return "There is no file to load"
 
     def get_details(self):
         self.player.get_details()
@@ -76,6 +78,8 @@ class Game:
             self.player.location = new_location
             self.gui.place_tile(new_tile, *new_location)
             self._place_new_tile(direction, new_tile)
+
+        self.save_game()
 
     def _place_new_tile(self, chosen_exit, new_tile):
         """
@@ -179,20 +183,23 @@ class Game:
             item_value = new_item['value']
             print(f"You found {item_name}")
 
-            while action not in possible_actions:
-                print(f"Invalid choice, choose: {possible_actions}")
-                action = input("Do you want to replace one of your items? (Y/N): ").upper()
-                if action not in possible_actions:
+            if len(self.player.items) >= 2:
+                while action not in possible_actions:
+                    action = input("Do you want to replace one of your items? (Y/N): ").upper()
                     print(f"Your current items: {self.player.items}")
+                    if action not in possible_actions:
+                        print(f"Invalid choice, choose: {possible_actions}")
 
-            if action == "Y": 
-                item_to_replace = input("Choose an item to replace: ")
-                if item_to_replace in self.player.items:
-                    self.player.items.remove(item_to_replace)
-                    self.player.items.append(item_name)
-                    print(f"You replaced {item_to_replace} with {item_name}.")
-                else:
-                    print("Invalid item choice.")
+                if action == "Y":
+                    item_to_replace = input("Choose an item to replace: ")
+                    if item_to_replace in self.player.items:
+                        self.player.items.remove(item_to_replace)
+                        self.player.items.append(item_name)
+                        print(f"You replaced {item_to_replace} with {item_name}.")
+                    else:
+                        print("Invalid item choice.")
+            else:
+                self.player.items.append(item_name)
 
     def cower(self):
         self.player.health += 3

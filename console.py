@@ -50,7 +50,7 @@ class Console(cmd.Cmd):
 
         save file will be created when the user quits the game
         """
-        self.game.save_game(filename)
+        self.game.save_game()
 
     def do_load(self, args):
         """

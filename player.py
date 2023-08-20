@@ -1,5 +1,5 @@
 class Player:
-    def __init__(self, start_coordinates, health=6, attack=1, items=["chainsaw", "candel"], has_totem=False):
+    def __init__(self, start_coordinates, health=6, attack=1, items=[], has_totem=False):
         self.location = start_coordinates
         self.health = health
         self.attack = attack
@@ -22,4 +22,4 @@ class Player:
         self.has_totem = True
 
     def get_details(self):
-        return print(f'Location->{self.location} \nHealth->{self.health} \nAttack->{self.attack} Items->{self.items}')
+        return print(f'Location->{self.location} \nHealth->{self.health} \nAttack->{self.attack} \nItems->{self.items}')

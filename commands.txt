@@ -1,1 +1,1 @@
-help, go [direction], cower, quit, save, details
+help, go [direction], cower, quit, save, details, load
