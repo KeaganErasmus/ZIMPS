@@ -39,15 +39,18 @@ class Game:
         if direction not in possible_exits:
             print(
                 f"Invalid direction. Choose from: {possible_exits}")
-            return
-        return self._update_location(direction)
+            return None
+        else:
+            return self._update_location(direction)
 
     def player_turn(self, direction):
-        direction = direction.upper()
-        new_location = self._move_direction(direction)
+        dir = direction.upper()
+        new_location = self._move_direction(dir)
+        if new_location is None:
+            return
         if self.board.is_explored(new_location):
             room = self.board.tile_map[new_location]
-            if self._opposite_direction(direction) not in room.possible_exits():
+            if self._opposite_direction(dir) not in room.possible_exits():
                 print("This exit is blocked by a wall from another room.")
                 return
             self.player.location = new_location
@@ -59,49 +62,55 @@ class Game:
                 return
             self.player.location = new_location
             self.gui.place_tile(new_tile, *new_location)
-            self._place_new_tile(direction, new_tile)
+            self._place_new_tile(dir, new_tile)
 
     def _place_new_tile(self, chosen_exit, new_tile):
         """
-        Choose side to enter new room from.
-        Rotate the new tile accordingly.
+        Place a newly explored room on the board.
         """
         # TODO:
-        # logic to place patio tile when moving outside
         # logic to bash down wall if no other exits
         possible_entries = new_tile.possible_exits()
         if len(possible_entries) > 1:
-            new_tile = self._choose_entry(
-                chosen_exit, new_tile, possible_entries)
+            if new_tile.name == 'Dining Room':
+                # not possible to choose entry for dining room
+                self._place_patio_tile(chosen_exit)
+            else:
+                new_tile = self._choose_entry(
+                    chosen_exit, new_tile, possible_entries)
         else:
             new_tile = new_tile.rotate(
                 possible_entries[0], chosen_exit)
 
         self.gui.place_tile(new_tile, *self.player.location)
         self.board.tile_map[self.player.location] = new_tile
+        new_tile.display()
         self._resolve_dev_card(new_tile)
 
     def _choose_entry(self, chosen_exit, new_tile, possible_entries):
-        if new_tile.name == 'Dining Room':
-            # 'N' is reserved for exit to the Patio
-            possible_entries.remove('N')
-            # place patio tile with 'N' to (N) of Dining room
+        """
+        Choose side to enter new room from.
+        Rotate the new tile accordingly.
+        """
         print(
-            f"You found the {new_tile.name}, you can enter from: {possible_entries}")
+            f"You found the {new_tile.name}, enter from: {possible_entries}")
         chosen_entry = ""
         while chosen_entry not in possible_entries:
             chosen_entry = input("Choose a side to enter from: ").upper()
             if chosen_entry not in possible_entries:
                 print(f"Invalid entry. Please choose from: {possible_entries}")
 
-        # if new_tile.name == 'Dining Room':
-        #     patio_tile = self.board.patio_tile.rotate(
-        #         'N', self._opposite_direction(chosen_entry))  # not tested
-        #     patio_location = self._update_location('N')
-        #     self.board.tile_map[patio_location] = patio_tile
-        #     self.gui.place_tile(patio_tile, *patio_location)
-
         return new_tile.rotate(chosen_entry, chosen_exit)
+
+    def _place_patio_tile(self):
+        patio = self.board.patio_tile
+        patio = patio.rotate('N', 'N')
+        self.gui.place_tile(patio, *self._patio_location())
+        self.board.tile_map[self.player.location] = patio
+
+    def _patio_location(self,):
+        x, y = self.player.location
+        return x - 1, y
 
     def _resolve_dev_card(self, tile):
         """
@@ -138,18 +147,21 @@ class Game:
                 print(f"Invalid, choose: {possible_actions}")
 
         if action == 'R':
-            self._escape_zombies(num_zombies)
+            self._escape_zombies()
             return True
 
         self._fight_zombies(num_zombies)
         return False
 
-    def _escape_zombies(self, number):
-        # logic to only run into prevously explored rooms
+    def _escape_zombies(self, ):
+        # TODO: logic to only run into prevously explored rooms
+        if 'Oil' in self.player.items:
+            self.player.items.remove('Oil')
+            return
         self.player.health -= 1
 
-    def _fight_zombies(self, number):
-        damage = number - self.player.attack
+    def _fight_zombies(self, num_zombies):
+        damage = num_zombies - self.player.attack
         if damage >= 0:
             damage = min(damage, 4)  # max damage is 4
             self.player.take_damage(damage)
@@ -162,10 +174,10 @@ class Game:
         if not self._game_over():
             new_item = self.board.dev_cards.draw().content['Item']
             item_name = new_item['text']
-            item_value = new_item['value']
             print(f"You found {item_name}")
-            # TODO: ask player to replace an item if inventory is full (2 items)
+            # TODO: replace an item if inventory is full (2 items)
             self.player.items.append(item_name)
+        self._game_over()
 
     def cower(self):
         self.player.health += 3
@@ -185,7 +197,7 @@ class Game:
                 return True
             self.board.update_time()
 
-        if self.player.health == 0:
+        if self.player.health <= 0:
             print("You died. GAME OVER!")
             return True
 

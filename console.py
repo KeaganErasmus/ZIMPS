@@ -17,7 +17,6 @@ class Console(cmd.Cmd):
         try:
             self.game.player_turn(direction)
         except TypeError as err:
-            print(TypeError.__str__())
             print(err)
 
     def do_cower(self):
@@ -27,7 +26,6 @@ class Console(cmd.Cmd):
         try:
             self.game.cower()
         except TypeError as err:
-            print(TypeError.__str__())
             print(err)
 
     def do_quit(self, arg):

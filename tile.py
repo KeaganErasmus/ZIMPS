@@ -26,18 +26,19 @@ class Tile:
         print('')
 
     def possible_exits(self):
-        return [direction for direction, is_exit in self.exits.items() if is_exit]
+        return [d for d, is_exit in self.exits.items() if is_exit]
 
-    def rotate(self, chosen_entry, chosen_exit):
+    def rotate(self, entry, exit):
         """
-        Rotate new tile to align the chosen entry with the chosen exit from the previous tile.
+        Rotate tile to align the chosen entry with the chosen exit.
         """
-        rotations_needed = {'N': {'N': 2, 'E': 1, 'S': 0, 'W': 3},
-                            'E': {'N': 3, 'E': 2, 'S': 1, 'W': 0},
-                            'S': {'N': 0, 'E': 3, 'S': 2, 'W': 1},
-                            'W': {'N': 1, 'E': 0, 'S': 3, 'W': 2}}[chosen_exit][chosen_entry]
+        rotations = {'N': {'N': 2, 'E': 1, 'S': 0, 'W': 3},
+                     'E': {'N': 3, 'E': 2, 'S': 1, 'W': 0},
+                     'S': {'N': 0, 'E': 3, 'S': 2, 'W': 1},
+                     'W': {'N': 1, 'E': 0, 'S': 3, 'W': 2}
+                     }[exit][entry]
 
-        for _ in range(rotations_needed):
+        for _ in range(rotations):
             self.exits = {direction: self.exits[prev_dir]
                           for direction, prev_dir in zip('NESW', 'WNES')}
             self.image = self.image.rotate(-90)
