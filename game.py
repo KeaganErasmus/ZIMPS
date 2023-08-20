@@ -174,7 +174,10 @@ class Game:
         self.get_details()
 
     def _get_new_item(self):
-        # logic for getting a new item
+        """
+        Logic for getting new items
+        or replacing items
+        """
         possible_actions = ["Y", "N"]
         action = ""
         if not self._game_over():
@@ -183,23 +186,26 @@ class Game:
             item_value = new_item['value']
             print(f"You found {item_name}")
 
-            if len(self.player.items) >= 2:
-                while action not in possible_actions:
-                    action = input("Do you want to replace one of your items? (Y/N): ").upper()
-                    print(f"Your current items: {self.player.items}")
-                    if action not in possible_actions:
-                        print(f"Invalid choice, choose: {possible_actions}")
+            self.remove_items(action, item_name, possible_actions)
 
-                if action == "Y":
-                    item_to_replace = input("Choose an item to replace: ")
-                    if item_to_replace in self.player.items:
-                        self.player.items.remove(item_to_replace)
-                        self.player.items.append(item_name)
-                        print(f"You replaced {item_to_replace} with {item_name}.")
-                    else:
-                        print("Invalid item choice.")
-            else:
-                self.player.items.append(item_name)
+    def remove_items(self, action, item_name, possible_actions):
+        if len(self.player.items) >= 2:
+            while action not in possible_actions:
+                action = input("Do you want to replace one of your items? (Y/N): ").upper()
+                print(f"Your current items: {self.player.items}")
+                if action not in possible_actions:
+                    print(f"Invalid choice, choose: {possible_actions}")
+
+            if action == "Y":
+                item_to_replace = input("Choose an item to replace: ")
+                if item_to_replace in self.player.items:
+                    self.player.items.remove(item_to_replace)
+                    self.player.items.append(item_name)
+                    print(f"You replaced {item_to_replace} with {item_name}.")
+                else:
+                    print("Invalid item choice.")
+        else:
+            self.player.items.append(item_name)
 
     def cower(self):
         self.player.health += 3
