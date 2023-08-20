@@ -103,14 +103,10 @@ class Game:
         return new_tile.rotate(chosen_entry, chosen_exit)
 
     def _place_patio_tile(self):
-        patio = self.board.patio_tile
-        patio = patio.rotate('N', 'N')
-        self.gui.place_tile(patio, *self._patio_location())
-        self.board.tile_map[self.player.location] = patio
-
-    def _patio_location(self,):
+        patio = self.board.patio_tile.rotate('N', 'N')
         x, y = self.player.location
-        return x - 1, y
+        self.gui.place_tile(patio, x - 1, y)
+        self.board.tile_map[self.player.location] = patio
 
     def _resolve_dev_card(self, tile):
         """
