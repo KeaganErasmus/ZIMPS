@@ -5,6 +5,7 @@ from player import Player
 from GUI.gui import GUI
 from pickling import Pickling
 
+
 class Game:
     """
     The Game class controls the game logic eg (movement, attack)
@@ -22,12 +23,13 @@ class Game:
         print(f"Saving file")
 
     def load_game(self, filename):
-        file = self.pickle.load_file()
-        if file:
+        try:
+            file = self.pickle.load_file()
             for line in file:
                 print(line.get_details())
-        else:
-            return "There is no file to load"
+        except EOFError:
+            return print("There is no file to load")
+
 
     def get_details(self):
         self.player.get_details()
