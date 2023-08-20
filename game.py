@@ -107,17 +107,18 @@ class Game:
         """
         Handle logic for resolving a development card.
         """
+        runaway = False
         card = self.board.dev_cards.draw()
         card.display(self.board.time)
         content = card.content[self.board.time]
         if content['text'] == 'zombies':
-            self._runaway_or_fight(content['value'])
+            runaway = self._runaway_or_fight(content['value'])
         elif content['text'] == 'ITEM':
             self._get_new_item()
         else:
             self.player.health += content['value']
 
-        if not self._game_over():
+        if not self._game_over() and not runaway:
             if tile.name == 'Kitchen' or tile.name == 'Garden':
                 self.player.health += 1
             elif tile.name == 'Storage':
@@ -137,20 +138,23 @@ class Game:
                 print(f"Invalid, choose: {possible_actions}")
 
         if action == 'R':
-            self._escape_zombies()
+            self._escape_zombies(num_zombies)
+            return True
 
-        if action == 'F':
-            damage = num_zombies - self.player.attack
-            if damage >= 0:
-                self.player.take_damage(damage)
-                self.player.attack = 0
-            else:  # no damage only decrease attack
-                self.player.attack += damage
-        return
+        self._fight_zombies(num_zombies)
+        return False
 
-    def _escape_zombies(self):
+    def _escape_zombies(self, number):
         # logic to only run into prevously explored rooms
         self.player.health -= 1
+
+    def _fight_zombies(self, number):
+        damage = number - self.player.attack
+        if damage >= 0:
+            self.player.take_damage(damage)
+            self.player.attack = 0
+        else:  # no damage only decrease attack
+            self.player.attack += damage
 
     def _get_new_item(self):
         # logic for getting a new item
@@ -193,7 +197,7 @@ class Game:
 
     def _update_location(self, direction):
         """
-        Calculate the new location based on the chosen exit direction.
+        Calculate the new location based on the chosen direction.
         """
         x, y = self.player.location
         if direction == 'E':
