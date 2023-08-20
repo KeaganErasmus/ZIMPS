@@ -106,7 +106,6 @@ class Game:
         """
         Handle logic for resolving a development card.
         """
-        tile.display()
         card = self.board.dev_cards.draw()
         card.display(self.board.time)
         content = card.content[self.board.time]
@@ -141,7 +140,11 @@ class Game:
 
         if action == 'F':
             damage = num_zombies - self.player.attack
-            self.player.take_damage(damage)
+            if damage >= 0:
+                self.player.take_damage(damage)
+                self.player.attack = 0
+            else:  # no damage only decrease attack
+                self.player.attack += damage
         return
 
     def _escape_zombies(self):
@@ -150,7 +153,13 @@ class Game:
 
     def _get_new_item(self):
         # logic for getting a new item
-        pass
+        if not self._game_over():
+            new_item = self.board.dev_cards.draw().content['Item']
+            item_name = new_item['text']
+            item_value = new_item['value']
+            print(f"You found {item_name}")
+            # TODO: ask player to replace an item if inventory is full (2 items)
+            self.player.items.append(item_name)
 
     def cower(self):
         self.player.health += 3

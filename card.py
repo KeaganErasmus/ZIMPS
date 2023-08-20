@@ -26,7 +26,7 @@ class Card:
         if text == 'zombies':
             print(f"{value} Zombies attack.. AHHH!!!")
         elif text == 'ITEM':
-            print("You found an item: Draw another card to see what it is.")
+            print("You look for an item:")
         else:
             print(f"{text}")
         print("---------------------------------------")
