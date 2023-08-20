@@ -5,7 +5,13 @@ from game import Game
 class Console(cmd.Cmd):
     def __init__(self):
         cmd.Cmd.__init__(self)
-        print("Commands: help, go [direction], cower, quit, save, details")
+
+        with open("commands.txt", 'r') as file:
+            print(f'Commands: ')
+            for lines in file:
+                print(f"{lines}")
+            print("\n")
+
         self.prompt = ">>> "
         self.game = Game()
 
