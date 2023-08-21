@@ -92,8 +92,8 @@ class Game:
         possible_entries = new_tile.possible_exits()
         if len(possible_entries) > 1:
             if new_tile.name == 'Dining Room':
-                # not possible to choose entry for dining room
-                self._place_patio_tile(chosen_exit)
+                # dining room always placed with exit to patio 'N'
+                self._place_patio_tile()
             else:
                 new_tile = self._choose_entry(
                     chosen_exit, new_tile, possible_entries)
