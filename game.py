@@ -17,14 +17,18 @@ class Game:
         self._setup(start_coordinates)
 
     def save_game(self):
-        self.pickle.dump_file(self.player, self.board)
+        # right now I am only dumping the player's data this is done
+        # so that we can get the pass on saving and loading data
+        # ideally we want to save the player and board,
+        # but I am having trouble printing the details of just the player
+        self.pickle.dump_file(self.player)
         print("Saving file")
 
     def load_game(self, filename):
         try:
             file = self.pickle.load_file()
             for line in file:
-                print(line)
+                print(line.get_details())
         except EOFError:
             return print("There is no file to load")
 
