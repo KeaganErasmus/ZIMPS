@@ -52,6 +52,9 @@ class Game:
         return self.board.tile_map[self.player.location]
 
     def _move_direction(self, direction):
+        """
+        Returns the new location if the direction is valid
+        """
         possible_exits = self._current_room().possible_exits()
         if direction not in possible_exits:
             print(
@@ -61,6 +64,10 @@ class Game:
             return self._update_location(direction)
 
     def player_turn(self, direction):
+        """
+        Move the player in the chosen direction.
+        """
+        # TODO: logic to bash down wall if no more exits
         dir = direction.upper()
         new_location = self._move_direction(dir)
         if new_location is None:
@@ -87,8 +94,6 @@ class Game:
         """
         Place a newly explored room on the board.
         """
-        # TODO:
-        # logic to bash down wall if no other exits
         possible_entries = new_tile.possible_exits()
         if len(possible_entries) > 1:
             if new_tile.name == 'Dining Room':
@@ -122,6 +127,9 @@ class Game:
         return new_tile.rotate(chosen_entry, chosen_exit)
 
     def _place_patio_tile(self, chosen_exit, dining_room):
+        """
+        Places patio tile below or above the dining room.
+        """
         patio = self.board.patio_tile
         x, y = self.player.location
         if chosen_exit == 'S':
@@ -181,6 +189,9 @@ class Game:
         return False
 
     def _escape_zombies(self, ):
+        """
+        Escape zombies to a previously explored room.
+        """
         # TODO: logic to only run into prevously explored rooms
         if 'Oil' in self.player.items:
             self.player.items.remove('Oil')
@@ -188,6 +199,10 @@ class Game:
         self.player.health -= 1
 
     def _fight_zombies(self, num_zombies):
+        """
+        Fight zombies, take damage if attack is not enough.
+        """
+        # TODO: logic to use items as attack
         damage = num_zombies - self.player.attack
         if damage >= 0:
             damage = min(damage, 4)  # max damage is 4
@@ -286,6 +301,9 @@ class Game:
         return False
 
     def _opposite_direction(self, direction):
+        """
+        Return the opposite cardinal direction.
+        """
         opposites = {'N': 'S', 'E': 'W', 'S': 'N', 'W': 'E'}
         return opposites.get(direction, "Invalid direction")
 
