@@ -93,7 +93,7 @@ class Game:
         if len(possible_entries) > 1:
             if new_tile.name == 'Dining Room':
                 # dining room always placed with exit to patio 'N'
-                self._place_patio_tile()
+                new_tile = self._place_patio_tile(chosen_exit, new_tile)
             else:
                 new_tile = self._choose_entry(
                     chosen_exit, new_tile, possible_entries)
@@ -121,12 +121,20 @@ class Game:
 
         return new_tile.rotate(chosen_entry, chosen_exit)
 
-    def _place_patio_tile(self):
-        patio = self.board.patio_tile.rotate('N', 'N')
+    def _place_patio_tile(self, chosen_exit, dining_room):
+        patio = self.board.patio_tile
         x, y = self.player.location
-        patio_location = (x - 1, y)
+        if chosen_exit == 'S':
+            # flip dining room as N is reserved for patio
+            dining_room = dining_room.rotate('S', 'S')
+            x += 1  # patio below dining room
+        else:
+            patio = patio.rotate('N', 'N')
+            x -= 1  # patio above dining room
+        patio_location = (x, y)
         self.gui.place_tile(patio, *patio_location)
         self.board.tile_map[patio_location] = patio
+        return dining_room
 
     def _resolve_dev_card(self):
         """
