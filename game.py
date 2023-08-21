@@ -71,7 +71,7 @@ class Game:
                 print("This exit is blocked by a wall from another room.")
                 return
             self.player.location = new_location
-            self._resolve_dev_card(room)
+            self._resolve_dev_card()
         else:
             new_tile, tile_type = self.board.draw_tile(self._current_room())
             if new_tile is None:
@@ -127,7 +127,7 @@ class Game:
         self.gui.place_tile(patio, x - 1, y)
         self.board.tile_map[self.player.location] = patio
 
-    def _resolve_dev_card(self, tile):
+    def _resolve_dev_card(self):
         """
         Handle logic for resolving a development card.
         """
@@ -143,9 +143,10 @@ class Game:
             self.player.health += content['value']
 
         if not self._game_over() and not runaway:
-            if tile.name == 'Kitchen' or tile.name == 'Garden':
+            room = self._current_room()
+            if room.name == 'Kitchen' or room.name == 'Garden':
                 self.player.health += 1
-            elif tile.name == 'Storage':
+            elif room.name == 'Storage':
                 self._get_new_item()
 
         self._update_gui_labels()
@@ -231,6 +232,32 @@ class Game:
         if not self._game_over():
             self._print_current_room()
         return
+
+    def find_or_burry_totem(self):
+        room = self._current_room()
+        if room.name == 'Evil Temple':
+            self._find_totem()
+        elif room.name == 'Graveyard':
+            self._burry_totem()
+        else:
+            print("You are not in the right room!")
+        return
+
+    def _find_totem(self):
+        print("You are searching for the Totem!")
+        self._resolve_dev_card()
+        if not self._game_over():
+            self.player.has_totem = True
+            print("You found the Totem!")
+
+    def _burry_totem(self):
+        if not self.player.has_totem:
+            print("You don't have the Totem!")
+            return
+        print("You are burying the Totem!")
+        self._resolve_dev_card()
+        if not self._game_over():
+            print("All zombies collapse. You WIN!")
 
     def _game_over(self):
         """

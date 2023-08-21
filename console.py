@@ -26,6 +26,15 @@ class Console(cmd.Cmd):
         except TypeError as err:
             print(str(err))
 
+    def do_totem(self):
+        """
+        Choose to find or burry the totem.
+        """
+        try:
+            self.game.find_or_burry_totem()
+        except TypeError as err:
+            print(str(err))
+
     def do_cower(self):
         """
         Choose to curl up into a corner and hide.
