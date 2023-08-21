@@ -104,7 +104,7 @@ class Game:
         self.gui.place_tile(new_tile, *self.player.location)
         self.board.tile_map[self.player.location] = new_tile
         new_tile.display()
-        self._resolve_dev_card(new_tile)
+        self._resolve_dev_card()
 
     def _choose_entry(self, chosen_exit, new_tile, possible_entries):
         """

@@ -7,7 +7,7 @@ class GUI:
     A graphical interface displaying the game board and development cards.
     """
 
-    def __init__(self, board_size=7, tile_size=100):
+    def __init__(self, board_size=7, tile_size=120):
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
         self.images = []  # A list to store references to the tile images
@@ -26,33 +26,42 @@ class GUI:
                 self.grid_rects[i][j] = self.canvas.create_rectangle(
                     j*self.tile_size, i*self.tile_size, (j+1)*self.tile_size, (i+1)*self.tile_size)
 
-        # Create labels to show the number of cards and tiles remaining
+        # Create two frames to hold the groups of labels
+        self.frame_group1 = tk.Frame(self.root)
+        # Pad for space between frames
+        self.frame_group1.pack(side=tk.LEFT, padx=20)
+
+        self.frame_group2 = tk.Frame(self.root)
+        self.frame_group2.pack(side=tk.LEFT, padx=60)
+
+        # Group 1 labels
         self.label_time = tk.Label(
-            self.root, text="Time: ")
+            self.frame_group1, text="Time: ")
         self.label_time.pack()
 
         self.label_dev_cards = tk.Label(
-            self.root, text="Development Cards: ")
+            self.frame_group1, text="Development Cards: ")
         self.label_dev_cards.pack()
 
         self.lable_outdoor_tiles = tk.Label(
-            self.root, text="Outdoor Tiles: ")
+            self.frame_group1, text="Outdoor Tiles: ")
         self.lable_outdoor_tiles.pack()
 
         self.lable_indoor_tiles = tk.Label(
-            self.root, text="Indoor Tiles: ")
+            self.frame_group1, text="Indoor Tiles: ")
         self.lable_indoor_tiles.pack()
 
+        # Group 2 labels
         self.lable_health = tk.Label(
-            self.root, text="Health: ")
+            self.frame_group2, text="Health: ")
         self.lable_health.pack()
 
         self.lable_attack = tk.Label(
-            self.root, text="Attack: ")
+            self.frame_group2, text="Attack: ")
         self.lable_attack.pack()
 
         self.items = tk.Label(
-            self.root, text="Items: ")
+            self.frame_group2, text="Items: ")
         self.items.pack()
 
         self.label_coords = tk.Label(
