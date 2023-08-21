@@ -55,6 +55,10 @@ class GUI:
             self.root, text="Items: ")
         self.items.pack()
 
+        self.label_coords = tk.Label(
+            self.root, text="N\nW\tE\nS")
+        self.label_coords.pack()
+
     def place_tile(self, tile, row, col):
         tile_image = tile.image
         # Resize the image to fit the tile size

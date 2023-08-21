@@ -1,6 +1,7 @@
 from board import Board
 from player import Player
 from GUI.gui import GUI
+from pickling import Pickling
 
 
 class Game:
@@ -12,7 +13,23 @@ class Game:
         self.player = Player(start_coordinates)
         self.board = Board(start_coordinates)
         self.gui = GUI()
+        self.pickle = Pickling()
         self._setup(start_coordinates)
+
+    def save_game(self):
+        self.pickle.dump_file(self.player, self.board)
+        print("Saving file")
+
+    def load_game(self, filename):
+        try:
+            file = self.pickle.load_file()
+            for line in file:
+                print(line)
+        except EOFError:
+            return print("There is no file to load")
+
+    def get_details(self):
+        self.player.get_details()
 
     def _setup(self, start_coordinates):
         self.gui.place_tile(self.board.foyer_tile, *start_coordinates)
@@ -63,6 +80,8 @@ class Game:
             self.player.location = new_location
             self.gui.place_tile(new_tile, *new_location)
             self._place_new_tile(dir, new_tile)
+
+        self.save_game()
 
     def _place_new_tile(self, chosen_exit, new_tile):
         """
@@ -133,7 +152,9 @@ class Game:
         return
 
     def _runaway_or_fight(self, num_zombies):
-        # handle logic for running away or fighting
+        """
+        handle logic for running away or fighting
+        """
         possible_actions = ['F', 'R']
         print("Enter 'F' to fight or 'R' to run away.")
         action = ""
@@ -166,12 +187,40 @@ class Game:
             self.player.attack += damage
 
     def _get_new_item(self):
-        # logic for getting a new item
+        """
+        Logic for getting new items
+        """
+        possible_actions = ["Y", "N"]
+        action = ""
         if not self._game_over():
             new_item = self.board.dev_cards.draw().content['Item']
             item_name = new_item['text']
             print(f"You found {item_name}")
-            # TODO: replace an item if inventory is full (2 items)
+
+            self.remove_items(action, item_name, possible_actions)
+
+    def remove_items(self, action, item_name, possible_actions):
+        """
+        This function does the logic for replacing items
+        if the player wants to
+        """
+        if len(self.player.items) >= 2:
+            while action not in possible_actions:
+                action = input(
+                    "Do you want to replace an item? (Y/N): ").upper()
+                print(f"Your current items: {self.player.items}")
+                if action not in possible_actions:
+                    print(f"Invalid choice, choose: {possible_actions}")
+
+            if action == "Y":
+                item_to_replace = input("Choose an item to replace: ")
+                if item_to_replace in self.player.items:
+                    self.player.items.remove(item_to_replace)
+                    self.player.items.append(item_name)
+                    print(f"You replaced {item_to_replace} with {item_name}.")
+                else:
+                    print("Invalid item choice.")
+        else:
             self.player.items.append(item_name)
         self._game_over()
 
