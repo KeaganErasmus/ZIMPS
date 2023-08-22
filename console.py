@@ -21,10 +21,11 @@ class Console(cmd.Cmd):
         Syntax: go [direction] where direction is either \'N\' (for
         north), \'E\' (for east), \'S\' (for south), \'W\' (for west).
         """
-        try:
-            self.game.player_turn(direction)
-        except TypeError as err:
-            print(str(err))
+        if not self.game.check_state():
+            try:
+                self.game.player_turn(direction)
+            except TypeError as err:
+                print(str(err))
 
     def do_totem(self, arg):
         """
@@ -76,4 +77,4 @@ class Console(cmd.Cmd):
         """
         Shows the coordinates of a compass
         """
-        print("  N\nW\tE\n  S")
+        print("  N\nW   E\n  S")
