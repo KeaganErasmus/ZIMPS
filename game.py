@@ -15,6 +15,7 @@ class Game:
         self.gui = GUI()
         self.pickle = Pickling()
         self._setup(start_coordinates)
+        self.lost = False
 
     def save_game(self):
         # right now I am only dumping the player's data this is done
@@ -244,15 +245,15 @@ class Game:
 
             if action == "Y":
                 item_to_replace = input("Choose an item to replace: ")
-                if item_to_replace in self.player.items:
-                    self.player.items.remove(item_to_replace)
-                    self.player.items.append(item_name)
-                    print(f"You replaced {item_to_replace} with {item_name}.")
-                else:
-                    print("Invalid item choice.")
-        else:
-            self.player.items.append(item_name)
-        self._game_over()
+                while item_to_replace not in self.player.items:
+                    if item_to_replace in self.player.items:
+                        self.player.items.remove(item_to_replace)
+                        self.player.items.append(item_name)
+                        print(f"You replaced {item_to_replace} with {item_name}.")
+                    else:
+                        print("Invalid item choice.")
+            else:
+                self.player.items.append(item_name)
 
     def cower(self):
         self.player.health += 3
@@ -295,15 +296,18 @@ class Game:
         if self.board.dev_cards.count == 0:
             if self.board.time == "11 PM":
                 print("You ran out of time. GAME OVER!")
+                self.lost = True
                 return True
             self.board.update_time()
 
         if self.player.health <= 0:
+
             print("You died. GAME OVER!")
             return True
 
         self._update_gui_labels()
         return False
+
 
     def _opposite_direction(self, direction):
         """
