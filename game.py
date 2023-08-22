@@ -170,6 +170,7 @@ class Game:
             elif room.name == 'Storage':
                 self._get_new_item()
 
+        self._print_current_room()
         self._update_gui_labels()
         return
 
