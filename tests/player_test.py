@@ -11,6 +11,14 @@ class player_initial_stats(unittest.TestCase):
         player_health = the_game.player.health
         self.assertEqual(player_health, 6)
 
+    def test_player_starting_attack(self):
+        player_attack = the_game.player.attack
+        self.assertEqual(player_attack, 1)
+
+    def test_player_starting_items(self):
+        player_items = the_game.player.items
+        self.assertEqual(player_items, [])
+
 
 if __name__ == '__main__':
     unittest.main()
