@@ -14,10 +14,9 @@ class Test_player_moving(unittest.TestCase):
         self.assertEqual(the_game.player.get_location(), player_loc)
 
     def test_player_moving_s_from_foyer(self):
-        # Player starts in the foyer
+        # Player starts in the foyerS
         # it has 1 exit to the north
         # So player should not be able to move any other direction
-        player_loc = the_game.player.location = (5, 3)
         turn = the_game._move_direction('S')
 
         self.assertEqual(turn, None)
