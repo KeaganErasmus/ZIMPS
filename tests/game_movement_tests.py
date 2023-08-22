@@ -8,14 +8,8 @@ class Test_player_moving(unittest.TestCase):
         # Player starting location is (x=5, y=3)
         # moving up takes away from x
         # eg (x=4, y=3)
-        player_loc = ()
-        turn = the_game.player_turn('n')
-        if turn is None:
-            player_loc = the_game.player.location
-        else:
-            # add logic to quit out of movement sequence
-            pass
-        self.assertEqual(player_loc, (4, 3))
+        the_game.player_turn('n')
+        self.assertEqual(the_game.player.get_location(), (4, 3))
 
 
     def test_player_moving_s_from_foyer(self):
