@@ -2,7 +2,7 @@ import unittest
 from game import Game
 
 the_game = Game()
-class MyTestCase(unittest.TestCase):
+class player_tests(unittest.TestCase):
     def test_player_start_location(self):
         player_loc = the_game.player.location
 
