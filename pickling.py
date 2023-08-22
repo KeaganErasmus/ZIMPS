@@ -30,6 +30,9 @@ class Pickling:
     def change_value(self, new_str):
         self.value = new_str
 
+    def change_filename(self, new_name):
+        self.filename = new_name
+
     def print_value(self):
         print(self.value)
 
