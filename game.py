@@ -23,7 +23,7 @@ class Game:
         # ideally we want to save the player and board,
         # but I am having trouble printing the details of just the player
         self.pickle.dump_file(self.player)
-        print("Saving file")
+        print("Saving Game")
 
     def load_game(self, filename):
         try:
