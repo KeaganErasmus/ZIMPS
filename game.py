@@ -2,6 +2,8 @@ from board import Board
 from player import Player
 from GUI.gui import GUI
 from pickling import Pickling
+from databasing import DataBasing
+from stringfiler import StringFiler
 
 
 class Game:
@@ -14,6 +16,9 @@ class Game:
         self.board = Board(start_coordinates)
         self.gui = GUI()
         self.pickle = Pickling()
+        self.strfiler = StringFiler()
+        self.databasing = DataBasing()
+        self.databasing.create_connection(r"db\database.db")
         self._setup(start_coordinates)
         self.lost = False
 
@@ -23,11 +28,18 @@ class Game:
         # ideally we want to save the player and board,
         # but I am having trouble printing the details of just the player
         self.pickle.dump_file(self.player)
+
+        # string and db
+        self.strfiler.save_file()
+        self.databasing.create_something("yeet")
+
         print("Saving Game")
 
     def load_game(self, filename):
         try:
             file = self.pickle.load_file()
+            print(self.strfiler.load_file())
+            print(self.databasing.read_from_db())
             for line in file:
                 print(line.get_details())
         except EOFError:

@@ -12,6 +12,7 @@ class StringFiler:
     def load_file(self):
         with open(self.filename) as file:
             self.value = file.readline()
+            return self.value
 
     def save_file(self):
         with open(self.filename, "w") as file:

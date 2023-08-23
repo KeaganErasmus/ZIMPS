@@ -77,4 +77,4 @@ class Console(cmd.Cmd):
         """
         Shows the coordinates of a compass
         """
-        print("  N\nW   E\n  S")
+        print("  N\nW\tE\n  S")

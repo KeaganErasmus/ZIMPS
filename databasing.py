@@ -21,13 +21,12 @@ class DataBasing:
         self.conn.close()
 
     def create_something(self, data):
-        self.cur.execute("DROP TABLE IF EXISTS fish")
         self.cur.execute("CREATE TABLE IF NOT EXISTS data (text TEXT)")
         self.cur.execute(f"INSERT INTO data VALUES ('{str(data)}')")
 
     def read_from_db(self):
         rows = self.cur.execute("SELECT * FROM data").fetchall()
-        print(rows)
+        return rows
 
 
 if __name__ == '__main__':
