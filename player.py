@@ -1,9 +1,11 @@
 class Player:
-    def __init__(self, start_coordinates, health=6, attack=1, items = [], has_totem=False):
+    def __init__(self, start_coordinates, health=6, attack=1, items=None, has_totem=False):
         self.location = start_coordinates
         self.health = health
         self.attack = attack
-        self.items = []
+        self.items = items
+        if self.items is None:
+            self.items = []
         self.has_totem = has_totem
 
     def get_location(self):
