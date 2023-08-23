@@ -23,7 +23,7 @@ class Game:
         # ideally we want to save the player and board,
         # but I am having trouble printing the details of just the player
         self.pickle.dump_file(self.player)
-        print("Saving file")
+        print("Saving Game")
 
     def load_game(self, filename):
         try:
@@ -245,15 +245,14 @@ class Game:
 
             if action == "Y":
                 item_to_replace = input("Choose an item to replace: ")
-                while item_to_replace not in self.player.items:
-                    if item_to_replace in self.player.items:
-                        self.player.items.remove(item_to_replace)
-                        self.player.items.append(item_name)
-                        print(f"You replaced {item_to_replace} with {item_name}.")
-                    else:
-                        print("Invalid item choice.")
-            else:
-                self.player.items.append(item_name)
+                if item_to_replace in self.player.items:
+                    self.player.items.remove(item_to_replace)
+                    self.player.items.append(item_name)
+                    print(f"You replaced {item_to_replace} with {item_name}.")
+                else:
+                    print("Invalid item choice.")
+        else:
+            self.player.items.append(item_name)
 
     def cower(self):
         self.player.health += 3
@@ -307,6 +306,9 @@ class Game:
 
         self._update_gui_labels()
         return False
+
+    def check_state(self):
+        return self._game_over()
 
 
     def _opposite_direction(self, direction):
