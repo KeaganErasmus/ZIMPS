@@ -1,0 +1,80 @@
+@startuml
+
+class Board {
+    time: str
+    tile_map: dict
+    dev_cards: CardDeck
+    outdoor_tiles: OutdoorTiles
+    indoor_tiles: IndoorTiles
+    patio_tile: Tile
+}
+
+class Card {
+    image: Image
+    content: str
+}
+
+class CardDeck {
+    cards: list
+    image_path: str
+}
+
+class Console {
+    prompt: str
+    game: Game
+}
+
+class Game {
+    player: Player
+    board: Board
+    gui: GUI
+    pickle: Pickling
+    lost: bool
+    save_game()
+}
+
+class Player {
+    location: tuple
+    health: int
+    attack: int
+    items: list
+    has_totem: bool
+    get_location(): tuple
+    get_items(): list
+    get_health(): int
+}
+
+class Tile {
+    image: Image
+    name: str
+    exits: dict
+    tile_type: str
+    display()
+}
+
+class TileDeck {
+    tiles: list
+    image_path: str
+}
+
+class OutdoorTiles {
+    -- Inherits from TileDeck --
+}
+
+class IndoorTiles {
+    -- Inherits from TileDeck --
+}
+
+Board -- CardDeck
+Board -- OutdoorTiles
+Board -- IndoorTiles
+CardDeck -- Card
+Console -- Game
+Game -- Player
+Game -- Board
+TileDeck -- Tile
+OutdoorTiles --|> TileDeck
+IndoorTiles --|> TileDeck
+
+@enduml
+
