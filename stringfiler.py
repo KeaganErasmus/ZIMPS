@@ -6,25 +6,43 @@ class StringFiler:
         self.file = open(str(self.filename), 'w')
 
     def close_file(self):
+        """
+        Sam
+        """
         self.file.close()
         self.value = "nothing"
 
     def load_file(self):
+        """
+        Sam
+        """
         with open(self.filename) as file:
             self.value = file.readline()
             return self.value
 
     def save_file(self):
+        """
+        Keagan
+        """
         with open(self.filename, "w") as file:
             file.write(self.value)
 
     def change_value(self, new_str):
+        """
+        Sam
+        """
         self.value = new_str
 
     def change_filename(self, new_name):
+        """
+        Christian
+        """
         self.filename = new_name
 
     def print_value(self):
+        """
+        Sam
+        """
         print(self.value)
 
 

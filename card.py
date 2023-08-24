@@ -12,6 +12,9 @@ class Card:
 
         Args:
             section_key (str): The section of the card to display. eg '9 PM'
+
+
+        Christian
         """
         # self.image.show()
         print("Development Card:")

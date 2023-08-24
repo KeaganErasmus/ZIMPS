@@ -9,6 +9,8 @@ from stringfiler import StringFiler
 class Game:
     """
     The Game class controls the game logic eg (movement, attack)
+
+    Christian, Same and Keagan have contributed to this class
     """
 
     def __init__(self, start_coordinates=(5, 3)):
@@ -33,7 +35,10 @@ class Game:
         self.strfiler.save_file()
         self.databasing.create_something("yeet")
 
+        # Sam
+        print("************")
         print("Saving Game")
+        print("************")
 
     def load_game(self, filename):
         try:
@@ -43,7 +48,11 @@ class Game:
             for line in file:
                 print(line.get_details())
         except EOFError:
-            return print("There is no file to load")
+            # Keagan
+            print("*************************")
+            print("There is no file to load")
+            print("*************************")
+
 
     def get_details(self):
         self.player.get_details()

@@ -9,7 +9,11 @@ class DataBasing:
         self.cur = None
 
     def create_connection(self, db_file):
-        """ create a database connection to a SQLite database """
+        """
+        create a database connection to a SQLite database
+
+        Sam
+        """
         try:
             self.conn = sqlite3.connect(db_file)
             self.cur = self.conn.cursor()
@@ -18,13 +22,22 @@ class DataBasing:
             print(e)
 
     def close_connection(self):
+        """
+        Sam
+        """
         self.conn.close()
 
     def create_something(self, data):
+        """
+        Christian
+        """
         self.cur.execute("CREATE TABLE IF NOT EXISTS data (text TEXT)")
         self.cur.execute(f"INSERT INTO data VALUES ('{str(data)}')")
 
     def read_from_db(self):
+        """
+        Keagan
+        """
         rows = self.cur.execute("SELECT * FROM data").fetchall()
         return rows
 
