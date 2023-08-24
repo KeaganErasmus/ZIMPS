@@ -355,7 +355,7 @@ class Game:
         self._update_gui_labels()
         return False
 
-    def check_state(self):
+    def check_game_state(self):
         return self._game_over()
 
     def _opposite_direction(self, direction):

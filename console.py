@@ -21,7 +21,7 @@ class Console(cmd.Cmd):
         Syntax: go [direction] where direction is either \'N\' (for
         north), \'E\' (for east), \'S\' (for south), \'W\' (for west).
         """
-        if not self.game.check_state():
+        if not self.game.check_game_state():
             try:
                 self.game.player_turn(direction)
             except TypeError as err:
