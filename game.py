@@ -30,8 +30,8 @@ class Game:
         self.pickle.dump_file(self.player)
 
         # string and db
-        self.strfiler.save_file()
-        self.databasing.create_something("yeet")
+        # self.strfiler.save_file()
+        # self.databasing.create_something("yeet")
 
         print("Saving Game")
 
@@ -274,6 +274,42 @@ class Game:
             self._print_current_room()
         return
 
+    def bash_through_wall(self, direction):
+        """
+        Logic for bashing through a wall.
+        """
+        # TODO: no cowering before bashing
+        dir = direction.upper()
+        if dir in self._current_room().possible_exits():
+            print(
+                f"No need to bash. A valid exit exists, use 'go {dir}' commmand.")
+            return
+
+        current_room = self._current_room()
+        new_location = self._update_location(dir)
+        if self.board.is_explored(new_location):
+            new_room = self.board.tile_map[new_location]
+            if self._opposite_direction(dir) not in new_room.possible_exits():
+                new_room.add_exit(self._opposite_direction(dir))
+            current_room.add_exit(dir)
+            self.player.location = new_location
+            self._fight_zombies(3)
+            # self._resolve_dev_card() # Also resolve a dev card??
+        else:
+            new_tile, tile_type = self.board.draw_tile(current_room)
+            if new_tile is None:
+                print(
+                    f"Can't bash from {tile_type}, no more rooms to explore.")
+                return
+            current_room.add_exit(dir)
+            self.player.location = new_location
+            self.gui.place_tile(new_tile, *new_location)
+            self._fight_zombies(3)
+            self._place_new_tile(dir, new_tile)
+
+        if not self._game_over():
+            self.save_game()
+
     def find_or_burry_totem(self):
         room = self._current_room()
         if room.name == 'Evil Temple':
@@ -321,7 +357,6 @@ class Game:
 
     def check_state(self):
         return self._game_over()
-
 
     def _opposite_direction(self, direction):
         """

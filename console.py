@@ -27,6 +27,12 @@ class Console(cmd.Cmd):
             except TypeError as err:
                 print(str(err))
 
+    def do_bash(self, direction):
+        """
+        Choose to bash through a wall.
+        """
+        self.game.bash_through_wall(direction)
+
     def do_totem(self, arg):
         """
         Choose to find or burry the totem.

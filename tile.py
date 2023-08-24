@@ -28,6 +28,9 @@ class Tile:
     def possible_exits(self):
         return [d for d, is_exit in self.exits.items() if is_exit]
 
+    def add_exit(self, direction):
+        self.exits[direction] = True
+
     def rotate(self, entry, exit):
         """
         Rotate tile to align the chosen entry with the chosen exit.
