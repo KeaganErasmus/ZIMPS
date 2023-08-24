@@ -8,35 +8,59 @@ class Pickling:
         self.file = open(str(self.filename), 'wb')
 
     def open_file(self):
+        """
+        Sam
+        """
         self.file = open(str(self.filename), 'rb')
         self.load_file()
 
     def close_file(self):
+        """
+        Sam
+        """
         self.file.close()
         self.value = "nothing"
 
     def load_file(self):
+        """
+        Keagan
+        """
         # self.value = load(self.file)
         with open(self.filename, 'rb') as file:
             data = pickle.load(file)
         return data
 
     def dump_file(self, *data):
+        """
+        Keagan
+        """
         with open(self.filename, "wb") as file:
             pickle.dump(data, file)
         # self.file = open(str(self.filename), 'wb')
         # pickle.dump(self.file, data)
 
     def change_value(self, new_str):
+        """
+        Christian
+        """
         self.value = new_str
 
     def change_filename(self, new_name):
+        """
+        Christian
+        """
         self.filename = new_name
 
     def print_value(self):
+        """
+        Sam
+        """
         print(self.value)
 
     def write_new_file(self, fn):
+        """
+        Sam
+        """
         # close current file
         self.close_file()
         self.filename = fn
