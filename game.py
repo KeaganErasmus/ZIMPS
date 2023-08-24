@@ -58,7 +58,7 @@ class Game:
         self.gui.update_tile_count(
             self.board.indoor_tiles.count, self.board.outdoor_tiles.count)
         self.gui.update_player_info(
-            self.player.health, self.player.attack, self.player.items)
+            self.player.health, self.player.attack, self.player.items, self.player.location)
 
     def _print_current_room(self):
         print(f"You are in the {self._current_room().name}.")

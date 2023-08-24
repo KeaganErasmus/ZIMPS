@@ -12,6 +12,8 @@ class GUI:
         self.images = []
         cols, rows = board_size, board_size
         self.tile_size = tile_size
+        self.player_row = 0
+        self.player_col = 0
 
         self.canvas = tk.Canvas(
             self.root, width=self.tile_size * cols,
@@ -70,7 +72,29 @@ class GUI:
         self.lable_indoor_tiles.config(
             text=f"Indoor Tiles: {indoor_count}")
 
-    def update_player_info(self, health, attack, items):
+    def update_player_info(self, health, attack, items, location):
         self.lable_health.config(text=f"Health: {health}")
         self.lable_attack.config(text=f"Attack: {attack}")
         self.items.config(text=f"Items: {items}")
+        self.move_player(*location)
+
+    def move_player(self, row, col):
+        self.player_row = row
+        self.player_col = col
+        self.draw_player()
+
+    def draw_player(self):
+        # Remove the previous player marker (if it exists)
+        if hasattr(self, 'player_marker'):
+            self.canvas.delete(self.player_marker)
+
+        # Calculate the size of the marker as one-eighth the tile size
+        marker_size = self.tile_size // 8
+
+        # Draw a new marker at the player's current position
+        self.player_marker = self.canvas.create_oval(
+            self.player_col * self.tile_size + 3 * marker_size,
+            self.player_row * self.tile_size + 3 * marker_size,
+            (self.player_col + 1) * self.tile_size - 3 * marker_size,
+            (self.player_row + 1) * self.tile_size - 3 * marker_size,
+            fill="red")
