@@ -30,8 +30,8 @@ class Game:
         self.pickle.dump_file(self.player)
 
         # string and db
-        # self.strfiler.save_file()
-        # self.databasing.create_something("yeet")
+        self.strfiler.save_file()
+        self.databasing.create_something("yeet")
 
         print("Saving Game")
 
