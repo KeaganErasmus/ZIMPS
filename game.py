@@ -4,6 +4,7 @@ from GUI.gui import GUI
 from pickling import Pickling
 from databasing import DataBasing
 from stringfiler import StringFiler
+from shelving import Shelving
 
 
 class Game:
@@ -18,6 +19,7 @@ class Game:
         self.board = Board(start_coordinates)
         self.gui = GUI(board_size)
         self.pickle = Pickling()
+        self.shelving = Shelving()
         self.strfiler = StringFiler()
         self.databasing = DataBasing()
         self.databasing.create_connection(r"db\database.db")
@@ -35,6 +37,9 @@ class Game:
         self.strfiler.save_file()
         self.databasing.create_something("yeet")
 
+        self.shelving.create_file("game_data")
+        self.shelving.save_object(self.player, "game_data.db")
+
         # Sam
         print("************")
         print("Saving Game")
@@ -42,9 +47,12 @@ class Game:
 
     def load_game(self, filename):
         try:
+            shelve_file = self.shelving.load_file_content(filename)
             file = self.pickle.load_file()
-            print(self.strfiler.load_file())
-            print(self.databasing.read_from_db())
+            # print(self.strfiler.load_file())
+            # print(self.databasing.read_from_db())
+
+            print(shelve_file)
             for line in file:
                 print(line.get_details())
         except EOFError:
