@@ -13,10 +13,10 @@ class Game:
     Christian, Same and Keagan have contributed to this class
     """
 
-    def __init__(self, start_coordinates=(5, 3)):
+    def __init__(self, start_coordinates=(5, 3), board_size=(7, 7)):
         self.player = Player(start_coordinates)
         self.board = Board(start_coordinates)
-        self.gui = GUI()
+        self.gui = GUI(board_size)
         self.pickle = Pickling()
         self.strfiler = StringFiler()
         self.databasing = DataBasing()

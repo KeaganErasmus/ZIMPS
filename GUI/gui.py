@@ -6,11 +6,11 @@ class GUI:
     """Displays the game board and player information.
     """
 
-    def __init__(self, board_size=7, tile_size=120):
+    def __init__(self, board_size=(7, 7), tile_size=120):
         self.root = tk.Tk()
         self.root.title("Zombie in my pocket")
         self.images = []
-        cols, rows = board_size, board_size
+        cols, rows = board_size
         self.tile_size = tile_size
         self.player_row = 0
         self.player_col = 0
