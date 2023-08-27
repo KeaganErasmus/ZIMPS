@@ -287,7 +287,13 @@ class Game:
         Logic for bashing through a wall.
         """
         # TODO: no cowering before bashing
+        valid_directions = ['N', 'E', 'S', 'W']
         dir = direction.upper()
+
+        if dir not in valid_directions:
+            print("Invalid direction. Please enter 'N', 'E', 'S', or 'W'.")
+            return
+
         if dir in self._current_room().possible_exits():
             print(
                 f"No need to bash. A valid exit exists, use 'go {dir}' commmand.")
