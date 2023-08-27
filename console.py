@@ -6,7 +6,8 @@ class Console(cmd.Cmd):
     """
     Keagan Created class
     """
-    def __init__(self):
+
+    def __init__(self, start_coordinates=(5, 3)):
         cmd.Cmd.__init__(self)
 
         """
@@ -19,7 +20,7 @@ class Console(cmd.Cmd):
             print("\n")
 
         self.prompt = ">>> "
-        self.game = Game()
+        self.game = Game(start_coordinates)
 
     def do_go(self, direction):
         """

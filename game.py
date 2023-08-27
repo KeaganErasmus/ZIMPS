@@ -53,7 +53,6 @@ class Game:
             print("There is no file to load")
             print("*************************")
 
-
     def get_details(self):
         self.player.get_details()
 
@@ -357,15 +356,15 @@ class Game:
             self.board.update_time()
 
         if self.player.health <= 0:
-
             print("You died. GAME OVER!")
+            self.lost = True
             return True
 
         self._update_gui_labels()
         return False
 
     def check_game_state(self):
-        return self._game_over()
+        return self.lost
 
     def _opposite_direction(self, direction):
         """
