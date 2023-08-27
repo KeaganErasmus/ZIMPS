@@ -58,6 +58,31 @@ class Game:
             print("There is no file to load")
             print("*************************")
 
+    def json_save(self, filename):
+        details = {
+            "health": self.player.get_health(),
+            "attack": self.player.get_attack(),
+            "location": self.player.get_location(),
+            "items": self.player.get_items()}
+        try:
+            with open(filename, 'w') as file:
+                json.dump(details, file)
+        except:
+            print("Please input a filename to save to")
+
+    def json_load(self, filename):
+        json_data = None
+        with open(filename, 'r') as f:
+            data = f.read()
+            json_data = json.loads(data)
+        # try:
+        #     with open(filename, 'r') as file:
+        #         data = file.read()
+        #         jata = json.loads(data)
+        #     print(jata)
+        # except:
+        #     print(f'No JSON file of name {filename}')
+
     def load_game(self, filename):
         try:
             file = self.pickle.load_file()

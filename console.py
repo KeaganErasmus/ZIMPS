@@ -107,6 +107,17 @@ class Console(cmd.Cmd):
         """
         self.game.shelve_load(filename)
 
+    def do_json_save(self, filename):
+        """
+        Save the current player state to a json file
+        """
+        self.game.json_save(filename)
+
+    def do_json_load(self, filename):
+        """
+        load up a json file
+        """
+
 
     def do_load(self, args):
         """
