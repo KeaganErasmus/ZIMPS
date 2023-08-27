@@ -39,23 +39,30 @@ class Game:
         self.strfiler.save_file()
         self.databasing.create_something("yeet")
 
-        # Shelving
-        self.shelving.create_file()
-        self.shelving.save_object(self.player)
-
         # Sam
         print("************")
         print("Saving Game")
         print("************")
 
-    def load_game(self, filename):
+    def shelve_save(self, filename):
+        # Shelving
+        self.shelving.create_file(filename)
+        self.shelving.save_object(self.player, filename)
+
+    def shelve_load(self, filename):
         try:
             shelve_file = self.shelving.load_file_content(filename)
-            file = self.pickle.load_file()
-            # print(self.strfiler.load_file())
-            # print(self.databasing.read_from_db())
-
             print(shelve_file)
+        except:
+            print("*************************")
+            print("There is no file to load")
+            print("*************************")
+
+    def load_game(self, filename):
+        try:
+            file = self.pickle.load_file()
+            print(self.strfiler.load_file())
+            print(self.databasing.read_from_db())
             for line in file:
                 print(line.get_details())
         except:

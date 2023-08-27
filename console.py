@@ -81,18 +81,40 @@ class Console(cmd.Cmd):
     def do_save(self, filename):
         """
         Allows the player to save the current game state to a file.
-
         save file will be created when the user quits the game
 
         Sam
         """
         self.game.save_game()
 
+    def do_shelve_save(self, filename):
+        """
+        allows the player to save the game data to a shelve file
+        """
+        try:
+            self.game.shelve_save(filename)
+        except:
+            print("Please enter a filename to save to")
+
+        # if not filename:
+        #     print("Please enter a filename to save to")
+        # else:
+        #     self.game.shelve_save(filename)
+
+    def do_shelve_load(self, filename):
+        """
+        allows the player to load a shelve file
+        """
+        self.game.shelve_load(filename)
+
+
     def do_load(self, args):
         """
-        Loads the serialized objects in the pickle files
+        Load by itself will load all current pickled player data
+        if you specify a filepath when loading you will load the shelve file
+        the default filename is player_data (load player_data)
 
-        Sam
+        sam
         """
         self.game.load_game(args)
 
