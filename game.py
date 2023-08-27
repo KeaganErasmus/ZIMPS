@@ -1,3 +1,4 @@
+import json
 from board import Board
 from player import Player
 from GUI.gui import GUI
@@ -26,6 +27,7 @@ class Game:
         self._setup(start_coordinates)
         self.lost = False
 
+
     def save_game(self):
         # right now I am only dumping the player's data this is done
         # so that we can get the pass on saving and loading data
@@ -37,8 +39,9 @@ class Game:
         self.strfiler.save_file()
         self.databasing.create_something("yeet")
 
-        self.shelving.create_file("game_data")
-        self.shelving.save_object(self.player, "game_data.db")
+        # Shelving
+        self.shelving.create_file()
+        self.shelving.save_object(self.player)
 
         # Sam
         print("************")
@@ -55,7 +58,7 @@ class Game:
             print(shelve_file)
             for line in file:
                 print(line.get_details())
-        except EOFError:
+        except:
             # Keagan
             print("*************************")
             print("There is no file to load")

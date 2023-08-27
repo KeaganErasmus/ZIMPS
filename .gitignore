@@ -6,3 +6,6 @@ __pycache__/
 *.pickle
 *.txt
 *.db
+*.bak
+*.dir
+*.dat

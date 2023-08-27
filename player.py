@@ -11,6 +11,9 @@ class Player:
     def get_location(self):
         return self.location
 
+    def get_attack(self):
+        return self.attack
+
     def get_items(self):
         return self.items
 
