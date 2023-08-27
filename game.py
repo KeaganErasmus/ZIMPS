@@ -71,17 +71,13 @@ class Game:
             print("Please input a filename to save to")
 
     def json_load(self, filename):
-        json_data = None
-        with open(filename, 'r') as f:
-            data = f.read()
-            json_data = json.loads(data)
-        # try:
-        #     with open(filename, 'r') as file:
-        #         data = file.read()
-        #         jata = json.loads(data)
-        #     print(jata)
-        # except:
-        #     print(f'No JSON file of name {filename}')
+        try:
+            with open(filename, 'r') as file:
+                data = file.read()
+                jata = json.loads(data)
+            print(jata)
+        except:
+            print(f'No JSON file of name {filename}')
 
     def load_game(self, filename):
         try:
