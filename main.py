@@ -12,8 +12,13 @@ def main():
     parser.add_argument('--rows', type=int, default=7,
                         help="The number of rows on the Board")
     parser.add_argument('--cols', type=int, default=7,
-                    help="The number of cols on the Board")   
+                        help="The number of cols on the Board")
+    
     args = parser.parse_args()
+    # Validate the coordinates against the board size
+    if args.x >= args.cols or args.y >= args.rows:
+        print("Invalid arguments: x and y coordinates must be within the bounds of the board size.")
+        return
 
     print("Welcome to Zombies in my pocket")
     start_coordinates = (args.x, args.y)
