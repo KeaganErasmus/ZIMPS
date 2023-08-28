@@ -1,14 +1,14 @@
 import unittest
 from tkinter import Tk
 from GUI.gui import GUI
-from tile_deck import TileDeck
+from board import Board
 
 
 class TestGUI(unittest.TestCase):
 
     def setUp(self):
         self.root = Tk()
-        self.tile_deck = TileDeck
+        # self.board = Board()
         self.gui = GUI(board_size=(7, 7), tile_size=120)
 
     def tearDown(self):
@@ -20,8 +20,8 @@ class TestGUI(unittest.TestCase):
         self.assertEqual(len(self.gui.grid_rects[0]), 7)
 
     def test_update_dev_cards(self):
-        self.gui.update_dev_cards(cards_count=5, current_time="12:00")
-        self.assertEqual(self.gui.label_time.cget("text"), "Time: 12:00")
+        self.gui.update_dev_cards(cards_count=5, current_time="11 PM")
+        self.assertEqual(self.gui.label_time.cget("text"), "Time: 11 PM")
         self.assertEqual(self.gui.label_dev_cards.cget("text"), "Development Cards: 5")
 
     def test_update_tile_count(self):
