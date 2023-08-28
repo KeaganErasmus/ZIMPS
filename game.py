@@ -27,7 +27,6 @@ class Game:
         self._setup(start_coordinates)
         self.lost = False
 
-
     def save_game(self):
         # right now I am only dumping the player's data this is done
         # so that we can get the pass on saving and loading data
@@ -285,33 +284,35 @@ class Game:
         if not self._game_over():
             new_item = self.board.dev_cards.draw().content['Item']
             item_name = new_item['text']
+
             print(f"You found {item_name}")
+            if len(self.player.items) >= 2:
+                while action not in possible_actions:
+                    action = input(
+                        "Do you want to replace an item? (Y/N): ").upper()
+                    print(f"Your current items: {self.player.items}")
+                    if action not in possible_actions:
+                        print(f"Invalid choice, choose: {possible_actions}")
+                    if action == 'Y':
+                        self.remove_items(item_name)
+            else:
+                self.player.items.append(item_name)
 
-            self.remove_items(action, item_name, possible_actions)
-
-    def remove_items(self, action, item_name, possible_actions):
+    def remove_items(self, item_name):
         """
         This function does the logic for replacing items
         if the player wants to
         """
-        if len(self.player.items) >= 2:
-            while action not in possible_actions:
-                action = input(
-                    "Do you want to replace an item? (Y/N): ").upper()
-                print(f"Your current items: {self.player.items}")
-                if action not in possible_actions:
-                    print(f"Invalid choice, choose: {possible_actions}")
-
-            if action == "Y":
-                item_to_replace = input("Choose an item to replace: ")
-                if item_to_replace in self.player.items:
-                    self.player.items.remove(item_to_replace)
-                    self.player.items.append(item_name)
-                    print(f"You replaced {item_to_replace} with {item_name}.")
-                else:
-                    print("Invalid item choice.")
-        else:
-            self.player.items.append(item_name)
+        item_to_replace = ""
+        while item_to_replace not in self.player.items:
+            item_to_replace = input("Choose an item to replace: ")
+            if item_to_replace in self.player.items:
+                self.player.items.remove(item_to_replace)
+                self.player.items.append(item_name)
+                print(f"You replaced {item_to_replace} with {item_name}.")
+                return
+            else:
+                print("Invalid item choice.")
 
     def cower(self):
         self.player.health += 3
