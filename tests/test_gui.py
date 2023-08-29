@@ -7,7 +7,7 @@ class TestGUI(unittest.TestCase):
 
     def setUp(self):
         self.root = Tk()
-        self.gui = GUI(board_size=(7, 7), tile_size=120)
+        self.gui = GUI()
 
     def tearDown(self):
         self.root.quit()
