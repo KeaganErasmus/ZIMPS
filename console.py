@@ -117,7 +117,7 @@ class Console(cmd.Cmd):
         """
         load up a json file
         """
-
+        self.game.json_load(filename)
 
     def do_load(self, args):
         """
