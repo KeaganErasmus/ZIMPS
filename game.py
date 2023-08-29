@@ -53,9 +53,9 @@ class Game:
             shelve_file = self.shelving.load_file_content(filename)
             print(shelve_file)
         except:
-            print("*************************")
-            print("There is no file to load")
-            print("*************************")
+            print("************************************")
+            print(f"There is no file to load {filename}")
+            print("************************************")
 
     def json_save(self, filename):
         details = {
@@ -76,7 +76,9 @@ class Game:
                 jata = json.loads(data)
             print(jata)
         except:
+            print("*********************************")
             print(f'No JSON file of name {filename}')
+            print("*********************************")
 
     def load_game(self, filename):
         try:
@@ -87,9 +89,9 @@ class Game:
                 print(line.get_details())
         except:
             # Keagan
-            print("*************************")
-            print("There is no file to load")
-            print("*************************")
+            print("************************************")
+            print(f"There is no file to load {filename}")
+            print("************************************")
 
     def get_details(self):
         self.player.get_details()
