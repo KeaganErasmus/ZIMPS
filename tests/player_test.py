@@ -4,7 +4,7 @@ from game import Game
 the_game = Game()
 
 
-class player_initial_stats(unittest.TestCase):
+class PlayerInitialStats(unittest.TestCase):
     def test_player_start_location(self):
         player_loc = the_game.player.get_location()
         print(player_loc)
