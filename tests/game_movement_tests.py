@@ -14,7 +14,7 @@ class TestPlayerMoving(unittest.TestCase):
         self.assertEqual(the_game.player.get_location(), player_loc)
 
     def test_player_moving_s_from_foyer(self):
-        # Player starts in the foyerS
+        # Player starts in the foyer
         # it has 1 exit to the north
         # So player should not be able to move any other direction
         turn = the_game._move_direction('S')
@@ -22,7 +22,7 @@ class TestPlayerMoving(unittest.TestCase):
         self.assertEqual(turn, None)
 
     def test_player_moving_w_from_foyer(self):
-        # Player starts in the foyerS
+        # Player starts in the foyer
         # it has 1 exit to the north
         # So player should not be able to move any other direction
         turn = the_game._move_direction('W')
@@ -30,7 +30,7 @@ class TestPlayerMoving(unittest.TestCase):
         self.assertEqual(turn, None)
 
     def test_player_moving_e_from_foyer(self):
-        # Player starts in the foyerS
+        # Player starts in the foyer
         # it has 1 exit to the north
         # So player should not be able to move any other direction
         turn = the_game._move_direction('E')
