@@ -35,6 +35,15 @@ class Board:
         self.dev_cards = CardDeck()
 
     def draw_tile(self, current_room):
+        """Draw a tile from the tile deck based on the current room.
+
+        Args:
+            current_room (Tile): The room the player is in.
+
+        Returns:
+            Tile: The drawn tile.
+            str: The tile type. Either 'indoor' or 'outdoor'.
+        """
         tile_type = current_room.tile_type
         tile = None
         print()
@@ -46,4 +55,12 @@ class Board:
         return tile, tile_type
 
     def is_explored(self, location):
+        """Check if the given location has been explored.
+
+        Args:
+            location (tuple): The location to check.
+
+        Returns:
+            Bool: True if the location has been explored, False otherwise.
+        """
         return location in self.tile_map
