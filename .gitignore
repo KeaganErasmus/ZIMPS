@@ -6,6 +6,7 @@ __pycache__/
 *.pickle
 *.txt
 *.db
+*.db-journal
 *.bak
 *.dir
 *.dat
