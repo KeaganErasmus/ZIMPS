@@ -17,7 +17,7 @@ class DataBasing:
         try:
             self.conn = sqlite3.connect(db_file)
             self.cur = self.conn.cursor()
-            print(sqlite3.version)
+            # print(sqlite3.version)
         except Error as e:
             print(e)
 

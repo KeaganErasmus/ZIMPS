@@ -1,3 +1,13 @@
+# --------------------------------------------------------------
+# tile.py
+# --------------------------------------------------------------
+# Author: Christian Diekmann
+#
+# Description:
+# A tile is a single square on the game board.
+# It has a name, an image, and exits to other tiles.
+# Also has a tile type, either 'indoor' or 'outdoor'.
+# ---------------------------------------------------------------
 class Tile:
     """
     A tile is a single square on the game board.
@@ -10,7 +20,9 @@ class Tile:
         self.tile_type = tile_type  # 'indoor' or 'outdoor'
 
     def display(self):
-        # self.image.show()
+        """
+        Display the tile name and exits in a nice ASCII art format.
+        """
         max_name_len = 15  # Set this to the length of the longest name
         padded_name = self.name.center(max_name_len)  # Center the name
 
@@ -26,9 +38,15 @@ class Tile:
         print('')
 
     def possible_exits(self):
+        """
+        List of possible exits from the tile.
+        """
         return [d for d, is_exit in self.exits.items() if is_exit]
 
     def add_exit(self, direction):
+        """
+        Add an exit in the given direction to the tile.
+        """
         self.exits[direction] = True
 
     def rotate(self, entry, exit):

@@ -1,3 +1,12 @@
+# --------------------------------------------------------------
+# board.py
+# --------------------------------------------------------------
+# Author: Christian Diekmann
+#
+# Description:
+# A board for the Zombie in my Pocket game.
+# It holds the different game components. eg Development Cards, Tiles etc.
+# ---------------------------------------------------------------
 from card_deck import CardDeck
 from tile_deck import OutdoorTiles, IndoorTiles
 

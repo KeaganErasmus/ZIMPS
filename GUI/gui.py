@@ -1,3 +1,11 @@
+# --------------------------------------------------------------
+# gui.py
+# --------------------------------------------------------------
+# Author: Christian Diekmann
+#
+# Description:
+# A GUI for the Zombie in my Pocket game.
+# ---------------------------------------------------------------
 import tkinter as tk
 from PIL import ImageTk
 

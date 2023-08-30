@@ -1,3 +1,14 @@
+# --------------------------------------------------------------
+# card.py
+# --------------------------------------------------------------
+# Author: Christian Diekmann
+#
+# Description:
+# A development card.
+# It has an image and the card content.
+# The content is a dictionary with the format:
+# {'9 PM': {...}, '10 PM': {...}, '11 PM': {...}}
+# ---------------------------------------------------------------
 class Card:
     """
     A development card.
@@ -12,11 +23,8 @@ class Card:
 
         Args:
             section_key (str): The section of the card to display. eg '9 PM'
-
-
-        Christian
         """
-        # self.image.show()
+        self.image.show()
         print("Development Card:")
         print("---------------------------------------")
         print(section_key)

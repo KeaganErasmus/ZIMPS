@@ -13,14 +13,13 @@ class Console(cmd.Cmd):
         """
         Keagan
         """
+        self.prompt = ">>> "
+        self.game = Game(start_coordinates, board_size, card_data, card_image)
         with open("commands.txt", 'r') as file:
             print('Commands: ')
             for lines in file:
                 print(f"{lines}")
             print("\n")
-
-        self.prompt = ">>> "
-        self.game = Game(start_coordinates, board_size, card_data, card_image)
 
     def do_go(self, direction):
         """

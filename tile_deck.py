@@ -1,7 +1,21 @@
+# --------------------------------------------------------------
+# tile_deck.py
+# --------------------------------------------------------------
+# Author: Christian Diekmann
+#
+# Description:
+# A deck of tiles represented as a Python class.
+# Provides methods for initializing the deck from JSON and image files,
+# shuffling, discarding, and drawing tiles.
+# ---------------------------------------------------------------
 import json
 import random
-from PIL import Image
+from PIL import Image, UnidentifiedImageError
 from tile import Tile
+
+
+class TileDeckInitializationError(Exception):
+    pass
 
 
 class TileDeck:
@@ -14,37 +28,40 @@ class TileDeck:
         self.tiles = []
         self.image_path = image_path
 
-        tile_metadata = self.load_metadata(deck_type, json_path)
-        self.initialize_tiles(deck_type, tile_metadata)
+        tile_metadata = self._load_metadata(deck_type, json_path)
+        self._initialize_tiles(deck_type, tile_metadata)
 
-    def load_metadata(self, deck_type, json_path):
+    def _load_metadata(self, deck_type, json_path):
         try:
             with open(json_path, 'r') as file:
                 metadata_dict = json.load(file)
-        except FileNotFoundError:
-            print(f"File {json_path} not found. "
-                  "Please ensure the path is correct.")
-            return None
-        except json.JSONDecodeError:
-            print(f"Error decoding JSON from {json_path}. "
-                  "Please ensure the file is formatted correctly.")
-            return None
+        except FileNotFoundError as e:
+            raise TileDeckInitializationError(
+                f"File {json_path} not found.") from e
+        except json.JSONDecodeError as e:
+            raise TileDeckInitializationError(
+                f"Error decoding JSON from {json_path}.") from e
 
         key = 'OUTDOOR' if deck_type == 'outdoor' else 'INDOOR'
         tile_metadata = metadata_dict.get(key)
 
         if tile_metadata is None:
-            print(f"Metadata for deck type '{deck_type}' not found "
-                  f"in {json_path}.")
+            raise TileDeckInitializationError(
+                f"Metadata for deck type '{deck_type}' "
+                "not found in {json_path}.")
 
         return tile_metadata
 
-    def initialize_tiles(self, decktype, tile_metadata):
-        if tile_metadata is None:
-            return
+    def _initialize_tiles(self, decktype, tile_metadata, rows=4, cols=4):
+        try:
+            image = Image.open(self.image_path)
+        except FileNotFoundError as e:
+            raise TileDeckInitializationError(
+                f"Tile image file {self.image_path} not found.") from e
+        except UnidentifiedImageError as e:
+            raise TileDeckInitializationError(
+                f"Invalid tile image for file {self.image_path}.") from e
 
-        image = Image.open(self.image_path)
-        rows, cols = 4, 4
         tile_width = image.width // cols
         tile_height = image.height // rows
         index = 1
@@ -67,12 +84,18 @@ class TileDeck:
         self.count = len(self.tiles)
 
     def draw_by_name(self, name):
+        """
+        Draws a tile from the deck by name.
+        """
         for i, tile in enumerate(self.tiles):
             if tile.name == name:
                 self.count -= 1
                 return self.tiles.pop(i)
 
     def draw(self):
+        """
+        Draws a tile from the deck.
+        """
         if self.count > 0:
             tile = self.tiles.pop(0)
             self.count -= 1

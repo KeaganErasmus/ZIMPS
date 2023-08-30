@@ -34,6 +34,7 @@ def main():
     print("Welcome to Zombies in my pocket")
     run = Console(start_coordinates, board_size,
                   args.cards_data, args.cards_image)
+
     run.cmdloop()
     run.game.gui.root.mainloop()
 
