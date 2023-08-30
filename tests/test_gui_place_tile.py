@@ -7,24 +7,29 @@ class TestPlaceTile(unittest.TestCase):
 
     @mock.patch('tkinter.Canvas')
     @mock.patch('PIL.ImageTk.PhotoImage')
-    def test_place_tile(self, MockPhotoImage, MockCanvas):
-        
+    @mock.patch('tile.Tile')
+    def test_place_tile(self, MockTile, MockPhotoImage, MockCanvas):
+        # Setup
         gui = GUI()
         gui.canvas = MockCanvas()
-        mock_tile = mock.Mock()
-        mock_tile.image = mock.Mock()
+        mock_tile = MockTile()
+        mock_tile.image = MockPhotoImage()
+        row = 1
+        col = 2
 
-        # Call method to test
-        gui.place_tile(mock_tile, 1, 2)
-               
-        # Check if image is resized
-        mock_tile.image.resize.assert_called_with((gui.tile_size, gui.tile_size))
+        # Act
+        gui.place_tile(mock_tile, row, col)
 
-        # Check if create_image is called on the canvas
-        gui.canvas.create_image.assert_called()
+        # Assert
+        mock_tile.image.resize.assert_called_with(
+            (gui.tile_size, gui.tile_size))
 
-        # Check if image is appended to self.images
-        self.assertIsInstance(gui.images[-1], mock.MagicMock)
+        gui.canvas.create_image.assert_called_with(
+            col * gui.tile_size, row * gui.tile_size,
+            image=mock_tile.image, anchor='nw')
+
+        self.assertEqual(len(gui.images), 1)
+        self.assertEqual(gui.images[-1], mock_tile.image)
 
 
 if __name__ == '__main__':
