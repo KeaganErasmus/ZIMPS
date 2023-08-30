@@ -13,8 +13,8 @@ class Board:
         self.dev_cards = CardDeck()
         self.outdoor_tiles = OutdoorTiles()
         self.indoor_tiles = IndoorTiles()
-        self.patio_tile = self.outdoor_tiles.draw_tile_by_name('Patio')
-        self.foyer_tile = self.indoor_tiles.draw_tile_by_name('Foyer')
+        self.patio_tile = self.outdoor_tiles.draw_by_name('Patio')
+        self.foyer_tile = self.indoor_tiles.draw_by_name('Foyer')
         self.tile_map[start_coordinates] = self.foyer_tile
 
     def update_time(self):

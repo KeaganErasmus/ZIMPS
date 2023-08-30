@@ -23,16 +23,23 @@ class TileDeck:
         try:
             with open(json_path, 'r') as file:
                 metadata_dict = json.load(file)
-            tile_metadata = metadata_dict['OUTDOOR'] if deck_type == 'outdoor' else metadata_dict['INDOOR']
-            return tile_metadata
         except FileNotFoundError:
-            print(
-                f"File {json_path} not found. Please ensure the path is correct.")
+            print(f"File {json_path} not found. "
+                  "Please ensure the path is correct.")
             return None
         except json.JSONDecodeError:
-            print(
-                f"Error decoding JSON from {json_path}. Please ensure the file is formatted correctly.")
+            print(f"Error decoding JSON from {json_path}. "
+                  "Please ensure the file is formatted correctly.")
             return None
+
+        key = 'OUTDOOR' if deck_type == 'outdoor' else 'INDOOR'
+        tile_metadata = metadata_dict.get(key)
+
+        if tile_metadata is None:
+            print(f"Metadata for deck type '{deck_type}' not found "
+                  f"in {json_path}.")
+
+        return tile_metadata
 
     def initialize_tiles(self, decktype, tile_metadata):
         if tile_metadata is None:
@@ -61,7 +68,7 @@ class TileDeck:
         random.shuffle(self.tiles)
         self.count = len(self.tiles)
 
-    def draw_tile_by_name(self, name):
+    def draw_by_name(self, name):
         for i, tile in enumerate(self.tiles):
             if tile.name == name:
                 self.count -= 1
