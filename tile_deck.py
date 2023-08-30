@@ -3,16 +3,14 @@ import random
 from PIL import Image
 from tile import Tile
 
-IMAGE_PATH = 'assets/tiles.jpg'
-DATA_PATH = 'assets/tiles.json'
-
 
 class TileDeck:
     """
     A tile deck is a collection of tiles that can be drawn from.
     """
 
-    def __init__(self, deck_type, image_path=IMAGE_PATH, json_path=DATA_PATH):
+    def __init__(self, deck_type, image_path='assets/tiles.jpg',
+                 json_path='assets/tiles.json'):
         self.tiles = []
         self.image_path = image_path
 

@@ -7,10 +7,11 @@ class Board:
     Holds the different game commponents. eg Cards, Tiles etc.
     """
 
-    def __init__(self, start_coordinates, start_time='9 PM'):
+    def __init__(self, start_coordinates, card_data, card_image,
+                 start_time='9 PM'):
         self.time = start_time
         self.tile_map = {}  # {(x, y): Tile}
-        self.dev_cards = CardDeck()
+        self.dev_cards = CardDeck(card_data, card_image)
         self.outdoor_tiles = OutdoorTiles()
         self.indoor_tiles = IndoorTiles()
         self.patio_tile = self.outdoor_tiles.draw_by_name('Patio')

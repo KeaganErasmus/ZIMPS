@@ -15,9 +15,9 @@ class Game:
     Christian, Same and Keagan have contributed to this class
     """
 
-    def __init__(self, start_coordinates=(5, 3), board_size=(7, 7)):
+    def __init__(self, start_coordinates, board_size, card_data, card_image):
         self.player = Player(start_coordinates)
-        self.board = Board(start_coordinates)
+        self.board = Board(start_coordinates, card_data, card_image)
         self.gui = GUI(board_size)
         self.pickle = Pickling()
         self.shelving = Shelving()

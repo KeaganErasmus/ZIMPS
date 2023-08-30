@@ -3,16 +3,13 @@ import random
 from PIL import Image
 from card import Card
 
-IMAGE_PATH = 'assets/dev_cards.jpg'
-CONTENT_PATH = 'assets/dev_cards.json'
-
 
 class CardDeck:
     """
     A deck of development cards.
     """
 
-    def __init__(self, image_path=IMAGE_PATH, json_path=CONTENT_PATH):
+    def __init__(self, json_path, image_path):
         self.cards = []
         self.image_path = image_path
         cards_content = self.load_cards_content(json_path)
