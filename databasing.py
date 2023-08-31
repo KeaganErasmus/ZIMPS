@@ -40,62 +40,80 @@ class DataBasing:
         except Error as e:
             print(f"Error: {e}")
 
-    def create_table(self):
-        """Create a table.
+    def create_table(self, tbl_name, col_name, d_type):
+        """Create a table with the given name, column, and data type.
         Christian
         """
-        create_table_query = "CREATE TABLE IF NOT EXISTS data (text TEXT)"
-        self.execute_query(create_table_query)
+        create_tbl_query = f"CREATE TABLE IF NOT EXISTS {tbl_name} ({col_name} {d_type})"
+        self.execute_query(create_tbl_query)
 
-    def insert_data(self, data):
-        """Insert new data into table.
-        Christian
-        """
-        insert_data_query = "INSERT INTO data (text) VALUES (?)"
+    def insert_data(self, table_name, column_name, data):
+        insert_data_query = f"INSERT INTO {table_name} ({column_name}) VALUES (?)"
         self.execute_query(insert_data_query, (data,))
 
-    def read_from_db(self):
-        """Read all rows from database.
-        Keagan
-        """
-        read_query = "SELECT * FROM data"
+    def read_from_db(self, table_name, column_name):
+        read_query = f"SELECT {column_name} FROM {table_name}"
         rows = self.cur.execute(read_query).fetchall()
         return rows
 
-    def delete_data(self, data):
-        """Delete data from table.
-        Keagan
-        """
-        delete_data_query = "DELETE FROM data WHERE text = ?"
+    def delete_data(self, table_name, column_name, data):
+        delete_data_query = f"DELETE FROM {table_name} WHERE {column_name} = ?"
         self.execute_query(delete_data_query, (data,))
 
-    def update_data(self, old_data, new_data):
-        """Update data in the table.
-        Sam
-        """
-        update_data_query = "UPDATE data SET text = ? WHERE text = ?"
+    def update_data(self, table_name, column_name, old_data, new_data):
+        update_data_query = f"UPDATE {table_name} SET {column_name} = ? WHERE {column_name} = ?"
         self.execute_query(update_data_query, (new_data, old_data))
+
+    def count_rows(self, table_name):
+        count_query = f"SELECT COUNT(*) FROM {table_name}"
+        self.cur.execute(count_query)
+        rows = self.cur.fetchone()[0]
+        return rows
+
+    def search_data(self, table_name, column_name, search_text):
+        search_query = f"SELECT * FROM {table_name} WHERE {column_name} LIKE ?"
+        rows = self.cur.execute(search_query, (f"%{search_text}%",)).fetchall()
+        return rows
+
+    def drop_table(self, table_name):
+        drop_table_query = f"DROP TABLE IF EXISTS {table_name}"
+        self.execute_query(drop_table_query)
+
+    def get_columns(self, table_name):
+        self.cur.execute(f"PRAGMA table_info({table_name})")
+        columns = [column[1] for column in self.cur.fetchall()]
+        return columns
+
+    def bulk_insert(self, table_name, column_name, data_list):
+        bulk_insert_query = f"INSERT INTO {table_name} ({column_name}) VALUES (?)"
+        self.cur.executemany(bulk_insert_query, [
+                             (data,) for data in data_list])
+        self.conn.commit()
 
 
 if __name__ == '__main__':
     db = DataBasing(r"db\database.db")
 
     # Create table
-    db.create_table()
+    db.create_table("players", "player_name", "TEXT")
+
+    # Read data
+    print(db.read_from_db("players", "player_name"))
 
     # Insert data
-    db.insert_data("string")
-    print(db.read_from_db())
-
-    # Delete data
-    db.delete_data("string")
-    print(db.read_from_db())
+    db.insert_data("players", "player_name", "Chris")
 
     # Update data
-    db.insert_data("string")
-    print(db.read_from_db())
-    db.update_data("string", "new_string")
-    print(db.read_from_db())
+    db.update_data("players", "player_name", "Chris", "Christian")
+    print(db.read_from_db("players", "player_name"))
+
+    # Bulk insert
+    db.bulk_insert("players", "player_name", ["Sam", "Keagan", "Bob"])
+    print(db.read_from_db("players", "player_name"))
+
+    # Delete data
+    db.delete_data("players", "player_name", "Sam")
+    print(db.read_from_db("players", "player_name"))
 
     # Close connection
     db.close_connection()
