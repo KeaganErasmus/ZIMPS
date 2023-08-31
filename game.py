@@ -34,7 +34,7 @@ class Game:
 
     def save_game(self):
         # save player object with pickle
-        self.pickle.dump_file(self.player)
+        self.pickle.save(self.player)
 
         # store the players path in the database (Christian)
         self.db.insert_data(str(self.player.location))
@@ -86,7 +86,7 @@ class Game:
     def load_game(self, filename):
         try:
             # load player details with pickle
-            file = self.pickle.load_file()
+            file = self.pickle.load()
             for player in file:
                 print(player.get_details())
 

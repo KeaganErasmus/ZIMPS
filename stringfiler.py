@@ -35,7 +35,7 @@ class StringFiler:
 
     def change_filename(self, new_name):
         """
-        Christian
+        Sam
         """
         self.filename = new_name
 
