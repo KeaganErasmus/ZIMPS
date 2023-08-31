@@ -142,6 +142,8 @@ class GUI:
             return None
 
     def save_canvas_as_image(self, filename):
+        """Saves the canvas as an image with the given filename.
+        """
         try:
             # Saving the canvas in PostScript format
             ps = self.canvas.postscript(colormode='color')
@@ -149,8 +151,6 @@ class GUI:
             # Converting PostScript format to desired image format using PIL
             image = Image.open(io.BytesIO(ps.encode('utf-8')))
             image.save(filename)
-
-            print(f"Canvas image saved as {filename}")
 
         except Exception as e:
             print(f"Error while saving the canvas image: {e}")
