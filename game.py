@@ -22,22 +22,25 @@ class Game:
         self.pickle = Pickling()
         self.shelving = Shelving()
         self.strfiler = StringFiler()
-        self.databasing = DataBasing()
-        self.databasing.create_connection(r"db\database.db")
+        self.db = DataBasing(r"db\database.db")
         self._setup(start_coordinates)
         self.lost = False
 
+    def _setup(self, start_coordinates):
+        self.db.create_table()
+        self.gui.place_tile(self.board.foyer_tile, *start_coordinates)
+        self._update_gui_labels()
+        self._print_current_room()
+
     def save_game(self):
-        # right now I am only dumping the player's data this is done
-        # so that we can get the pass on saving and loading data
-        # ideally we want to save the player and board,
-        # but I am having trouble printing the details of just the player
+        # save player object with pickle
         self.pickle.dump_file(self.player)
 
-        # string and db
-        self.strfiler.save_file()
-        self.databasing.create_something("yeet")
+        # store the players path in the database (Christian)
+        self.db.insert_data(str(self.player.location))
 
+        # string file
+        self.strfiler.save_file()
         # Sam
         print("************")
         print("Saving Game")
@@ -82,11 +85,16 @@ class Game:
 
     def load_game(self, filename):
         try:
+            # load player details with pickle
             file = self.pickle.load_file()
+            for player in file:
+                print(player.get_details())
+
+            # load players path from db
+            print(self.db.read_from_db())
+
+            # load string from file
             print(self.strfiler.load_file())
-            print(self.databasing.read_from_db())
-            for line in file:
-                print(line.get_details())
         except:
             # Keagan
             print("************************************")
@@ -94,12 +102,7 @@ class Game:
             print("************************************")
 
     def get_details(self):
-        self.player.get_details()
-
-    def _setup(self, start_coordinates):
-        self.gui.place_tile(self.board.foyer_tile, *start_coordinates)
-        self._update_gui_labels()
-        self._print_current_room()
+        print(self.player.get_details())
 
     def _update_gui_labels(self):
         self.gui.update_dev_cards(self.board.dev_cards.count, self.board.time)

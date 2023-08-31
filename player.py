@@ -27,4 +27,4 @@ class Player:
         self.has_totem = True
 
     def get_details(self):
-        return print(f'Location->{self.location} \nHealth->{self.health} \nAttack->{self.attack} \nItems->{self.items}')
+        return f'Location->{self.location} \nHealth->{self.health} \nAttack->{self.attack} \nItems->{self.items}'
