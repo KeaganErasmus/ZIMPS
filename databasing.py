@@ -6,8 +6,11 @@ class DataBasing:
 
     def __init__(self, db_file):
         """Initialize a new or connect to an existing database."""
-        self.conn = self.create_connection(db_file)
-        self.cur = self.conn.cursor()
+        try:
+            self.conn = self.create_connection(db_file)
+            self.cur = self.conn.cursor()
+        except FileExistsError:
+            print(f"File does not exist {db_file}")
 
     def create_connection(self, db_file):
         """Create a database connection to a SQLite database.
