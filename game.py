@@ -27,7 +27,13 @@ class Game:
         self.lost = False
 
     def _setup(self, start_coordinates):
-        self.db.create_table()
+        self.db.create_table(tbl_name="player_path",
+                             col_name="location", d_type="TEXT")
+        self.db.create_table(tbl_name="player_health",
+                             col_name="health", d_type="INTEGER")
+        self.db.insert_data("player_health", "health",
+                            self.player.get_health())
+        self.db.insert_data("player_path", "location", str(start_coordinates))
         self.gui.place_tile(self.board.foyer_tile, *start_coordinates)
         self._update_gui_labels()
         self._print_current_room()
@@ -36,8 +42,11 @@ class Game:
         # save player object with pickle
         self.pickle.save(self.player)
 
-        # store the players path in the database (Christian)
-        self.db.insert_data(str(self.player.location))
+        # store the players locations in the player table (Christian)
+        self.db.insert_data("player_path", "location",
+                            str(self.player.location))
+        self.db.insert_data("player_health", "health",
+                            self.player.get_health())
 
         # string file
         self.strfiler.save_file()
@@ -45,6 +54,25 @@ class Game:
         print("************")
         print("Saving Game")
         print("************")
+
+    def load_game(self, filename):
+        try:
+            # load player details with pickle
+            file = self.pickle.load()
+            for player in file:
+                print(player.get_details())
+
+            # load players path and health progression from db
+            print(self.db.read_from_db("player_path", "location"))
+            print(self.db.read_from_db("player_health", "health"))
+
+            # load string from file
+            print(self.strfiler.load_file())
+        except:
+            # Keagan
+            print("************************************")
+            print(f"There is no file to load {filename}")
+            print("************************************")
 
     def shelve_save(self, filename):
         # Shelving
@@ -82,24 +110,6 @@ class Game:
             print("*********************************")
             print(f'No JSON file of name {filename}')
             print("*********************************")
-
-    def load_game(self, filename):
-        try:
-            # load player details with pickle
-            file = self.pickle.load()
-            for player in file:
-                print(player.get_details())
-
-            # load players path from db
-            print(self.db.read_from_db())
-
-            # load string from file
-            print(self.strfiler.load_file())
-        except:
-            # Keagan
-            print("************************************")
-            print(f"There is no file to load {filename}")
-            print("************************************")
 
     def get_details(self):
         print(self.player.get_details())

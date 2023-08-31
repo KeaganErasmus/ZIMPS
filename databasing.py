@@ -64,11 +64,11 @@ class DataBasing:
         update_data_query = f"UPDATE {table_name} SET {column_name} = ? WHERE {column_name} = ?"
         self.execute_query(update_data_query, (new_data, old_data))
 
-    def count_rows(self, table_name):
-        count_query = f"SELECT COUNT(*) FROM {table_name}"
-        self.cur.execute(count_query)
-        rows = self.cur.fetchone()[0]
-        return rows
+    def add_column(self, table_name, new_column_name, data_type):
+        """Add a new column to an existing table.
+        """
+        add_column_query = f"ALTER TABLE {table_name} ADD COLUMN {new_column_name} {data_type}"
+        self.execute_query(add_column_query)
 
     def search_data(self, table_name, column_name, search_text):
         search_query = f"SELECT * FROM {table_name} WHERE {column_name} LIKE ?"
@@ -114,6 +114,10 @@ if __name__ == '__main__':
     # Delete data
     db.delete_data("players", "player_name", "Sam")
     print(db.read_from_db("players", "player_name"))
+
+    # Add column
+    db.add_column("players", "player_age", "INTEGER")
+    print(db.get_columns("players"))
 
     # Close connection
     db.close_connection()
