@@ -49,7 +49,7 @@ class Game:
                             self.player.get_health())
 
         # save canvas as image
-        self.gui.save_canvas_as_image("GUI/saved_game.png")
+        # self.gui.save_canvas_as_image("GUI/saved_game.png")
 
         # string file
         self.strfiler.save_file()
