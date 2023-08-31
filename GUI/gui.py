@@ -6,8 +6,9 @@
 # Description:
 # A GUI for the Zombie in my Pocket game.
 # ---------------------------------------------------------------
+import io
 import tkinter as tk
-from PIL import ImageTk
+from PIL import ImageTk, Image
 
 
 class GUI:
@@ -58,8 +59,15 @@ class GUI:
         self.lable_attack.pack()
         self.items = tk.Label(self.frame_group2, text="Items: ")
         self.items.pack()
-        self.label_coords = tk.Label(self.root, text="N\nW\tE\nS")
-        self.label_coords.pack()
+        self.frame_compass = tk.Frame(self.root)
+        self.frame_compass.pack(side=tk.RIGHT, padx=20)
+
+        self.compass_image = self._load_image("GUI/compass.png", (80, 80))
+        if self.compass_image is None:
+            raise Exception("Compass image not found.")
+        self.compass_label = tk.Label(
+            self.frame_compass, image=self.compass_image)
+        self.compass_label.pack()
 
     def place_tile(self, tile, row, col):
         """Places a tile on the board at the given row and column.
@@ -118,3 +126,31 @@ class GUI:
             (self.player_col + 1) * self.tile_size - 3 * marker_size,
             (self.player_row + 1) * self.tile_size - 3 * marker_size,
             fill="red")
+
+    def _load_image(self, path, dimensions):
+        """Loads an image from the given path and resizes it to the given
+        dimensions.
+        """
+        try:
+            image = Image.open(path)
+            image = image.resize(dimensions)
+            tk_image = ImageTk.PhotoImage(image)
+            return tk_image
+
+        except Exception as e:
+            print(f"Error: {e}")
+            return None
+
+    def save_canvas_as_image(self, filename):
+        try:
+            # Saving the canvas in PostScript format
+            ps = self.canvas.postscript(colormode='color')
+
+            # Converting PostScript format to desired image format using PIL
+            image = Image.open(io.BytesIO(ps.encode('utf-8')))
+            image.save(filename)
+
+            print(f"Canvas image saved as {filename}")
+
+        except Exception as e:
+            print(f"Error while saving the canvas image: {e}")
