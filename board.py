@@ -46,7 +46,6 @@ class Board:
         """
         tile_type = current_room.tile_type
         tile = None
-        print()
         if tile_type == "outdoor":
             tile = self.outdoor_tiles.draw()
         elif tile_type == "indoor":
