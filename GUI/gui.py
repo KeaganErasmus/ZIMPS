@@ -62,6 +62,8 @@ class GUI:
         self.label_coords.pack()
 
     def place_tile(self, tile, row, col):
+        """Places a tile on the board at the given row and column.
+        """
         tile_image = tile.image
         tile_image = tile_image.resize((self.tile_size, self.tile_size))
         tile_tk_image = ImageTk.PhotoImage(tile_image)
@@ -71,27 +73,37 @@ class GUI:
         self.images.append(tile_tk_image)
 
     def update_dev_cards(self, cards_count, current_time):
+        """Updates the development cards and time labels.
+        """
         self.label_time.config(text=f"Time: {current_time}")
         self.label_dev_cards.config(text=f"Development Cards: {cards_count}")
 
     def update_tile_count(self, indoor_count, outdoor_count):
+        """Updates the indoor and outdoor tile count labels.
+        """
         self.lable_outdoor_tiles.config(
             text=f"Outdoor Tiles: {outdoor_count}")
         self.lable_indoor_tiles.config(
             text=f"Indoor Tiles: {indoor_count}")
 
     def update_player_info(self, health, attack, items, location):
+        """Updates the player information labels and moves the player marker.
+        """
         self.lable_health.config(text=f"Health: {health}")
         self.lable_attack.config(text=f"Attack: {attack}")
         self.items.config(text=f"Items: {items}")
-        self.move_player(*location)
+        self._move_player(*location)
 
-    def move_player(self, row, col):
+    def _move_player(self, row, col):
+        """Moves the player marker to the given row and column.
+        """
         self.player_row = row
         self.player_col = col
-        self.draw_player()
+        self._draw_player()
 
-    def draw_player(self):
+    def _draw_player(self):
+        """Draws the player marker on the board.
+        """
         # Remove the previous player marker (if it exists)
         if hasattr(self, 'player_marker'):
             self.canvas.delete(self.player_marker)
