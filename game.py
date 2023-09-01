@@ -1,4 +1,6 @@
 import json
+import pprint
+
 from board import Board
 from player import Player
 from GUI.gui import GUI
@@ -25,6 +27,7 @@ class Game:
         self.db = DataBasing(r"db\database.db")
         self._setup(start_coordinates)
         self.lost = False
+        self.pretty_print = pprint.PrettyPrinter(width=41, indent=4)
 
     def _setup(self, start_coordinates):
         self.db.create_table(tbl_name="player_path",
@@ -85,7 +88,7 @@ class Game:
     def shelve_load(self, filename):
         try:
             shelve_file = self.shelving.load_file_content(filename)
-            print(shelve_file)
+            self.pretty_print.pprint(shelve_file)
         except:
             print("************************************")
             print(f"There is no file to load {filename}")
@@ -96,7 +99,8 @@ class Game:
             "health": self.player.get_health(),
             "attack": self.player.get_attack(),
             "location": self.player.get_location(),
-            "items": self.player.get_items()}
+            "items": self.player.get_items()
+        }
         try:
             with open(filename, 'w') as file:
                 json.dump(details, file)
@@ -108,7 +112,7 @@ class Game:
             with open(filename, 'r') as file:
                 data = file.read()
                 jata = json.loads(data)
-            print(jata)
+            self.pretty_print.pprint(jata)
         except:
             print("*********************************")
             print(f'No JSON file of name {filename}')
