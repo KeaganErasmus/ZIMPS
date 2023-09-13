@@ -23,7 +23,7 @@ class CardDeck:
     A deck of development cards.
     """
 
-    def __init__(self, json_path, image_path):
+    def __init__(self, json_path='assets/dev_cards.json', image_path='assets/dev_cards.jpg'):
         self.cards = []
         self.image_path = image_path
         cards_content = self._load_cards_content(json_path)

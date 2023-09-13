@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from sqlite3 import Error
 
@@ -6,11 +7,13 @@ class DataBasing:
 
     def __init__(self, db_file):
         """Initialize a new or connect to an existing database."""
-        try:
-            self.conn = self.create_connection(db_file)
-            self.cur = self.conn.cursor()
-        except FileExistsError:
-            print(f"File does not exist {db_file}")
+        # Ensure the directory exists
+        directory = os.path.dirname(db_file)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        self.conn = self.create_connection(db_file)
+        self.cur = self.conn.cursor()
 
     def create_connection(self, db_file):
         """Create a database connection to a SQLite database.

@@ -24,20 +24,33 @@ class GUI:
         self.player_row = 0
         self.player_col = 0
 
-        self.canvas = tk.Canvas(
-            self.root, width=self.tile_size * cols,
-            height=self.tile_size * rows)
-        self.canvas.pack()
+        # Create a main frame to hold the lables
+        self.main_frame = tk.Frame(self.root)
+        self.main_frame.pack(fill=tk.BOTH, expand=1)
 
-        self.grid_rects = [[None for _ in range(cols)] for _ in range(rows)]
-        for i in range(rows):
-            for j in range(cols):
-                self.grid_rects[i][j] = self.canvas.create_rectangle(
-                    j * self.tile_size, i * self.tile_size,
-                    (j + 1) * self.tile_size, (i + 1) * self.tile_size)
+        # Create a frame to contain the Canvas
+        self.canvas_frame = tk.Frame(self.main_frame)
+        self.canvas_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
+        # Add a canvas to the canvas frame
+        self.canvas = tk.Canvas(self.canvas_frame)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=1)
+
+        # Create scrollbars for the canvas
+        self.scrollbar_y = tk.Scrollbar(
+            self.canvas_frame, orient="vertical", command=self.canvas.yview)
+        self.scrollbar_y.pack(side=tk.RIGHT, fill=tk.Y)
+        self.scrollbar_x = tk.Scrollbar(
+            self.main_frame, orient="horizontal", command=self.canvas.xview)
+        self.scrollbar_x.pack(side=tk.BOTTOM, fill=tk.X)
+
+        self.canvas.configure(
+            yscrollcommand=self.scrollbar_y.set, xscrollcommand=self.scrollbar_x.set)
+
+        # Add widgets to the  the root window
         self.frame_group1 = tk.Frame(self.root)
         self.frame_group1.pack(side=tk.LEFT, padx=20)
+
         self.frame_group2 = tk.Frame(self.root)
         self.frame_group2.pack(side=tk.LEFT, padx=60)
 
@@ -46,6 +59,7 @@ class GUI:
         self.label_dev_cards = tk.Label(
             self.frame_group1, text="Development Cards: ")
         self.label_dev_cards.pack()
+
         self.lable_outdoor_tiles = tk.Label(
             self.frame_group1, text="Outdoor Tiles: ")
         self.lable_outdoor_tiles.pack()
@@ -59,15 +73,43 @@ class GUI:
         self.lable_attack.pack()
         self.items = tk.Label(self.frame_group2, text="Items: ")
         self.items.pack()
-        self.frame_compass = tk.Frame(self.root)
-        self.frame_compass.pack(side=tk.RIGHT, padx=20)
 
+        self.frame_compass = tk.Frame(self.root)
+        self.frame_compass.pack(side=tk.LEFT, padx=80)
         self.compass_image = self._load_image("GUI/compass.png", (80, 80))
         if self.compass_image is None:
             raise Exception("Compass image not found.")
         self.compass_label = tk.Label(
             self.frame_compass, image=self.compass_image)
         self.compass_label.pack()
+
+        # Create another frame INSIDE the canvas
+        self.frame_inside_canvas = tk.Frame(self.canvas)
+
+        # Add that inner frame to a window in the canvas
+        self.canvas.create_window(
+            (0, 0), window=self.frame_inside_canvas, anchor="nw")
+
+        self.grid_rects = [[None for _ in range(cols)] for _ in range(rows)]
+        for i in range(rows):
+            for j in range(cols):
+                self.grid_rects[i][j] = self.canvas.create_rectangle(
+                    j * self.tile_size, i * self.tile_size,
+                    (j + 1) * self.tile_size, (i + 1) * self.tile_size)
+
+        # Update the scrollregion of the canvas to encompass the inner frame
+        self.frame_inside_canvas.update_idletasks()
+        self.canvas.config(scrollregion=self.canvas.bbox("all"))
+
+        # Bind the mouse scroll event to scrolling function
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+        self.canvas.bind_all("<Shift-MouseWheel>", self._on_shiftmousewheel)
+
+    def _on_mousewheel(self, event):
+        self.canvas.yview_scroll(-1*(event.delta//120), "units")
+
+    def _on_shiftmousewheel(self, event):
+        self.canvas.xview_scroll(-1*(event.delta//120), "units")
 
     def place_tile(self, tile, row, col):
         """Places a tile on the board at the given row and column.
