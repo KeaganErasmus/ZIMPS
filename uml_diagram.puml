@@ -1,0 +1,110 @@
+@startuml ZIMP
+class Board {
+    time: str
+    tile_map: dict
+    dev_cards: CardDeck
+    outdoor_tiles: OutdoorTiles
+    indoor_tiles: IndoorTiles
+    patio_tile: Tile
+    update_time()
+    is_explored(location: tuple): bool
+    draw_tile(current_room: Tile): (Tile, str)
+}
+
+class Card {
+    image: Image
+    content: dict
+    display(section_key: str)
+}
+
+class CardDeck {
+    cards: list
+    image_path: str
+    draw(): Card
+}
+
+class Console {
+    prompt: str
+    game: Game
+    do_go(direction: str)
+    do_load()
+    do_quit()
+    do_save(filename: str)
+    do_coords()
+    do_details()
+    do_bash(direction: str)
+    do_cower()
+    do_totem()
+}
+
+class Game {
+    player: Player
+    board: Board
+    gui: GUI
+    pickle: Pickling
+    lost: bool
+    save_game()
+    load_game()
+    player_turn(direction: str)
+    bash_wall_down(direction: str)
+    find_or_bury_totem()
+    cower()
+}
+
+class Player {
+    location: tuple
+    health: int
+    attack: int
+    items: list
+    has_totem: bool
+    get_location(): tuple
+    get_items(): list
+    get_health(): int
+    take_damage(amount: int)
+}
+
+class GUI {
+    root: Tk
+    canvas: Canvas
+    images: list
+    board_size: int
+    tile_size: int
+    place_tile(tile: Tile, row: int, col: int)
+    update_dev_cards(cards_count: int, current_time: str)
+    update_tile_count(indoor_count: int, outdoor_count: int)
+    update_player_info(health: int, attack: int, items: list)
+}
+
+class Tile {
+    image: Image
+    name: str
+    exits: dict
+    tile_type: str
+    display()
+}
+
+class TileDeck {
+    tiles: list
+    image_path: str
+    draw(): Tile
+    draw_by_name(name: str): Tile
+}
+
+class OutdoorTiles {
+}
+
+class IndoorTiles {
+}
+
+Board -- CardDeck
+Board -- OutdoorTiles
+Board -- IndoorTiles
+CardDeck -- Card
+Console -- Game
+Game -- GUI
+Game -- Player
+Game -- Board
+TileDeck -- Tile
+OutdoorTiles --|> TileDeck
+IndoorTiles --|> TileDeck
+@enduml

@@ -1,74 +1,70 @@
-from pickle import dump, load
+import pickle
 
 
 class Pickling:
 
-    def __init__(self):
-        self.value = "file text initial"
-        self.filename = "initial"
-        self.file = open(str(self.filename), 'wb')
+    def __init__(self, filename="initial.pickle"):
+        """Initialize the Pickling class with a filename."""
+        self.value = "initial value"
+        self.filename = filename
 
-    def open_file(self):
-        self.file = open(str(self.filename), 'rb')
-        self.load()
+    def save(self, *data, filename=None):
+        """
+        Save the data to a pickle file.
+        If a filename is provided, it will update the class attribute.
+        Keagan, Christian
+        """
+        if filename:
+            self.filename = filename
 
-    def close_file(self):
-        self.file.close()
-        self.value = "nothing"
+        with open(self.filename, 'wb') as file:
+            pickle.dump(data, file)
 
-    def load(self):
-        self.value = load(self.file)
+    def load(self, filename=None):
+        """
+        Load data from a pickle file and store it in self.value.
+        If a filename is provided, it will update the class attribute.
+        Sam, Christian
+        """
+        if filename:
+            self.filename = filename
 
-    def dump(self):
-        self.file = open(str(self.filename), 'wb')
-        dump(self.value, self.file)
+        with open(self.filename, 'rb') as file:
+            self.value = pickle.load(file)
+        return self.value
 
-    def change_value(self, new_str):
-        self.value = new_str
+    def change_filename(self, new_name):
+        """
+        Update the filename for future operations.
+        Christian
+        """
+        self.filename = new_name
 
     def print_value(self):
+        """
+        Print the current value.
+        Sam
+        """
         print(self.value)
-
-    def write_new_file(self, fn):
-        # close current file
-        self.close_file()
-        self.filename = fn
-        # set current file to be new file we just wrote
-        # with inputted filename fn
-        self.file = open(str(self.filename), 'wb')
 
 
 if __name__ == "__main__":
-    # pickle has initial file created
     p = Pickling()
-    # print value
-    p.print_value()
-    # save value to file
-    p.dump()
-    # close file
-    p.close_file()
 
-    # print
+    # Print initial value
     p.print_value()
 
-    # open file
-    p.open_file()
-    # print
+    # Save initial value
+    p.save(p.value)
+
+    # Load saved data
+    loaded_data = p.load()
     p.print_value()
 
-    # change value
-    p.change_value("changed text")
-    # dump new value
-    p.dump()
-    # print value
-    p.print_value()
-    # close file again
-    p.close_file()
+    # Change value and save again
+    p.value = "changed text"
+    p.save(p.value)
 
-    # open file
-    p.open_file()
-    # print
+    # Load new data
+    new_loaded_data = p.load()
     p.print_value()
-    # close file again
-    p.close_file()
-

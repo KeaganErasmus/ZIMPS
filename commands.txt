@@ -1,0 +1,1 @@
+help, go [direction], totem, cower, quit, save, details, load, coords

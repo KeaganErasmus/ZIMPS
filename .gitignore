@@ -3,3 +3,10 @@
 .vscode
 __pycache__/
 .idea
+*.pickle
+*.txt
+*.db
+*.db-journal
+*.bak
+*.dir
+*.dat
