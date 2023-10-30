@@ -74,14 +74,14 @@ class GUI:
         self.items = tk.Label(self.frame_group2, text="Items: ")
         self.items.pack()
 
-        self.frame_compass = tk.Frame(self.root)
-        self.frame_compass.pack(side=tk.LEFT, padx=80)
-        self.compass_image = self._load_image("GUI/compass.png", (80, 80))
-        if self.compass_image is None:
-            raise Exception("Compass image not found.")
-        self.compass_label = tk.Label(
-            self.frame_compass, image=self.compass_image)
-        self.compass_label.pack()
+        # self.frame_compass = tk.Frame(self.root)
+        # self.frame_compass.pack(side=tk.LEFT, padx=80)
+        # self.compass_image = self._load_image("../GUI/compass.png", (80, 80))
+        # if self.compass_image is None:
+        #     raise Exception("Compass image not found.")
+        # self.compass_label = tk.Label(
+        #     self.frame_compass, image=self.compass_image)
+        # self.compass_label.pack()
 
         # Create another frame INSIDE the canvas
         self.frame_inside_canvas = tk.Frame(self.canvas)

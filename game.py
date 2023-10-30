@@ -24,7 +24,7 @@ class Game:
         self.pickle = Pickling()
         self.shelving = Shelving()
         self.strfiler = StringFiler()
-        self.db = DataBasing(r"db\database.db")
+        self.db = DataBasing(r"db/database.db")
         self._setup(start_coordinates)
         self.lost = False
         self.pretty_print = pprint.PrettyPrinter(width=41, indent=4)

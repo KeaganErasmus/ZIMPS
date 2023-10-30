@@ -1,7 +1,7 @@
 import unittest
 from game import Game
 
-the_game = Game()
+the_game = Game((5, 3), (7, 7), 'assets/dev_cards.json', 'assets/dev_cards.jpg')
 
 
 class PlayerInitialStats(unittest.TestCase):
