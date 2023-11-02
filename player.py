@@ -1,12 +1,12 @@
 class Player:
-    def __init__(self, start_coordinates, health=6, attack=1, items=None, has_totem=False):
+    def __init__(self, start_coordinates, health=6, attack=1, items=None):
         self.location = start_coordinates
         self.health = health
         self.attack = attack
         self.items = items
         if self.items is None:
             self.items = []
-        self.has_totem = has_totem
+        self.has_totem = False
 
     def get_location(self):
         return self.location
@@ -27,4 +27,8 @@ class Player:
         self.has_totem = True
 
     def get_details(self):
-        return f'Location->{self.location} \nHealth->{self.health} \nAttack->{self.attack} \nItems->{self.items}'
+        return (f'Location->{self.location} '
+                f'\nHealth->{self.health} '
+                f'\nAttack->{self.attack} '
+                f'\nItems->{self.items}'
+                f'\nTotem->{self.has_totem}')

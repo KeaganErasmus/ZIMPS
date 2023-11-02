@@ -400,7 +400,7 @@ class Game:
         print("You are searching for the Totem!")
         self._resolve_dev_card()
         if not self._game_over():
-            self.player.has_totem = True
+            self.player.take_totem()
             print("You found the Totem!")
 
     def _burry_totem(self):
