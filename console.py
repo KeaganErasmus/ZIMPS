@@ -95,10 +95,10 @@ class Console(cmd.Cmd):
         except:
             print("Please enter a filename to save to")
 
-        # if not filename:
-        #     print("Please enter a filename to save to")
-        # else:
-        #     self.game.shelve_save(filename)
+        if not filename:
+            print("Please enter a filename to save to")
+        else:
+            self.game.shelve_save(filename)
 
     def do_shelve_load(self, filename):
         """
@@ -143,3 +143,8 @@ class Console(cmd.Cmd):
         Keagan
         """
         print("  N\nW\tE\n  S")
+
+    def do_heal(self, args):
+        amount = int(args)
+        self.game.heal(amount)
+        print(self.game.player.health)

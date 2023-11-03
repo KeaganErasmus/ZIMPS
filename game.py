@@ -52,7 +52,7 @@ class Game:
                             self.player.get_health())
 
         # save canvas as image
-        # self.gui.save_canvas_as_image("GUI/saved_game.png")
+        self.gui.save_canvas_as_image("GUI/saved_game.png")
 
         # string file
         self.strfiler.save_file()
@@ -454,3 +454,6 @@ class Game:
             return x - 1, y
         elif direction == 'S':
             return x + 1, y
+
+    def heal(self, amount):
+        self.player.health += amount
