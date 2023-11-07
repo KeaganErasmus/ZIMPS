@@ -1,12 +1,19 @@
 import argparse
+from abc import ABC, abstractmethod
 
 
-class GameConfigFactory:
+class GameConfigFactory(ABC):
+    @abstractmethod
     def create_game_config(self):
-        return GameConfig()
+        pass
 
 
-class GameConfig:
+class CustomGameConfigFactory(GameConfigFactory):
+    def create_game_config(self):
+        return CustomGameConfig()
+
+
+class CustomGameConfig:
     def __init__(self):
         self.parser = argparse.ArgumentParser(description='Zombies in my Pocket game')
         self.setup_arguments()
@@ -27,6 +34,7 @@ class GameConfig:
                                  default='assets/dev_cards.jpg',
                                  help='The path to the tiles image file.')
 
+
     def parse_arguments(self):
         args = self.parser.parse_args()
         # Validate the coordinates against the board size
@@ -35,11 +43,3 @@ class GameConfig:
                   f"Out of board bounds: ({args.rows}, {args.cols})")
             return None
         return args
-
-
-if __name__ == "__main__":
-    factory = GameConfigFactory()
-    config = factory.create_game_config()
-    args = config.parse_arguments()
-    if args:
-        pass
