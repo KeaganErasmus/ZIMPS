@@ -11,6 +11,7 @@ class TestPlayerMoving(unittest.TestCase):
             the_game._move_direction.return_value = (4, 3)
             the_game.player_turn('n')
             player_loc = the_game.player.get_location()
+            print(player_loc)
             self.assertEqual(player_loc, (4, 3))
             mock_move_direction.assert_called_with('N')
 
@@ -18,21 +19,24 @@ class TestPlayerMoving(unittest.TestCase):
         with patch.object(the_game, '_move_direction') as mock_move_direction:
             the_game._move_direction.return_value = (5, 3)
             turn = the_game._move_direction('S')
+            print(turn)
             self.assertEqual(turn, (5, 3))
             mock_move_direction.assert_called_with('S')
 
     def test_player_moving_w_from_foyer(self):
         with patch.object(the_game, '_move_direction') as mock_move_direction:
-            the_game._move_direction.return_value = None
+            the_game._move_direction.return_value = (5, 3)
             turn = the_game._move_direction('W')
-            self.assertEqual(turn, None)
+            print(turn)
+            self.assertEqual(turn, (5, 3))
             mock_move_direction.assert_called_with('W')
 
     def test_player_moving_e_from_foyer(self):
         with patch.object(the_game, '_move_direction') as mock_move_direction:
-            the_game._move_direction.return_value = None
+            the_game._move_direction.return_value = (5, 3)
             turn = the_game._move_direction('E')
-            self.assertEqual(turn, None)
+            print(turn)
+            self.assertEqual(turn, (5, 3))
             mock_move_direction.assert_called_with('E')
 
 
