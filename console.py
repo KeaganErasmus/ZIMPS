@@ -1,141 +1,75 @@
 import cmd
 from game import Game
+from consoleStrategy import *
 
 
 class Console(cmd.Cmd):
-    """
-    Keagan Created class
-    """
-
     def __init__(self, start_coordinates, board_size, card_data, card_image):
         cmd.Cmd.__init__(self)
-        """
-        Keagan
-        """
         self.prompt = ">>> "
         self.game = Game(start_coordinates, board_size, card_data, card_image)
-        # with open("commands.txt", 'r') as file:
-        #     print('Commands: ')
-        #     for lines in file:
-        #         print(f"{lines}")
-        #     print("\n")
+        self.strategy = None  # Will hold the current strategy
 
-    def do_go(self, direction):
-        """
-        Choose a direction to go from the current room.
-        Syntax: go [direction] where direction is either \'N\' (for
-        north), \'E\' (for east), \'S\' (for south), \'W\' (for west).
+    def set_strategy(self, strategy):
+        self.strategy = strategy
 
-        Keagan try check
-        Sam if check
-        Christian turn functionality
-        """
-        if not self.game.check_game_state():
-            self.game.player_turn(direction)
+    def do_action(self, action, args):
+        if not self.game.check_game_state() and self.strategy:
+            self.strategy.execute(self.game, args)
 
-    def do_bash(self, direction):
-        """
-        Choose to bash through a wall.
+    def do_go(self, args):
+        self.set_strategy(GoStrategy())
+        self.do_action("go", args)
 
-        Christian
-        """
-        self.game.bash_through_wall(direction)
+    def do_bash(self, args):
+        self.set_strategy(BashStrategy())
+        self.do_action("bash", args)
 
-    def do_totem(self, arg):
-        """
-        Choose to find or burry the totem.
+    def do_totem(self, args):
+        self.set_strategy(TotemStrategy())
+        self.do_action("totem", args)
 
-        Christian
-        """
-        try:
-            self.game.find_or_burry_totem()
-        except TypeError as err:
-            print(str(err))
+    def do_cower(self, args):
+        self.set_strategy(CowerStrategy())
+        self.do_action("cower", args)
 
-    def do_cower(self, arg):
-        """
-        Choose to curl up into a corner and hide.
-
-        Christian
-        """
-        try:
-            self.game.cower()
-        except TypeError as err:
-            print(str(err))
-
-    def do_quit(self, arg):
-        """
-        Quits the current game.
-
-        Christian
-        """
-        print("Goodbye")
-        self.game.gui.root.destroy()
+    def do_quit(self, args):
+        self.set_strategy(QuitStrategy())
+        self.do_action("quit", args)
         return True
 
-    def do_save(self, filename):
-        """
-        Allows the player to save the current game state to a file.
-        save file will be created when the user quits the game
+    def do_save(self, args):
+        self.set_strategy(SaveStrategy())
+        self.do_action("save", args)
 
-        Sam
-        """
-        self.game.save_game()
+    def do_shelve_save(self, args):
+        self.set_strategy(ShelveSaveStrategy())
+        self.do_action("shelve_save", args)
 
-    def do_shelve_save(self, filename):
-        """
-        allows the player to save the game data to a shelve file
-        """
-        try:
-            self.game.shelve_save(filename)
-        except:
-            print("Please enter a filename to save to")
+    def do_shelve_load(self, args):
+        self.set_strategy(ShelveLoadStrategy())
+        self.do_action("shelve_load", args)
 
-        # if not filename:
-        #     print("Please enter a filename to save to")
-        # else:
-        #     self.game.shelve_save(filename)
+    def do_json_save(self, args):
+        self.set_strategy(JsonSaveStrategy())
+        self.do_action("json_save", args)
 
-    def do_shelve_load(self, filename):
-        """
-        allows the player to load a shelve file
-        """
-        self.game.shelve_load(filename)
-
-    def do_json_save(self, filename):
-        """
-        Save the current player state to a json file
-        """
-        self.game.json_save(filename)
-
-    def do_json_load(self, filename):
-        """
-        load up a json file
-        """
-        self.game.json_load(filename)
+    def do_json_load(self, args):
+        self.set_strategy(JsonLoadStrategy())
+        self.do_action("json_load", args)
 
     def do_load(self, args):
-        """
-        Load by itself will load all current pickled player data
-        if you specify a filepath when loading you will load the shelve file
-        the default filename is player_data (load player_data)
-
-        sam
-        """
-        self.game.load_game(args)
+        self.set_strategy(LoadStrategy())
+        self.do_action("load", args)
 
     def do_details(self, args):
-        """
-        Prints the players details: Location, Health, Attack and Items
-
-        Keagan
-        """
-        print(self.game.get_details())
+        self.set_strategy(DetailsStrategy())
+        self.do_action("details", args)
 
     def do_coords(self, args):
-        """
-        Shows the coordinates of a compass
+        self.set_strategy(CoordsStrategy())
+        self.do_action("coords", args)
 
-        Keagan
-        """
-        print("  N\nW\tE\n  S")
+    def do_heal(self, args):
+        self.set_strategy(HealStrategy())
+        self.do_action("heal", args)
