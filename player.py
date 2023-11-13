@@ -26,7 +26,7 @@ class Player:
     def take_totem(self):
         self.has_totem = True
 
-    def get_details(self):
+    def get_details(self) -> str:
         return (f'Location->{self.location} '
                 f'\nHealth->{self.health} '
                 f'\nAttack->{self.attack} '

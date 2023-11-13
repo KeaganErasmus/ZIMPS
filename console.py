@@ -9,17 +9,16 @@ class Console(cmd.Cmd):
 
     def __init__(self, start_coordinates, board_size, card_data, card_image):
         cmd.Cmd.__init__(self)
-
         """
         Keagan
         """
         self.prompt = ">>> "
         self.game = Game(start_coordinates, board_size, card_data, card_image)
-        with open("commands.txt", 'r') as file:
-            print('Commands: ')
-            for lines in file:
-                print(f"{lines}")
-            print("\n")
+        # with open("commands.txt", 'r') as file:
+        #     print('Commands: ')
+        #     for lines in file:
+        #         print(f"{lines}")
+        #     print("\n")
 
     def do_go(self, direction):
         """
@@ -32,10 +31,7 @@ class Console(cmd.Cmd):
         Christian turn functionality
         """
         if not self.game.check_game_state():
-            try:
-                self.game.player_turn(direction)
-            except TypeError as err:
-                print(str(err))
+            self.game.player_turn(direction)
 
     def do_bash(self, direction):
         """
@@ -95,10 +91,10 @@ class Console(cmd.Cmd):
         except:
             print("Please enter a filename to save to")
 
-        if not filename:
-            print("Please enter a filename to save to")
-        else:
-            self.game.shelve_save(filename)
+        # if not filename:
+        #     print("Please enter a filename to save to")
+        # else:
+        #     self.game.shelve_save(filename)
 
     def do_shelve_load(self, filename):
         """
@@ -134,7 +130,7 @@ class Console(cmd.Cmd):
 
         Keagan
         """
-        self.game.get_details()
+        print(self.game.get_details())
 
     def do_coords(self, args):
         """
@@ -143,8 +139,3 @@ class Console(cmd.Cmd):
         Keagan
         """
         print("  N\nW\tE\n  S")
-
-    def do_heal(self, args):
-        amount = int(args)
-        self.game.heal(amount)
-        print(self.game.player.health)

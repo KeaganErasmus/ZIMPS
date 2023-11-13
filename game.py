@@ -118,8 +118,15 @@ class Game:
             print(f'No JSON file of name {filename}')
             print("*********************************")
 
-    def get_details(self):
-        print(self.player.get_details())
+    def get_details(self) -> str:
+        # val = self.player.get_details()
+        # return val
+        val = f'Location->{self.player.location} ' \
+              f'\nHealth->{self.player.health} ' \
+              f'\nAttack->{self.player.attack} ' \
+              f'\nItems->{self.player.items}' \
+              f'\nTotem->{self.player.has_totem}'
+        return val
 
     def _update_gui_labels(self):
         self.gui.update_dev_cards(self.board.dev_cards.count, self.board.time)
