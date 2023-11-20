@@ -1,6 +1,10 @@
-class ActionStrategy:
+from abc import ABC, abstractmethod
+
+
+class ActionStrategy(ABC):
+    @abstractmethod
     def execute(self, game, args):
-        pass
+        ...
 
 
 class GoStrategy(ActionStrategy):
@@ -47,7 +51,7 @@ class ShelveSaveStrategy(ActionStrategy):
     def execute(self, game, args):
         try:
             game.shelve_save(args)
-        except:
+        except FileExistsError:
             print("Please enter a filename to save to")
 
 
@@ -79,10 +83,3 @@ class DetailsStrategy(ActionStrategy):
 class CoordsStrategy(ActionStrategy):
     def execute(self, game, args):
         print("  N\nW\tE\n  S")
-
-
-class HealStrategy(ActionStrategy):
-    def execute(self, game, args):
-        amount = int(args)
-        game.heal(amount)
-        print(game.player.health)

@@ -70,6 +70,3 @@ class Console(cmd.Cmd):
         self.set_strategy(CoordsStrategy())
         self.do_action("coords", args)
 
-    def do_heal(self, args):
-        self.set_strategy(HealStrategy())
-        self.do_action("heal", args)
