@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class ActionStrategy(ABC):
     @abstractmethod
     def execute(self, game, args):
-        ...
+        pass
 
 
 class GoStrategy(ActionStrategy):
