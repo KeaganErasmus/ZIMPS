@@ -34,7 +34,6 @@ class CustomGameConfig:
                                  default='assets/dev_cards.jpg',
                                  help='The path to the tiles image file.')
 
-
     def parse_arguments(self):
         args = self.parser.parse_args()
         # Validate the coordinates against the board size
