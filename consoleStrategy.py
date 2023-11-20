@@ -51,7 +51,7 @@ class ShelveSaveStrategy(ActionStrategy):
     def execute(self, game, args):
         try:
             game.shelve_save(args)
-        except FileExistsError:
+        except:
             print("Please enter a filename to save to")
 
 
