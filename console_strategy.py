@@ -6,7 +6,9 @@ import sys
 # Strategy Base Class
 class ActionStrategy:
     def execute(self, game, *args):
-        raise NotImplementedError("This method should be overridden by subclasses")
+        raise NotImplementedError(
+            "This method should be overridden by subclasses")
+
 
 # Concrete Strategies for each action
 class GoStrategy(ActionStrategy):
@@ -17,9 +19,11 @@ class GoStrategy(ActionStrategy):
             except TypeError as err:
                 print(str(err))
 
+
 class BashStrategy(ActionStrategy):
     def execute(self, game, direction):
         game.bash_through_wall(direction)
+
 
 class TotemStrategy(ActionStrategy):
     def execute(self, game):
@@ -28,6 +32,7 @@ class TotemStrategy(ActionStrategy):
         except TypeError as err:
             print(str(err))
 
+
 class CowerStrategy(ActionStrategy):
     def execute(self, game):
         try:
@@ -35,9 +40,11 @@ class CowerStrategy(ActionStrategy):
         except TypeError as err:
             print(str(err))
 
+
 class SaveStrategy(ActionStrategy):
     def execute(self, game, filename=None):
         game.save_game()
+
 
 class ShelveSaveStrategy(ActionStrategy):
     def execute(self, game, filename):
@@ -46,21 +53,26 @@ class ShelveSaveStrategy(ActionStrategy):
         else:
             game.shelve_save(filename)
 
+
 class ShelveLoadStrategy(ActionStrategy):
     def execute(self, game, filename):
         game.shelve_load(filename)
+
 
 class JsonSaveStrategy(ActionStrategy):
     def execute(self, game, filename):
         game.json_save(filename)
 
+
 class JsonLoadStrategy(ActionStrategy):
     def execute(self, game, filename):
         game.json_load(filename)
 
+
 class LoadStrategy(ActionStrategy):
     def execute(self, game, args):
         game.load_game(args)
+
 
 class QuitStrategy(ActionStrategy):
     def execute(self, game):
@@ -69,13 +81,16 @@ class QuitStrategy(ActionStrategy):
         sys.exit(0)
         return True
 
+
 class DetailsStrategy(ActionStrategy):
     def execute(self, game):
         game.get_details()
 
+
 class CoordsStrategy(ActionStrategy):
     def execute(self, game):
         print("  N\nW\tE\n  S")
+
 
 # Console class to manage command-line input
 class Console(cmd.Cmd):
