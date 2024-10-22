@@ -7,7 +7,7 @@ from console_strategy import Console, ActionStrategy
 # Concrete subclass for testing purposes
 class IncompleteStrategy(ActionStrategy):
     """Concrete subclass that does not implement execute."""
-    
+
     pass
 
 
@@ -28,29 +28,35 @@ class TestConsole(unittest.TestCase):
                                    self.card_data,
                                    self.card_image)
             self.console.game = MockGame.return_value
-            self.console.game.gui.root.mainloop = MagicMock()  # Mocking the GUI loop
-            self.console.game.gui.root.destroy = MagicMock()   # Mocking GUI destroy
+            self.console.game.gui.root.mainloop = MagicMock()
+            self.console.game.gui.root.destroy = MagicMock()
 
     def test_initialization(self):
         """Test that Console initializes properly and reads commands.txt."""
-        with patch('console_strategy.open', unittest.mock.mock_open(read_data="go\nbash\n"), create=True) as mock_file:
-            self.console = Console(self.start_coordinates, self.board_size, self.card_data, self.card_image)
+        with patch('console_strategy.open',
+                   unittest.mock.mock_open(read_data="go\nbash\n"),
+                   create=True) as mock_file:
+            self.console = Console(self.start_coordinates,
+                                   self.board_size,
+                                   self.card_data,
+                                   self.card_image)
             mock_file.assert_called_with("commands.txt", 'r')
 
     def test_execute_not_implemented(self):
-        """Test that calling execute on ActionStrategy raises NotImplementedError."""
+        """
+        Test that calling execute on ActionStrategy raises NotImplementedError.
+        """
         strategy = IncompleteStrategy()
         with self.assertRaises(NotImplementedError):
-            strategy.execute(None)  # Passing None as game since we just want to test the error
+            strategy.execute(None)
 
     def test_do_action_unknown_action(self):
         """Test that do_action handles unknown actions."""
         action = "unknown_action"  # Action that is not defined in strategies
 
         with patch('builtins.print') as mocked_print:
-            self.console.do_action(action)  # Call do_action with the unknown action
-            mocked_print.assert_called_with(f"Unknown action: {action}")  # Check if the correct message was printed
-
+            self.console.do_action(action)
+            mocked_print.assert_called_with(f"Unknown action: {action}")
 
     def test_do_go(self):
         """Test that do_go gets called with direction."""
@@ -68,8 +74,10 @@ class TestConsole(unittest.TestCase):
     def test_do_go_exception(self):
         """Test that do_go handles TypeError."""
         direction = 'N'
-        with patch.object(self.console.game, 'check_game_state', return_value=False):
-            with patch.object(self.console.game, 'player_turn', side_effect=TypeError("Invalid type")):
+        with patch.object(self.console.game,
+                          'check_game_state', return_value=False):
+            with patch.object(self.console.game, 'player_turn',
+                              side_effect=TypeError("Invalid type")):
                 with patch('builtins.print') as mocked_print:
                     self.console.do_go(direction)
                     mocked_print.assert_called_with("Invalid type")
@@ -87,7 +95,9 @@ class TestConsole(unittest.TestCase):
 
     def test_do_totem_exception(self):
         """Test that do_totem handles TypeError."""
-        with patch.object(self.console.game, 'find_or_burry_totem', side_effect=TypeError("Totem error")):
+        with patch.object(self.console.game,
+                          'find_or_burry_totem',
+                          side_effect=TypeError("Totem error")):
             with patch('builtins.print') as mocked_print:
                 self.console.do_totem(None)
                 mocked_print.assert_called_with("Totem error")
@@ -99,7 +109,9 @@ class TestConsole(unittest.TestCase):
 
     def test_do_cower_exception(self):
         """Test that do_cower handles TypeError."""
-        with patch.object(self.console.game, 'cower', side_effect=TypeError("Cower error")):
+        with patch.object(self.console.game,
+                          'cower',
+                          side_effect=TypeError("Cower error")):
             with patch('builtins.print') as mocked_print:
                 self.console.do_cower(None)
                 mocked_print.assert_called_with("Cower error")
@@ -108,14 +120,13 @@ class TestConsole(unittest.TestCase):
 
     def test_do_quit(self):
         """Test that do_quit ends the game properly."""
-        with patch('builtins.print') as mocked_print, \
-            patch('sys.exit') as mocked_exit:
+        with patch('builtins.print'
+                   ) as mocked_print, patch('sys.exit') as mocked_exit:
             self.console.game.gui.root = MagicMock()
             self.console.do_quit(None)
             mocked_print.assert_called_with("Goodbye")
             self.console.game.gui.root.destroy.assert_called_once()
             mocked_exit.assert_called_once_with(0)
-
 
     def test_do_save(self):
         """Test that do_save gets called."""
@@ -129,10 +140,12 @@ class TestConsole(unittest.TestCase):
 
     def test_do_shelve_save_no_filename(self):
         """Test that do_shelve_save handles missing filename."""
-        with patch.object(self.console.game, 'shelve_save', side_effect=Exception):
+        with patch.object(self.console.game,
+                          'shelve_save', side_effect=Exception):
             with patch('builtins.print') as mocked_print:
-                self.console.do_shelve_save(None)  # Pass None to trigger the exception
-                mocked_print.assert_called_with("Please re-enter command with filename to save to")
+                self.console.do_shelve_save(None)
+                mocked_print.assert_called_with(
+                    "Please re-enter command with filename to save to")
 
     def test_do_json_save(self):
         """Test that do_json_save gets called with filename."""
