@@ -1,3 +1,4 @@
+"""Test document for console_strategy.py."""
 import unittest
 from unittest.mock import MagicMock, patch
 from console_strategy import Console, ActionStrategy
@@ -6,6 +7,7 @@ from console_strategy import Console, ActionStrategy
 # Concrete subclass for testing purposes
 class IncompleteStrategy(ActionStrategy):
     """Concrete subclass that does not implement execute."""
+    
     pass
 
 
