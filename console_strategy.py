@@ -2,30 +2,6 @@ import cmd
 from game import Game
 import sys
 
-"""
-Strategy Pattern:
-The game has multiple behaviors like "bashing through a wall",
-"finding or burying a totem", and "cowering". These could be
-treated as separate strategies that can be selected and executed
-at runtime based on the players actions or the game state.
-This would avoid putting all game logic into the Game class
-and instead distribute behaviors into interchangeable strategy classes.
-
-Using the Strategy pattern would allow different in-game actions to be
-modular and interchangeable.
-
-Key Points:
-Strategies for Actions: Each action (go, bash, totem, cower, etc.) is encapsulated in its own class that inherits from the ActionStrategy base class.
-Console Class: The Console class now holds a dictionary called self.strategies, which maps commands (like "go", "bash", "totem") to their respective strategy classes.
-Action Dispatching: Instead of having separate methods for each command, a general do_action method is used to fetch the correct strategy and execute it.
-Command Wrappers: While the do_action method is the core execution point, I left do_go, do_bash, etc., as wrappers for backward compatibility with cmd.Cmd.
-
-Benefits:
-Extensibility: Adding a new action (e.g., "jump") only requires creating a new strategy class and adding it to the self.strategies dictionary.
-Separation of Concerns: The logic for each action is neatly encapsulated in its own class, reducing clutter in the Console class.
-Flexibility: Strategies can be reused, combined, or swapped out without modifying the core game loop or the Console class.
-This refactor adheres to the Strategy Pattern principles, making the code more modular and easier to maintain.
-"""
 
 # Strategy Base Class
 class ActionStrategy:
