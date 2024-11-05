@@ -86,7 +86,8 @@ class TestConsole(unittest.TestCase):
         """Test that do_bash gets called with direction."""
         direction = 'E'
         self.console.do_bash(direction)
-        self.console.game.bash_through_wall.assert_called_with(direction)
+        self.game.bash_through_wall.assert_called_once_with(direction)
+        # self.console.game.bash_through_wall.assert_called_with(direction)
 
     def test_do_totem(self):
         """Test that do_totem gets called."""
