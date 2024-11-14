@@ -56,6 +56,14 @@ class TestConsole(unittest.TestCase):
                     mocked_print.assert_called_with("Invalid type")
                     mock_player_turn.assert_called_once_with(direction) 
 
+    def test_do_go_game_state_true(self):
+        """Test that do_go exits when check_game_state is True."""
+        direction = 'N'
+        with patch.object(self.console.game, 'check_game_state', return_value=True):
+            with patch.object(self.console.game, 'player_turn') as mock_player_turn:
+                self.console.do_go(direction)
+                mock_player_turn.assert_not_called()  # Ensures player_turn is not called if game state is True
+
     def test_do_bash(self):
         """Test that do_bash gets called with direction."""
         direction = 'E'

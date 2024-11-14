@@ -1,4 +1,7 @@
-class ActionStrategy:
+from abc import ABC, abstractmethod
+
+class ActionStrategy(ABC):
+    @abstractmethod
     def execute(self, game, *args):
-        raise NotImplementedError(
-            "This method should be overridden by subclasses")
+        """Executes the action in the context of the game."""
+        pass
