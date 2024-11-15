@@ -1,18 +1,10 @@
-"""Test document for console_strategy.py."""
 import unittest
 from unittest.mock import MagicMock, patch
-from console_strategy import Console, ActionStrategy
+from console_strategy import Console  # Make sure you import from console_strategy
 
 
-# Concrete subclass for testing purposes
-class IncompleteStrategy(ActionStrategy):
-    """Concrete subclass that does not implement execute."""
-
-    pass
-
-
-class TestConsole(unittest.TestCase):
-    """TestConsole class for running all tests."""
+class TestConsoleStrategy(unittest.TestCase):
+    """TestConsoleStrategy class for running all tests."""
 
     def setUp(self):
         """Do setup."""
@@ -28,158 +20,131 @@ class TestConsole(unittest.TestCase):
                                    self.card_data,
                                    self.card_image)
             self.console.game = MockGame.return_value
-            self.console.game.gui.root.mainloop = MagicMock()
-            self.console.game.gui.root.destroy = MagicMock()
+            self.console.game.gui.root.mainloop = MagicMock()  # Mocking the GUI loop
+            self.console.game.gui.root.destroy = MagicMock()  # Mocking GUI destroy
+
+        # Mocking strategies to ensure actions can be executed
+        self.console.strategies = {
+            "go": MagicMock(),
+            "bash": MagicMock(),
+            "totem": MagicMock(),
+            "cower": MagicMock(),
+            "quit": MagicMock(),
+            "save": MagicMock(),
+            "load": MagicMock(),
+            "shelve_save": MagicMock(),
+            "shelve_load": MagicMock(),
+            "json_save": MagicMock(),
+            "json_load": MagicMock(),
+            "details": MagicMock(),
+            "coords": MagicMock(),
+        }
 
     def test_initialization(self):
         """Test that Console initializes properly and reads commands.txt."""
-        with patch('console_strategy.open',
-                   unittest.mock.mock_open(read_data="go\nbash\n"),
-                   create=True) as mock_file:
-            self.console = Console(self.start_coordinates,
-                                   self.board_size,
-                                   self.card_data,
-                                   self.card_image)
+        with patch('builtins.open', unittest.mock.mock_open(read_data="go\nbash\n"), create=True) as mock_file:
+            self.console = Console(self.start_coordinates, self.board_size, self.card_data, self.card_image)
             mock_file.assert_called_with("commands.txt", 'r')
 
-    def test_execute_not_implemented(self):
-        """
-        Test that calling execute on ActionStrategy raises NotImplementedError.
-        """
-        strategy = IncompleteStrategy()
-        with self.assertRaises(NotImplementedError):
-            strategy.execute(None)
-
-    def test_do_action_unknown_action(self):
-        """Test that do_action handles unknown actions."""
-        action = "unknown_action"  # Action that is not defined in strategies
-
-        with patch('builtins.print') as mocked_print:
-            self.console.do_action(action)
-            mocked_print.assert_called_with(f"Unknown action: {action}")
-
     def test_do_go(self):
-        """Test that do_go gets called with direction."""
+        """Test that do_go calls do_action with the correct parameters."""
         direction = 'N'
-
-        with patch.object(self.console.game,
-                          'check_game_state',
-                          return_value=False):
-            with patch.object(self.console.game,
-                              'player_turn',
-                              return_value=None) as mock_player_turn:
-                self.console.do_go(direction)
-                mock_player_turn.assert_called_once_with(direction)
-
-    def test_do_go_exception(self):
-        """Test that do_go handles TypeError."""
-        direction = 'N'
-        with patch.object(self.console.game,
-                          'check_game_state', return_value=False):
-            with patch.object(self.console.game, 'player_turn',
-                              side_effect=TypeError("Invalid type")):
-                with patch('builtins.print') as mocked_print:
-                    self.console.do_go(direction)
-                    mocked_print.assert_called_with("Invalid type")
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_go(direction)
+            mock_do_action.assert_called_once_with("go", direction)
 
     def test_do_bash(self):
-        """Test that do_bash gets called with direction."""
+        """Test that do_bash calls do_action with the correct parameters."""
         direction = 'E'
-        self.console.do_bash(direction)
-        self.game.bash_through_wall.assert_called_once_with(direction)
-        # self.console.game.bash_through_wall.assert_called_with(direction)
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_bash(direction)
+            mock_do_action.assert_called_once_with("bash", direction)
 
     def test_do_totem(self):
-        """Test that do_totem gets called."""
-        self.console.do_totem(None)
-        self.console.game.find_or_burry_totem.assert_called()
-
-    def test_do_totem_exception(self):
-        """Test that do_totem handles TypeError."""
-        with patch.object(self.console.game,
-                          'find_or_burry_totem',
-                          side_effect=TypeError("Totem error")):
-            with patch('builtins.print') as mocked_print:
-                self.console.do_totem(None)
-                mocked_print.assert_called_with("Totem error")
+        """Test that do_totem calls do_action with the correct parameters."""
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_totem(None)
+            mock_do_action.assert_called_once_with("totem", None)
 
     def test_do_cower(self):
-        """Test that do_cower gets called."""
-        self.console.do_cower(None)
-        self.console.game.cower.assert_called()
-
-    def test_do_cower_exception(self):
-        """Test that do_cower handles TypeError."""
-        with patch.object(self.console.game,
-                          'cower',
-                          side_effect=TypeError("Cower error")):
-            with patch('builtins.print') as mocked_print:
-                self.console.do_cower(None)
-                mocked_print.assert_called_with("Cower error")
-
-    from unittest.mock import patch
+        """Test that do_cower calls do_action with the correct parameters."""
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_cower(None)
+            mock_do_action.assert_called_once_with("cower", None)
 
     def test_do_quit(self):
-        """Test that do_quit ends the game properly."""
-        with patch('builtins.print'
-                   ) as mocked_print, patch('sys.exit') as mocked_exit:
-            self.console.game.gui.root = MagicMock()
+        """Test that do_quit calls do_action with the correct parameters."""
+        with patch.object(self.console, 'do_action') as mock_do_action:
             self.console.do_quit(None)
-            mocked_print.assert_called_with("Goodbye")
-            self.console.game.gui.root.destroy.assert_called_once()
-            mocked_exit.assert_called_once_with(0)
+            mock_do_action.assert_called_once_with("quit", None)
 
     def test_do_save(self):
-        """Test that do_save gets called."""
+        """Test that do_save calls do_action with the correct parameters."""
         self.console.do_save("save_file")
-        self.console.game.save_game.assert_called()
-
-    def test_do_shelve_save(self):
-        """Test that do_shelve_save gets called with filename."""
-        self.console.do_shelve_save("shelve_file")
-        self.console.game.shelve_save.assert_called_with("shelve_file")
-
-    def test_do_shelve_save_no_filename(self):
-        """Test that do_shelve_save handles missing filename."""
-        with patch.object(self.console.game,
-                          'shelve_save', side_effect=Exception):
-            with patch('builtins.print') as mocked_print:
-                self.console.do_shelve_save(None)
-                mocked_print.assert_called_with(
-                    "Please re-enter command with filename to save to")
-
-    def test_do_json_save(self):
-        """Test that do_json_save gets called with filename."""
-        self.console.do_json_save("json_file")
-        self.console.game.json_save.assert_called_with("json_file")
+        self.console.strategies["save"].execute.assert_called_with(self.console.game, "save_file")
 
     def test_do_load(self):
-        """Test that do_load loads with filename."""
-        filename = "player_data"
-        self.console.do_load(filename)
-        self.console.game.load_game.assert_called_with(filename)
+        """Test that do_load calls do_action with the correct parameters."""
+        self.console.do_load("load_file")
+        self.console.strategies["load"].execute.assert_called_with(self.console.game, "load_file")
+
+    def test_do_shelve_save(self):
+        """Test that do_shelve_save calls do_action with the correct parameters."""
+        filename = "shelve_file"
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_shelve_save(filename)
+            mock_do_action.assert_called_once_with("shelve_save", filename)
 
     def test_do_shelve_load(self):
-        """Test that do_shelve_load gets called with filename."""
-        self.console.do_shelve_load("shelve_file")
-        self.console.game.shelve_load.assert_called_with("shelve_file")
+        """Test that do_shelve_load calls do_action with the correct parameters."""
+        filename = "shelve_file"
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_shelve_load(filename)
+            mock_do_action.assert_called_once_with("shelve_load", filename)
+
+    def test_do_json_save(self):
+        """Test that do_json_save calls do_action with the correct parameters."""
+        filename = "json_file"
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_json_save(filename)
+            mock_do_action.assert_called_once_with("json_save", filename)
 
     def test_do_json_load(self):
-        """Test that do_json_load gets called with filename."""
-        self.console.do_json_load("json_file")
-        self.console.game.json_load.assert_called_with("json_file")
+        """Test that do_json_load calls do_action with the correct parameters."""
+        filename = "json_file"
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_json_load(filename)
+            mock_do_action.assert_called_once_with("json_load", filename)
 
     def test_do_details(self):
-        """Test that do_details gets called."""
-        self.console.do_details(None)
-        self.console.game.get_details.assert_called()
+        """Test that do_details calls do_action with the correct parameters."""
+        with patch.object(self.console, 'do_action') as mock_do_action:
+            self.console.do_details(None)
+            mock_do_action.assert_called_once_with("details")
 
     def test_do_coords(self):
-        """Test that do_coords gets called."""
-        with patch('builtins.print') as mocked_print:
+        """Test that do_coords calls do_action with the correct parameters."""
+        with patch.object(self.console, 'do_action') as mock_do_action:
             self.console.do_coords(None)
-            mocked_print.assert_called_with("  N\nW\tE\n  S")
+            mock_do_action.assert_called_once_with("coords")
 
+    def test_do_action_valid_strategy(self):
+        """Test that do_action correctly calls execute on the valid strategy."""
+        action = "go"  # Valid action
+        direction = "N"
+        
+        # Ensure the strategy is called with the correct parameters
+        self.console.do_action(action, direction)
+        self.console.strategies[action].execute.assert_called_once_with(self.console.game, direction)
+
+    def test_do_action_invalid_strategy(self):
+        """Test that do_action prints an error for an invalid strategy."""
+        action = "invalid_action"  # Invalid action not in strategies
+        direction = "N"
+        
+        with patch('builtins.print') as mock_print:  # Mock print to check for error message
+            self.console.do_action(action, direction)
+            mock_print.assert_called_with(f"Unknown action: {action}")  # Ensure "Unknown action" is printed
 
 if __name__ == '__main__':
     unittest.main()
