@@ -1,0 +1,16 @@
+Example usage:
+
+from player.player import Player
+from player.armor_decorator import ArmorDecorator
+from player.weapon_decorator import WeaponDecorator
+
+# Base player
+player = Player(start_coordinates=(0, 0))
+
+# Decorate player with armor and weapon
+player_with_armor = ArmorDecorator(player, armor_points=5)
+player_with_weapon = WeaponDecorator(player_with_armor, weapon_name="Sword", weapon_attack=3)
+
+# Display details
+print(player_with_weapon.get_details())
+

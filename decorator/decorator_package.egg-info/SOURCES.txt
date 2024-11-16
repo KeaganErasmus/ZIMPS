@@ -1,0 +1,11 @@
+setup.py
+decorator_package/__init__.py
+decorator_package/armor_decorator.py
+decorator_package/player.py
+decorator_package/player_component.py
+decorator_package/player_decorator.py
+decorator_package/weapon_decorator.py
+decorator_package.egg-info/PKG-INFO
+decorator_package.egg-info/SOURCES.txt
+decorator_package.egg-info/dependency_links.txt
+decorator_package.egg-info/top_level.txt
